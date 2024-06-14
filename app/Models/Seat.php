@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Seat extends Model
 {
     use HasFactory;
+    protected $primaryKey ='seat_num';
+    public function user()
+    {
+        return $this->hasOne(User::class,'seat_num');
+    }
 }

@@ -9,6 +9,7 @@ class Seat extends Model
 {
     use HasFactory;
     protected $primaryKey ='seat_num';
+    protected $fillable = ['value'];
     public function user()
     {
         return $this->hasOne(User::class,'seat_num');

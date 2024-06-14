@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Seat;
+
 
 class SeatController extends Controller
 {
@@ -27,7 +30,13 @@ class SeatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user_id = Auth::id();
+        $seat = new Seat();
+        $seat->users_id = $user_id;
+        $seat->seat_num = $request->input('seat_number');
+        $seat->save();
+
+        return back()->with('success', 'Seat value stored successfully!');
     }
 
     /**

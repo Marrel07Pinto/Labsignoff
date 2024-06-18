@@ -1,17 +1,25 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Seat Selection</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script>
-        function confirmSeatSelection(event) {
-            if (!confirm("Your seat is " + seatNumber)) {
-                event.preventDefault(); 
-            }
-        }
-    </script>
+    
 </head>
 <body>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Please select your seat</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Icons</li>
+          <li class="breadcrumb-item active">Bootstrap</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
     <form id="seatForm" action="{{ route('seat_value') }}" method="POST">
         @csrf
         <button type="submit" name="seat_number" value="S1" onclick="confirmSeatSelection(event)">S1</button>
@@ -29,5 +37,8 @@
         <button type="submit" name="seat_number" value="S7" onclick="confirmSeatSelection(event)">S7</button>
         <button type="submit" name="seat_number" value="S6" onclick="confirmSeatSelection(event)">S6</button>
     </form>
+</section>
+</main>
 </body>
 </html>
+@endsection

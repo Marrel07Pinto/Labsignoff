@@ -26,6 +26,6 @@ Route::get('/seat', function(){
 
 
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
-
-
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 require __DIR__.'/auth.php';

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeatController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,9 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/seat',function(){
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('/seat', function(){
     return view('seat');
-});
+})->name('seat');
+
 
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 

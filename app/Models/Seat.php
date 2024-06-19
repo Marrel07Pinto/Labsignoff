@@ -9,7 +9,6 @@ class Seat extends Model
 {
     use HasFactory;
     protected $fillable = ['users_id', 'seat_num'];
-    protected $primaryKey ='seat_num';
     public function user()
     {
         return $this->belongsTo(User::class,'id');

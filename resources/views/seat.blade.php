@@ -23,17 +23,18 @@
                     </div>
                 @endif
                 @if(session('info'))
-                    <div class="alert alert-info">
-                        {{ session('info') }}
+                        <div class="alert alert-info" id="infoAlert">
+                            {{ session('info') }}
                             @php
                                 $user_id = auth()->user()->id;
-                             @endphp
-                         <form id="seatForm" action="{{ url('/seat_vupdate/' . $user_id) }}" method="POST">
-                            @csrf
+                            @endphp
+                            <form id="seatForm" action="{{ url('/seat_vupdate/' . $user_id) }}" method="POST">
+                                @csrf
                                 <button type="submit" name="seat_number" value="{{ session('seat_number') }}">Yes</button>
-                        </form>
-                    </div>
-                @endif
+                                <button type="button" onclick="hideConfirmation()">No</button>
+                            </form>
+                        </div>
+                    @endif
 
                 <form id="seatForm" action="{{ route('seat_value') }}" method="POST">
                     @csrf
@@ -56,4 +57,9 @@
         </main>
     </body>
 </html>
+<script>
+    function hideConfirmation() {
+        document.getElementById('infoAlert').style.display = 'none';
+    }
+</script>
 @endsection

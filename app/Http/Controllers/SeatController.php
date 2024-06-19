@@ -31,12 +31,26 @@ class SeatController extends Controller
     public function store(Request $request)
     {
         $user_id = Auth::id();
-        $seat = new Seat();
-        $seat->users_id = $user_id;
-        $seat->seat_num = $request->input('seat_number');
-        $seat->save();
+        $seat_number = $request->input('seat_number');
 
-        return back()->with('success', 'Seat value stored successfully!');
+        // Fetch the existing seat for the user
+        $existing_seat = Seat::where('users_id', $user_id)->first();
+        // Check if the user already has a seat
+        if ($existing_seat) 
+        {
+            // If user already has a seat, ask for confirmation to change it
+            return back()->with('info', "Do you want to change your seat to {$seat_number}?")
+                         ->with('seat_number', $seat_number);
+        }
+        else 
+        {
+            // Assign the seat to the user
+            $seat = new Seat();
+            $seat->users_id = $user_id;
+            $seat->seat_num = $seat_number;
+            $seat->save();
+            return back()->with('success', 'Seat selected successfully!');
+        }
     }
 
     /**
@@ -58,10 +72,29 @@ class SeatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,$id)
     {
-        //
+        $seat_number = $request->input('seat_number');
+        $seat = Seat::where('users_id', $id)->first();
+        if ($seat) 
+        {
+            // Update the seat number
+            $seat->users_id = $id;
+            $seat->seat_num = $seat_number;
+            $seat->save();
+
+            // Redirect back with a success message
+            return back()->with('success', "Seat changed to $seat_number successfully!");
+        } 
+        else 
+        {
+            // Handle case where no seat is found
+            return back()->with('error', 'No seat found to update.');
+        
+        }
+       
     }
+    
 
     /**
      * Remove the specified resource from storage.

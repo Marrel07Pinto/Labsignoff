@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('queries', function (Blueprint $table) {
             $table->id();
+            $table->biginteger('users_id')->unsigned();
+            $table->string('q_clink');
+            $table->string('q_img');
+            $table->string('q_description');
             $table->timestamps();
+
+            $table->foreign('users_id')->references('id')->on('users')
+            ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

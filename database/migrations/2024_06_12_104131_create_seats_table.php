@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('users_id')->unsigned();
-            $table->string('seat_num');
+            $table->string('seat_num')->unique();
             $table->timestamps();
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');

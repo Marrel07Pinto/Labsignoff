@@ -49,5 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Seat::class,'seat_num');
     }
+    public function queries()
+    {
+        return $this->hasMany(Query::class, 'users_id'); 
+    }
 
 }

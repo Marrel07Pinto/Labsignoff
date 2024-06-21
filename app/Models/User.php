@@ -50,8 +50,4 @@ class User extends Authenticatable
         return $this->hasOne(Seat::class,'seat_num');
     }
 
-    public function query()
-    {
-        return $this->hasMany(Query::class,'users_id');
-    }
 }

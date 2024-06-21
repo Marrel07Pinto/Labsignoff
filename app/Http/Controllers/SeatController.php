@@ -36,16 +36,22 @@ class SeatController extends Controller
         // Fetch the existing seat for the user
         $existing_seat = Seat::where('users_id', $user_id)->first();
         // Check if the user already has a seat
-        if ($existing_seat && $existing_seat->seat_num === $seat_number) 
-            {
-                return back()->with('success', 'You have selected your current seat again.');
-            }
-            else
-            {
-            // If user already has a seat, ask for confirmation to change it
-                return back()->with('info', "Do you want to change your seat to {$seat_number}?")
-                ->with('seat_number', $seat_number);
-            }
+        if ($existing_seat && $existing_seat->seat_num !== $seat_number) {
+            // Ask for confirmation to change the seat
+            return back()->with('info', "Do you want to change your seat to {$seat_number}?")
+                         ->with('seat_number', $seat_number);
+        } elseif ($existing_seat && $existing_seat->seat_num === $seat_number) {
+            // If user already has the same seat, proceed without asking any question
+            return back()->with('success', 'You have selected your current seat again.');
+        } else {
+            // If user doesn't have a seat, assign the seat to the user
+            $seat = new Seat();
+            $seat->users_id = $user_id;
+            $seat->seat_num = $seat_number;
+            $seat->save();
+            
+            return back()->with('success', 'Seat selected successfully!');
+        }
     }
 
     /**

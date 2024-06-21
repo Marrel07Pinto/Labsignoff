@@ -40,10 +40,14 @@ class SeatController extends Controller
             // Ask for confirmation to change the seat
             return back()->with('info', "Do you want to change your seat to {$seat_number}?")
                          ->with('seat_number', $seat_number);
-        } elseif ($existing_seat && $existing_seat->seat_num === $seat_number) {
+        } 
+        elseif ($existing_seat && $existing_seat->seat_num === $seat_number) 
+        {
             // If user already has the same seat, proceed without asking any question
             return back()->with('success', 'You have selected your current seat again.');
-        } else {
+        } 
+        else 
+        {
             // If user doesn't have a seat, assign the seat to the user
             $seat = new Seat();
             $seat->users_id = $user_id;

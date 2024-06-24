@@ -31,7 +31,13 @@ class QueryController extends Controller
     {
         $request->validate([
             'q_description' => 'required|string',
+            'q_img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'q_img.image' => 'The file must be an image.',
+            'q_img.mimes' => 'Image should be of type jpeg, png, jpg.',
+
         ]);
+
         
         $user_id = auth()->user()->id;
         $seat = Seat::where('users_id', $user_id)->first();

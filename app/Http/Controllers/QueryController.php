@@ -33,7 +33,9 @@ class QueryController extends Controller
         $seat = Seat::where('users_id', $user_id)->first();
         $seat_number = $seat->seat_num;
 
+        
         $qimage = '';
+        
         if($request->hasFile('q_img'))
         {
             $img=$request->file('q_img');
@@ -50,6 +52,7 @@ class QueryController extends Controller
             $query->q_img = $qimage;
             $query->q_description=$request->input('q_description');
             $query->save();
+            return back()->with('success', 'Query has been raised successfully!');
     }
 
     /**

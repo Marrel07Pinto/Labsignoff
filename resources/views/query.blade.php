@@ -20,11 +20,16 @@
                 <label for="q_img">Image:</label>
                     <input type="file" id="q_img" name="q_img"><br><br>
                 <label for="q_description">Description:</label>
-                    <textarea id="q_description" name="q_description"></textarea><br><br>
+                    <textarea id="q_description" name="q_description" required></textarea><br><br>
                 <label for="q_clink">Codeshare Link:</label>
                     <input type="text" id="q_clink" name="q_clink"><br><br>
                 <input type="submit" value="Submit">
             </form>
+            @if (session('success'))
+                <script>
+                    alert('{{ session('success') }}');
+                </script>
+            @endif
         </main>
     </body>
 </html>

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->biginteger('users_id')->unsigned();
             $table->string('q_seat');
-            $table->string('q_clink');
-            $table->string('q_img');
+            $table->string('q_clink')->nullable();
+            $table->string('q_img')->nullable();
             $table->string('q_description');
             $table->timestamps();
 

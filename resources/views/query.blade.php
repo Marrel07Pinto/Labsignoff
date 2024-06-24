@@ -15,7 +15,7 @@
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
-            <form id="queryform" action="{{ route('query_form') }}" method="POST" encrypt="multipart/form-data">
+            <form id="queryform" action="{{ route('query_form') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <label for="q_img">Image:</label>
                     <input type="file" id="q_img" name="q_img"><br><br>

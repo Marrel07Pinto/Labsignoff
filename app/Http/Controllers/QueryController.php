@@ -29,6 +29,10 @@ class QueryController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'q_description' => 'required|string',
+        ]);
+        
         $user_id = auth()->user()->id;
         $seat = Seat::where('users_id', $user_id)->first();
         $seat_number = $seat->seat_num;

@@ -32,14 +32,23 @@ class QueryController extends Controller
         $user_id = auth()->user()->id;
         $seat = Seat::where('users_id', $user_id)->first();
         $seat_number = $seat->seat_num;
+
+        $qimage = '';
+        if($request->hasFile('q_img'))
+        {
+            $img=$request->file('q_img');
+            $qimage=time().'.'.$img->getClientOriginalExtension();
+            $path=public_path('/images/query_images');
+            $img->move($path,$qimage);
+
+        }
            
             $query = new Query();
             $query->users_id = $user_id;
             $query->q_seat = $seat_number;
             $query->q_clink =$request->input('q_clink');
-            $query->q_img = $q_img;
-            $query->q_description= $q_description;
-            dd($query);
+            $query->q_img = $qimage;
+            $query->q_description=$request->input('q_description');
             $query->save();
     }
 

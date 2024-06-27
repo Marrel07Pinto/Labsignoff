@@ -13,8 +13,8 @@ class Seat extends Model
     {
         return $this->belongsTo(User::class,'id');
     }
-    public function queries()
+    public function sign()
     {
-        return $this->hasMany(Query::class, 'q_seat'); 
+        return $this->hasMany(Sign::class, 's_seat'); 
     }
 }

@@ -17,4 +17,8 @@ class Seat extends Model
     {
         return $this->hasMany(Sign::class, 's_seat'); 
     }
+    public function queries()
+    {
+        return $this->hasMany(Query::class, 'q_seat'); 
+    }
 }

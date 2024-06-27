@@ -53,5 +53,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sign::class, 'users_id'); 
     }
+    public function queries()
+    {
+        return $this->hasMany(Query::class, 'users_id'); 
+    }
 
 }

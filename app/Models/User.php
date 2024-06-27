@@ -49,9 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Seat::class,'seat_num');
     }
-    public function queries()
+    public function sign()
     {
-        return $this->hasMany(Query::class, 'users_id'); 
+        return $this->hasMany(Sign::class, 'users_id'); 
     }
 
 }

@@ -29,7 +29,7 @@ class SignController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            's_description' => 'required|string',
+            
             's_img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             's_img.image' => 'The file must be an image.',
@@ -61,7 +61,7 @@ class SignController extends Controller
             $sign->s_img = $simage;
             $sign->s_description=$request->input('s_description');
             $sign->save();
-            return back()->with('success', 'Query has been raised successfully!');
+            return back()->with('success', 'Sign-off requested');
     }
 
 

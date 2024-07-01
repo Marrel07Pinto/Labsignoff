@@ -12,9 +12,9 @@ class SeatController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function homeindex()
     {
-        //
+        return view('home');
     }
 
     /**
@@ -54,8 +54,12 @@ class SeatController extends Controller
             $seat->seat_num = $seat_number;
             $seat->save();
             
-            return back()->with('success', 'Seat selected successfully!');
+            return redirect()->route('seat')->with('success', 'Seat selected successfully!');
         }
+    }
+    public function showSeatSelection()
+    {
+        return view('seat');  // Ensure this corresponds to resources/views/seat.blade.php
     }
 
     /**

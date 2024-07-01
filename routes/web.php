@@ -37,5 +37,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/query_form',[QueryController::class,'store'])->name('query_form');
 Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
+Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
+Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
 
 require __DIR__.'/auth.php';

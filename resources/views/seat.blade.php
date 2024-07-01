@@ -10,6 +10,12 @@
             </div><!-- End Page Title -->
 
             <section class="section">
+                <script>
+                    // Redirect to home after 2 seconds
+                    setTimeout(function() {
+                    window.location.href = "{{ route('home') }}";
+                    }, 2000);  // 2000 milliseconds = 2 seconds
+                </script>
                 @if(session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}

@@ -45,9 +45,11 @@ class QueryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $user_id = auth()->user()->id;
+        $data = Query::where('users_id', $user_id)->get();
+        return view('query',compact('data'));
     }
 
     /**

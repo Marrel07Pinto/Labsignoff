@@ -306,7 +306,7 @@
   </li>
 
   <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('queries') }}">
+          <a class="nav-link collapsed" href="{{ route('query') }}">
           <i class="bi bi-question-circle"></i>
           <span>Ask Query</span>
         </a>

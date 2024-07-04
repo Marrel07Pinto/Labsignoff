@@ -27,10 +27,6 @@ Route::get('/sign', function ()
                     {
                         return view('sign');
                     })->name('sign');
-Route::get('/query', function () 
-                    {
-                        return view('query');
-                    })->name('queries');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -39,5 +35,10 @@ Route::post('/query_form',[QueryController::class,'store'])->name('query_form');
 Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
 Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
 Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/query', [QueryController::class, 'show'])->name('query'); // Use 'query' as the name
+});
+
+
 
 require __DIR__.'/auth.php';

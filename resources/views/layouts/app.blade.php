@@ -306,7 +306,7 @@
   </li>
 
   <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('query') }}">
+        <a class="nav-link collapsed" href="{{ route('queries') }}">
           <i class="bi bi-question-circle"></i>
           <span>Ask Query</span>
         </a>
@@ -318,7 +318,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link collapsed" href="{{ route('sign') }}">
+    <a class="nav-link collapsed" href="">
       <i class="bi bi-journal-text"></i>
       <span>Feedback</span>
     </a>

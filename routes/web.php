@@ -30,7 +30,7 @@ Route::get('/sign', function ()
 Route::get('/query', function () 
                     {
                         return view('query');
-                    })->name('query');
+                    })->name('queries');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

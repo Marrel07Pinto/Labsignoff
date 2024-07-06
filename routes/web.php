@@ -36,8 +36,11 @@ Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
 Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
 Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
 Route::middleware('auth')->group(function () {
-    Route::get('/query', [QueryController::class, 'show'])->name('query'); // Use 'query' as the name
+    Route::get('/query', [QueryController::class, 'show'])->name('query');
+    Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.delete');
+
 });
+
 
 
 

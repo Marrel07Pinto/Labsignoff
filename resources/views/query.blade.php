@@ -41,17 +41,14 @@
             @else
                 <table style="width: 100%; border-collapse: collapse;">
                     <tr>
-                        <th style="width: 30%;">Query</th>
-                        <th style="width: 30%;">Date & Time</th>
-                        <th style="width: 20%;">Edit</th>
+                        <th style="width: 80%;">Query</th>
                         <th style="width: 20%;">Delete</th>
                     </tr>
                     @foreach($data as $item)  
                         <tr>
                             <td>{{ $item->q_query }}</td>
-                            <td>{{ $item->created_at }}</td>
-                            <td><button>Edit</button></td>
-                            <td><button>Delete</button></td>
+                            <td>
+                            <a href="{{ url('delete/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete this query?');"><button>Delete</button></a></td>
                         </tr>
                     @endforeach
                 </table>

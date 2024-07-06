@@ -68,9 +68,11 @@ class SignController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $user_id = auth()->user()->id;
+        $signoff = Sign::where('users_id', $user_id)->get();
+        return view('sign',compact('signoff'));
     }
 
     /**

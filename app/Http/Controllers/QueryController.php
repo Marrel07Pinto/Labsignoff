@@ -71,8 +71,10 @@ class QueryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $data = Query::find($id);
+        $data->delete();
+        return back()->with('success', 'Query has been deleted successfully!');
     }
 }

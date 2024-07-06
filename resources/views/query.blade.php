@@ -47,8 +47,7 @@
                     @foreach($data as $item)  
                         <tr>
                             <td>{{ $item->q_query }}</td>
-                            <td>
-                            <a href="{{ url('delete/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete this query?');"><button>Delete</button></a></td>
+                            <td><a href="{{ url('delete/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete this query?');"><button>Delete</button></a></td>
                         </tr>
                     @endforeach
                 </table>

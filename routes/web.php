@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::get('/seat', function()
                     {
@@ -35,10 +36,9 @@ Route::post('/query_form',[QueryController::class,'store'])->name('query_form');
 Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
 Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
 Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
-Route::middleware('auth')->group(function () {
-    Route::get('/query', [QueryController::class, 'show'])->name('query');
-    Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.delete');
-
+Route::get('/query', [QueryController::class, 'show'])->name('query');
+Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.delete');
+Route::get('/sign', [SignController::class, 'show'])->name('sign');
 });
 
 

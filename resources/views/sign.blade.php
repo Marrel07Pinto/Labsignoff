@@ -23,6 +23,7 @@
                 <label for="s_clink">Codeshare Link:</label>
                     <input type="text" id="s_clink" name="s_clink"><br><br>
                 <input type="submit" value="Submit">
+                <hr>
             </form>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,6 +38,29 @@
                 <script>
                     alert('{{ session('success') }}');
                 </script>
+                
+            @endif
+            @if($signoff->isEmpty())
+                <p>No request as been raised for lab signoff</p>
+            @else
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <th style="width: 60%;">Explanation</th>
+                        <th style="width: 25%;">CodeLink</th>
+                        <th style="width: 5%;">View</th>
+                        <th style="width: 5%;">Edit</th>
+                        <th style="width: 5%;">Delete</th>
+                    </tr>
+                    @foreach($signoff as $item)  
+                        <tr>
+                            <td>{{ $item->s_description }}</td>
+                            <td>{{ $item->s_clink }}</td>
+                            <td><button>View</button></td>
+                            <td><button>Edit</button></td>
+                            <td><button>Delete</button></td>
+                        </tr>
+                    @endforeach
+                </table>
             @endif
         </main>
     </body>

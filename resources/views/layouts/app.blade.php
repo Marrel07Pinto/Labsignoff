@@ -288,7 +288,7 @@
   <li class="nav-item">
     <a class="nav-link collapsed" href="">
       <i class="bi bi-book"></i>
-      <span>Todays Task</span>
+      <span>Task</span>
     </a>
   </li>
 

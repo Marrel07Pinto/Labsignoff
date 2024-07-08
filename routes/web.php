@@ -39,6 +39,7 @@ Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
 Route::get('/query', [QueryController::class, 'show'])->name('query');
 Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.delete');
 Route::get('/sign', [SignController::class, 'show'])->name('sign');
+Route::get('/signd/{id}', [SignController::class, 'destroy'])->name('item.delete');
 });
 
 

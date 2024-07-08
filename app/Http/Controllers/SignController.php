@@ -94,8 +94,10 @@ class SignController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $signoff = Sign::find($id);
+        $signoff->delete();
+        return back()->with('success', 'Request for lab sign-off has been deleted successfully!');
     }
 }

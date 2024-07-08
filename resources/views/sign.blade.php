@@ -57,7 +57,7 @@
                             <td>{{ $item->s_clink }}</td>
                             <td><button>View</button></td>
                             <td><button>Edit</button></td>
-                            <td><button>Delete</button></td>
+                            <td><a href="{{ url('signd/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete the request for lab sign-off?');"><button>Delete</button></a></td>
                         </tr>
                     @endforeach
                 </table>

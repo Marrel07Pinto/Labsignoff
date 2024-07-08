@@ -40,6 +40,9 @@ Route::get('/query', [QueryController::class, 'show'])->name('query');
 Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.delete');
 Route::get('/sign', [SignController::class, 'show'])->name('sign');
 Route::get('/signd/{id}', [SignController::class, 'destroy'])->name('item.delete');
+Route::get('signview/{sign}', [SignController::class, 'signView'])->name('signview');
+
+
 });
 
 

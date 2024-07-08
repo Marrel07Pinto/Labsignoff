@@ -84,7 +84,9 @@ class SignController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $signedit = Sign::find($id);
+        return view('signedit',compact('signedit'));
+
     }
 
     /**
@@ -92,7 +94,37 @@ class SignController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            
+            's_img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            's_img.image' => 'The file must be an image.',
+            's_img.mimes' => 'Image should be of type jpeg, png, jpg.',
+            
+
+        ]);
+        $validatedData = $request->validate([
+            's_description' => 'required|string|max:10000', // Example: max length of 10,000 characters
+        ]);
+        
+
+        $simage = '';
+        
+        if($request->hasFile('s_img'))
+        {
+            $img=$request->file('s_img');
+            $simage=time().'.'.$img->getClientOriginalExtension();
+            $path=public_path('/images/signoff_images');
+            $img->move($path,$simage);
+
+        }
+        
+        $signedit = Sign::find($id);
+        $signedit->s_clink =$request->input('s_clink');
+        $signedit->s_img = $simage;
+        $signedit->s_description= $validatedData['s_description'];
+        $signedit->update();
+        return back()->with('success', 'Sign-off requested has been updated');
     }
 
     /**

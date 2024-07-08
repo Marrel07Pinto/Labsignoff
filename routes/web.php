@@ -41,6 +41,8 @@ Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.dele
 Route::get('/sign', [SignController::class, 'show'])->name('sign');
 Route::get('/signd/{id}', [SignController::class, 'destroy'])->name('item.delete');
 Route::get('signview/{sign}', [SignController::class, 'signView'])->name('signview');
+Route::get('signedit/{id}',[SignController::class,'edit'])->name('signedit');
+Route::put('signupdate/{id}',[SignController::class,'update'])->name('signupdate');
 
 
 });

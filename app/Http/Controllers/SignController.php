@@ -34,7 +34,11 @@ class SignController extends Controller
         ], [
             's_img.image' => 'The file must be an image.',
             's_img.mimes' => 'Image should be of type jpeg, png, jpg.',
+            
 
+        ]);
+        $validatedData = $request->validate([
+            's_description' => 'required|string|max:10000', // Example: max length of 10,000 characters
         ]);
 
         
@@ -59,7 +63,7 @@ class SignController extends Controller
             $sign->s_seat = $seat_number;
             $sign->s_clink =$request->input('s_clink');
             $sign->s_img = $simage;
-            $sign->s_description=$request->input('s_description');
+            $sign->s_description= $validatedData['s_description'];
             $sign->save();
             return back()->with('success', 'Sign-off requested');
     }
@@ -99,5 +103,10 @@ class SignController extends Controller
         $signoff = Sign::find($id);
         $signoff->delete();
         return back()->with('success', 'Request for lab sign-off has been deleted successfully!');
+    }
+    public function signview($sign)
+    {
+        $signview = Sign::findOrFail($sign);
+        return view('signview', compact('signview'));
     }
 }

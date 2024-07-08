@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('s_seat');
             $table->string('s_clink')->nullable();
             $table->string('s_img')->nullable();
-            $table->string('s_description');
+            $table->text('s_description');
             $table->timestamps();
 
             $table->foreign('users_id')->references('id')->on('users')

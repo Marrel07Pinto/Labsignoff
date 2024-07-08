@@ -10,7 +10,12 @@
             </div><!-- End Page Title -->
 
             <section class="section">
-            @if(session('success') || session('info'))
+            @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+            @if(session('success'))
                     <script>
                         // Redirect to home after 2 seconds if there is a session message
                         setTimeout(function() {

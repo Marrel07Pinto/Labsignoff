@@ -53,9 +53,19 @@
                     </tr>
                     @foreach($signoff as $item)  
                         <tr>
-                            <td>{{ $item->s_description }}</td>
+                            <td>@if (strlen($item->s_description) > 50)
+                                    {{ substr($item->s_description, 0, 50) }}...
+                                @else
+                                    {{ $item->s_description }}
+                                @endif
+                            </td>
                             <td>{{ $item->s_clink }}</td>
-                            <td><button>View</button></td>
+                            <td><button onclick="openPopup('{{ route('signview', $item) }}')">View</button></td>
+                            <script>
+                                function openPopup(url) {
+                                    window.open(url, 'popupWindow', 'width=600,height=400,scrollbars=yes');
+                                }
+                            </script>
                             <td><button>Edit</button></td>
                             <td><a href="{{ url('signd/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete the request for lab sign-off?');"><button>Delete</button></a></td>
                         </tr>

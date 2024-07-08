@@ -61,18 +61,19 @@
                             </td>
                             <td>{{ $item->s_clink }}</td>
                             <td><button onclick="openPopup('{{ route('signview', $item) }}')">View</button></td>
-                            <script>
-                                function openPopup(url) {
-                                    window.open(url, 'popupWindow', 'width=600,height=400,scrollbars=yes');
-                                }
-                            </script>
-                            <td><button>Edit</button></td>
+                            <td><a onclick="openPopup( '{{ route('signedit', $item) }}')"><button>Edit</button></a></td>
                             <td><a href="{{ url('signd/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete the request for lab sign-off?');"><button>Delete</button></a></td>
                         </tr>
                     @endforeach
                 </table>
             @endif
         </main>
+        <script>
+            function openPopup(url) 
+            {
+            window.open(url, 'popupWindow', 'width=600,height=400,scrollbars=yes');
+            }
+        </script>
     </body>
 </html>
 @endsection

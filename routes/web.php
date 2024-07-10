@@ -28,6 +28,10 @@ Route::get('/sign', function ()
                     {
                         return view('sign');
                     })->name('sign');
+Route::get('/chat', function () 
+                    {
+                        return view('chat');
+                    })->name('chat');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

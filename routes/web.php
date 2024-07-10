@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\SignController;
 use App\Http\Controllers\QueryController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -47,7 +48,8 @@ Route::get('/signd/{id}', [SignController::class, 'destroy'])->name('item.delete
 Route::get('signview/{sign}', [SignController::class, 'signView'])->name('signview');
 Route::get('signedit/{id}',[SignController::class,'edit'])->name('signedit');
 Route::put('signupdate/{id}',[SignController::class,'update'])->name('signupdate');
-
+Route::post('/chat_form',[ChatController::class,'store'])->name('chat_form');
+Route::get('/chat', [ChatController::class, 'show'])->name('chat');
 
 });
 

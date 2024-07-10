@@ -293,7 +293,7 @@
   </li>
 
   <li class="nav-item">
-    <a class="nav-link collapsed" href="">
+    <a class="nav-link collapsed" href="{{ route('chat') }}">
     <i class="bi bi-chat-left-text"></i>
       <span>Chat</span>
     </a>

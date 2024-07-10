@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Chat;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -27,15 +27,24 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'c_messages' => 'required|string|max:10000', // Example: max length of 10,000 characters
+        ]);
+        $user_id = auth()->user()->id;
+        $chat = new Chat();
+        $chat->users_id = $user_id;
+        $chat->c_messages = $request->input('c_messages');
+        $chat->save();
+        return back()->with('success', 'Message sent successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $chatmessages = Chat::all();
+        return view('chat',compact('chatmessages'));
     }
 
     /**

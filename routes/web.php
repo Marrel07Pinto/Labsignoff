@@ -33,6 +33,10 @@ Route::get('/chat', function ()
                     {
                         return view('chat');
                     })->name('chat');
+Route::get('/feedback', function () 
+                    {
+                        return view('feedback');
+                    })->name('feedback');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

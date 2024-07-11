@@ -1,29 +1,79 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+<div class="container">
+    <h1>Profile</h1>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
+    <!-- Display Status Messages -->
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
         </div>
-    </div>
-</x-app-layout>
+    @endif
+
+    <!-- Display Validation Errors -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <!-- Profile Details Form -->
+    <form action="{{ route('profile.update') }}" method="POST">
+        @csrf
+        @method('PATCH')
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+
+    <hr>
+
+    <!-- Change Password Form -->
+    <form action="{{ route('profile.update.password') }}" method="POST">
+        @csrf
+        @method('PATCH')
+
+        <div class="form-group">
+            <label for="current_password">Current Password</label>
+            <input type="password" class="form-control" id="current_password" name="current_password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="new_password">New Password</label>
+            <input type="password" class="form-control" id="new_password" name="new_password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="new_password_confirmation">Confirm New Password</label>
+            <input type="password" class="form-control" id="new_password_confirmation" name="new_password_confirmation" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Change Password</button>
+    </form>
+
+    <hr>
+
+    <!-- Delete Account Form -->
+    <form action="{{ route('profile.destroy') }}" method="POST">
+        @csrf
+        @method('DELETE')
+
+        <div class="form-group">
+            <label for="password">Confirm Password to Delete Account</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
+    </form>
+</div>

@@ -6,6 +6,8 @@ use App\Http\Controllers\SeatController;
 use App\Http\Controllers\SignController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\FeedbackController;
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -54,6 +56,7 @@ Route::get('signedit/{id}',[SignController::class,'edit'])->name('signedit');
 Route::put('signupdate/{id}',[SignController::class,'update'])->name('signupdate');
 Route::post('/chat_form',[ChatController::class,'store'])->name('chat_form');
 Route::get('/chat', [ChatController::class, 'show'])->name('chat');
+Route::post('/feedback_form',[FeedbackController::class,'store'])->name('feedback_form');
 
 });
 

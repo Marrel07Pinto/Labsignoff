@@ -9,13 +9,6 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FeedbackController;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -23,6 +16,9 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('/register', function () {
+    return view('auth.register'); 
+})->name('register');
 Route::get('/seat', function()
                     {
                         return view('seat');

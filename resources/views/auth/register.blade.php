@@ -1,4 +1,5 @@
 <x-guest-layout>
+<h1><Center><b>REGISTER</b></center></h1>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -46,9 +47,6 @@
 
             <x-primary-button class="ms-4">
                 {{ __('Register') }}
-            </x-primary-button>
-            <x-primary-button class="ms-3"><a href="{{ route('login') }}">
-                {{ __('Log in') }}
             </x-primary-button>
         </div>
     </form>

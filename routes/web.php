@@ -14,9 +14,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::patch('/profile/password', [PasswordController::class, 'update'])->name('profile.update.password');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-
+    Route::patch('/profile/edit', [PasswordController::class, 'update'])->name('pass_update');
 });
 Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');

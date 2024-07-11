@@ -43,6 +43,10 @@ Route::get('/feedback', function ()
                     {
                         return view('feedback');
                     })->name('feedback');
+Route::get('/task', function () 
+                    {
+                        return view('task');
+                    })->name('task');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -61,6 +65,7 @@ Route::put('signupdate/{id}',[SignController::class,'update'])->name('signupdate
 Route::post('/chat_form',[ChatController::class,'store'])->name('chat_form');
 Route::get('/chat', [ChatController::class, 'show'])->name('chat');
 Route::post('/feedback_form',[FeedbackController::class,'store'])->name('feedback_form');
+
 
 });
 

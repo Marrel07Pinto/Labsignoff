@@ -28,11 +28,16 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'interesting' => 'required|string|max:1000',
+             'engaging'  => 'required|string|max:1000',
+             
+        ]);
         $feedback = new Feedback();
         $feedback->f_understanding = $request->input('understanding');
         $feedback->f_confusing = $request->input('confusing');
-        $feedback->f_interesting =$request->input('interesting');
-        $feedback->f_engaging = $request->input('engaging');
+        $feedback->f_interesting =$validatedData['interesting'];
+        $feedback->f_engaging = $validatedData['engaging'];
         $feedback->f_important = $request->input('important');
         $feedback->f_overall = $request->input('overall');
         $feedback->f_difficulty = $request->input('difficulty');

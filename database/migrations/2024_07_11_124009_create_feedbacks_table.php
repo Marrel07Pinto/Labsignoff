@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('f_understanding');
             $table->string('f_confusing');
-            $table->string('f_interesting');
+            $table->text('f_interesting');
             $table->text('f_engaging');
             $table->string('f_important');
             $table->integer('f_overall');

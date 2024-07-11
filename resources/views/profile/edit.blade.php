@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Profile</h1>
+    <h1>Account Settings</h1>
 
     <!-- Display Status Messages -->
     @if (session('status'))
@@ -38,9 +38,8 @@
     </form>
 
     <hr>
-
     <!-- Change Password Form -->
-    <form action="{{ route('profile.update.password') }}" method="POST">
+    <form action="{{ route('pass_update') }}" method="POST">
         @csrf
         @method('PATCH')
 

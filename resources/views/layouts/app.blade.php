@@ -299,7 +299,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link collapsed" href="{{ route('seat') }}">
+    <a class="nav-link collapsed" href="{{ route('seatwithnav') }}">
     <i class="bi bi-person-square"></i>
       <span>Seat</span>
     </a>

@@ -6,14 +6,8 @@
         <main id="main" class="main">
             <div class="pagetitle">
                 <h1>Request for sign-off</h1>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item">Icons</li>
-                        <li class="breadcrumb-item active">Bootstrap</li>
-                    </ol>
-                </nav>
             </div><!-- End Page Title -->
+            <br>
             <form id="signform" action="{{route('sign_form') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <label for="s_img">Image:</label>

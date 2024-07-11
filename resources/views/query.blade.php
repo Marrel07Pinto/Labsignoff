@@ -7,14 +7,8 @@
 
             <div class="pagetitle">
                 <h1>Raise a Query</h1>
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="">Home</a></li>
-                        <li class="breadcrumb-item">Icons</li>
-                        <li class="breadcrumb-item active">Bootstrap</li>
-                    </ol>
-                </nav>
             </div><!-- End Page Title -->
+            <br>
             <form id="signform" action="{{route('query_form') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <label for="q_query">Query:</label>

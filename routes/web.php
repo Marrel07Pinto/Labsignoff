@@ -27,6 +27,10 @@ Route::get('/seat', function()
                     {
                         return view('seat');
                     })->name('seat');
+Route::get('/seatwithnav', function()
+                    {
+                        return view('seatwithnav');
+                    })->name('seatwithnav');
 Route::get('/sign', function () 
                     {
                         return view('sign');

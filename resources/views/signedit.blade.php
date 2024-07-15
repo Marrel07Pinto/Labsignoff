@@ -27,16 +27,27 @@
         <form id="signform" action="{{ url('signupdate/'.$signedit->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <label for="s_img">Screenshot:</label> 
-                <div class = "image-container">
-                    <img src="{{ asset('images/signoff_images/' . $signedit->s_img) }}">
-                </div>
-                    <input type="file" id="s_img" value="{{ $signedit->s_img }}" name="s_img" accept="image/*"><br><br>
-                    <label for="s_description">Explanation:</label>
-                    <textarea id="s_description" name="s_description">{{ $signedit->s_description }}</textarea><br><br>
-                    <label for="s_clink">Codeshare Link:</label>
-                    <input type="text" id="s_clink" name="s_clink" value="{{ $signedit->s_clink }}"><br><br>
-                    <button type="submit">Update </button>
+                <label for="s_img">Current Screenshots:</label> 
+                    <div class="image-container">
+                        @php
+                            $images = json_decode($signedit->s_img);
+                        @endphp
+
+                        @if(!empty($images))
+                            @foreach($images as $image)
+                                <img src="{{ asset('images/signoff_images/' . $image) }}" alt="Screenshot" style="width: 100px; height: auto;">
+                            @endforeach
+                        @else
+                            <p>No images available.</p>
+                        @endif
+                    </div>
+                <label for="s_img">Upload New Screenshots:</label> 
+                <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple> 
+                <label for="s_description">Explanation:</label>
+                <textarea id="s_description" name="s_description">{{ $signedit->s_description }}</textarea><br><br>
+                <label for="s_clink">Codeshare Link:</label>
+                <input type="text" id="s_clink" name="s_clink" value="{{ $signedit->s_clink }}"><br><br>
+                <button type="submit">Update </button>
             </form>
             @if (session('success'))
                 <script>

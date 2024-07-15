@@ -11,7 +11,7 @@
             <form id="signform" action="{{route('sign_form') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <label for="s_img">Image:</label>
-                    <input type="file" id="s_img" name="s_img" accept="image/*"><br><br>
+                    <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple><br><br>
                 <label for="s_description">Explanation:</label>
                     <textarea id="s_description" name="s_description" required></textarea><br><br>
                 <label for="s_clink">Codeshare Link:</label>

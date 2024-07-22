@@ -209,6 +209,7 @@
         </li><!-- End Messages Nav -->
         @php
           $userName = auth()->user()->name;
+          $uni_num = auth()->user()->u_num;
         @endphp
 
         <li class="nav-item dropdown pe-3">
@@ -221,7 +222,7 @@
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>{{ $userName }}</h6>
-              <span>Web Designer</span>
+              <span>{{ $uni_num }}</span>
             </li>
             <li>
               <hr class="dropdown-divider">

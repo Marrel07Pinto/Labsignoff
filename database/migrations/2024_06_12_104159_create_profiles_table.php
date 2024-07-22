@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
+            $table->biginteger('users_id')->unsigned();
+            $table->string('seat_num')->nullable();
+            $table->string('p_img')->nullable();
+
+            $table->foreign('users_id')->references('id')->on('users')
+            ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('seat_num')->references('seat_num')->on('seats')
+            ->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
         });
     }

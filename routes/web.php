@@ -67,9 +67,9 @@ Route::put('signupdate/{id}',[SignController::class,'update'])->name('signupdate
 Route::post('/chat_form',[ChatController::class,'store'])->name('chat_form');
 Route::get('/chat', [ChatController::class, 'show'])->name('chat');
 Route::post('/feedback_form',[FeedbackController::class,'store'])->name('feedback_form');
-
 Route::get('/usersprofile', [ProfileController::class, 'show'])->name('usersprofile');
 Route::put('profileuserupdate/{id}',[ProfileController::class,'profileuupdate'])->name('profileuserupdate');
+Route::get('/delete/{id}', [ProfileController::class, 'delete'])->name('profileuser.delete');
 
 });
 

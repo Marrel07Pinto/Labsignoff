@@ -80,7 +80,7 @@
                                                 <img src="{{ asset('images/profile_images/' . ($profileuser->p_img ?? 'default_image/765-default-avatar.png')) }}" alt="Profile">
                                                 <div class="pt-2">
                                                     <input type="file" class="btn btn-primary btn-sm" title="Upload new profile image" id="p_img" name="p_img" accept="image/*">
-                                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                    <a href="{{ url('delete/'.$profileuser->id) }}" onclick="return confirm('Are you sure you want to delete this query?');" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
                                                 </div>
                                             </div>
                                         </div>

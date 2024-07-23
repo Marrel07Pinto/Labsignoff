@@ -68,6 +68,8 @@ Route::post('/chat_form',[ChatController::class,'store'])->name('chat_form');
 Route::get('/chat', [ChatController::class, 'show'])->name('chat');
 Route::post('/feedback_form',[FeedbackController::class,'store'])->name('feedback_form');
 
+Route::get('/usersprofile', [ProfileController::class, 'show'])->name('usersprofile');
+
 });
 
 

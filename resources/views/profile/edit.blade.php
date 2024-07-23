@@ -1,8 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<!DOCTYPE html>
-<html>
-    <body>
+
         <main id="main" class="main">
                 <div class="pagetitle">
                     <h1><center>Account Settings</center></h1>
@@ -30,20 +28,6 @@
                     @csrf
                     @method('PATCH')
 
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
-                    </div>
-                     <br>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </form>
-
-                <hr>
                 <!-- Change Password Form -->
                 <form action="{{ route('pass_update') }}" method="POST">
                     @csrf
@@ -83,6 +67,5 @@
                 </form>
             </section>
         </main>
-    </body>
-</html>
+ 
 @endsection

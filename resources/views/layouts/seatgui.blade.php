@@ -50,12 +50,13 @@
             <ul class="d-flex align-items-center">
                 @php
                 $userName = auth()->user()->name;
+                $profileImage = auth()->user() ? asset('images/profile_images/' . (auth()->user()->profile->p_img ?? 'default_image/765-default-avatar.png')) : asset('images/profile_images/default_image/765-default-avatar.png');
                 @endphp
 
                 <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                    <img src="{{$profileImage}}" alt="Profile" class="rounded-circle">
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ $userName }}</span>
                 </a><!-- End Profile Iamge Icon -->
 

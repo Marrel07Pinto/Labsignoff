@@ -12,15 +12,9 @@
                         <div class="col-xl-4">
                             <div class="card">
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                                    <h2>{{ $profileuser->user->name }}</h2>
+                                <img src="{{ asset('images/profile_images/' . ($profileuser->p_img ?? 'default_image/765-default-avatar.png')) }}" alt="Profile" class="rounded-circle">
+                                <h2>{{ $profileuser->user->name }}</h2>
                                     <h3>{{$profileuser->user->u_num}}</h3>
-                                    <div class="social-links mt-2">
-                                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -52,6 +46,10 @@
                                             <div class="col-lg-3 col-md-4 label">University Number</div>
                                             <div class="col-lg-9 col-md-8">{{$profileuser->user->u_num}}</div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Seat Number</div>
+                                            <div class="col-lg-9 col-md-8">{{$profileuser->seat_num}}</div>
+                                        </div>
 
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Lab</div>
@@ -73,147 +71,39 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                     <!-- Profile Edit Form -->
-                                    <form id="signform" action="" method="POST" enctype="multipart/form-data">
+                                    <form id="signform" action="{{ route('profileuserupdate', $profileuser->id) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="row mb-3">
-                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <img src="assets/img/profile-img.jpg" alt="Profile">
-                                            <div class="pt-2">
-                                           <a><input type="file" class="btn btn-primary btn-sm" title="Upload new profile image" id="p_img" name="p_img" accept="image/*" ><i class="bi bi-upload" ></i></a>
-                                            <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                            <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <img src="{{ asset('images/profile_images/' . ($profileuser->p_img ?? 'default_image/765-default-avatar.png')) }}" alt="Profile">
+                                                <div class="pt-2">
+                                                    <input type="file" class="btn btn-primary btn-sm" title="Upload new profile image" id="p_img" name="p_img" accept="image/*">
+                                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <div class="row mb-3">
+                                            <label for="name" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="name" type="text" class="form-control" id="name" value="{{ old('name', $profileuser->user->name) }}">
+                                            </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job" value="Web Designer">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country" value="USA">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="phone" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
-                                        </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
-                                        </div>
+                                            <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="email" type="email" class="form-control" id="email" value="{{ old('email', $profileuser->user->email) }}">
+                                            </div>
                                         </div>
 
                                         <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
                                         </div>
-                                    </form><!-- End Profile Edit Form -->
+                                    </form>
 
-                                </div>
-                                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-
-                                        <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                                            <label class="form-check-label" for="changesMade">
-                                                Changes made to your account
-                                            </label>
-                                            </div>
-                                            <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                                            <label class="form-check-label" for="newProducts">
-                                                Information on new products and services
-                                            </label>
-                                            </div>
-                                            <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="proOffers">
-                                            <label class="form-check-label" for="proOffers">
-                                                Marketing and promo offers
-                                            </label>
-                                            </div>
-                                            <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
-                                            <label class="form-check-label" for="securityNotify">
-                                                Security alerts
-                                            </label>
-                                            </div>
-                                        </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
 
                                 </div>
 

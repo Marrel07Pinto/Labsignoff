@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Profile;
 
 class ProfileController extends Controller
 {
@@ -56,5 +57,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('login');
+    }
+    public function show()
+    {
+        $user_id = auth()->user()->id;
+        $profileuser = Profile::where('users_id', $user_id)->first();
+        return view('usersprofile',compact('profileuser'));
     }
 }

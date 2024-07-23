@@ -45,6 +45,10 @@ Route::get('/task', function ()
                     {
                         return view('task');
                     })->name('task');
+Route::get('/usersprofile', function () 
+                    {
+                        return view('usersprofile');
+                    })->name('usersprofile');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

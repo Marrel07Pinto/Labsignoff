@@ -24,9 +24,6 @@
                     @endif
 
             <!-- Profile Details Form -->
-                <form action="{{ route('profile.update') }}" method="POST">
-                    @csrf
-                    @method('PATCH')
 
                 <!-- Change Password Form -->
                 <form action="{{ route('pass_update') }}" method="POST">

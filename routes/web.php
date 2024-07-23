@@ -8,6 +8,8 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\TaregistrationController;
+
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 Route::middleware('auth')->group(function () {
@@ -75,6 +77,11 @@ Route::put('profileuserupdate/{id}',[ProfileController::class,'profileuupdate'])
 Route::get('/delete/{id}', [ProfileController::class, 'delete'])->name('profileuser.delete');
 
 });
+Route::get('/ta_registration', function()
+                    {
+                        return view('ta_registration');
+                    })->name('ta_registration');
+Route::post('/ta_registration', [TaregistrationController::class, 'store'])->name('t_registration');
 
 
 

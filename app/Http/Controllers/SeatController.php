@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Seat;
+use App\Models\Profile;
 
 
 class SeatController extends Controller
@@ -58,6 +59,11 @@ class SeatController extends Controller
             $seat->users_id = $user_id;
             $seat->seat_num = $seat_number;
             $seat->save();
+
+            $userprofile = new Profile();
+            $userprofile->users_id = $user_id;
+            $userprofile->seat_num = $seat_number;
+            $userprofile->save();
             
             return redirect()->route('seat')->with('success', 'Seat selected successfully!');
         }

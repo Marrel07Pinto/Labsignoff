@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Models\Profile;
 use App\Models\User;
@@ -109,5 +110,23 @@ class ProfileController extends Controller
         $user->save();
     
         return back()->with('success', 'Profile has been updated successfully!');
+    }
+
+    public function delete($id)
+    {
+        $data = Profile::find($id);
+        if ($data->p_img) {
+            Storage::delete($data->p_img);
+    
+            // Remove the image path from the profile
+            $data->p_img = null;
+            $data->save();
+    
+            return back()->with('success', 'Deleted the profile picture successfully!');
+        } 
+        else 
+        {
+            return back()->with('error', 'No profile picture to delete.');
+        }
     }
 }

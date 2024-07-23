@@ -11,10 +11,9 @@ use App\Http\Controllers\Auth\PasswordController;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 Route::middleware('auth')->group(function () {
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/edit', [PasswordController::class, 'update'])->name('pass_update');
+    Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/edit', [PasswordController::class, 'update'])->name('pass_update');
 });
 Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -49,6 +48,10 @@ Route::get('/usersprofile', function ()
                     {
                         return view('usersprofile');
                     })->name('usersprofile');
+Route::get('/edit', function()
+                    {
+                        return view('edit');
+                    })->name('edit');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

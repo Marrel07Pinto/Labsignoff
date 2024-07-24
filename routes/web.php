@@ -54,6 +54,9 @@ Route::get('/edit', function()
                     {
                         return view('edit');
                     })->name('edit');
+Route::get('/ta_registration', function() {
+                        return view('ta_registration');
+                    })->name('ta_registration');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -75,13 +78,11 @@ Route::post('/feedback_form',[FeedbackController::class,'store'])->name('feedbac
 Route::get('/usersprofile', [ProfileController::class, 'show'])->name('usersprofile');
 Route::put('profileuserupdate/{id}',[ProfileController::class,'profileuupdate'])->name('profileuserupdate');
 Route::get('/delete/{id}', [ProfileController::class, 'delete'])->name('profileuser.delete');
+Route::post('/ta_registration', [TaregistrationController::class, 'store'])->name('t_registration');
+
 
 });
-Route::get('/ta_registration', function()
-                    {
-                        return view('ta_registration');
-                    })->name('ta_registration');
-Route::post('/ta_registration', [TaregistrationController::class, 'store'])->name('t_registration');
+
 
 
 

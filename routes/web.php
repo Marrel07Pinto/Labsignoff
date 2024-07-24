@@ -61,6 +61,12 @@ Route::get('/ta_registration', function() {
 Route::get('/adminseatview', function() {
                         return view('adminseatview');
                     })->name('adminseatview');
+Route::get('/admintask', function() {
+                        return view('admintask');
+                    })->name('admintask');
+Route::get('/adminchat', function() {
+                        return view('adminchat');
+                    })->name('adminchat');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -86,6 +92,8 @@ Route::post('/ta_registration', [TaregistrationController::class, 'store'])->nam
 Route::get('/ta_registration', [TaregistrationController::class, 'show'])->name('ta_registration');
 Route::get('/ta_registration/{id}', [TaregistrationController::class, 'destroy'])->name('tadata.delete');
 Route::get('/adminseatview', [SeatController::class, 'adminseatshow'])->name('adminseatview');
+
+Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat');
 });
 
 

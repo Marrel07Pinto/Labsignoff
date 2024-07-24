@@ -80,7 +80,6 @@ Route::get('/usersprofile', [ProfileController::class, 'show'])->name('usersprof
 Route::put('profileuserupdate/{id}',[ProfileController::class,'profileuupdate'])->name('profileuserupdate');
 Route::get('/delete/{id}', [ProfileController::class, 'delete'])->name('profileuser.delete');
 Route::post('/ta_registration', [TaregistrationController::class, 'store'])->name('t_registration');
-
 Route::get('/ta_registration', [TaregistrationController::class, 'show'])->name('ta_registration');
 Route::get('/ta_registration/{id}', [TaregistrationController::class, 'destroy'])->name('tadata.delete');
 

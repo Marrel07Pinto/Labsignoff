@@ -123,4 +123,9 @@ class SeatController extends Controller
     {
         //
     }
+    public function adminseatshow()
+    {
+        $seatview = Seat::all();
+        return view('adminseatview',compact('seatview'));
+    }
 }

@@ -47,6 +47,12 @@ class ChatController extends Controller
         return view('chat',compact('chatmessages'));
     }
 
+    public function adminshow()
+    {
+        $chatmessages = Chat::all();
+        return view('adminchat',compact('chatmessages'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

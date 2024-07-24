@@ -242,13 +242,13 @@
 <ul class="sidebar-nav" id="sidebar-nav">
 
 <li class="nav-item">
-    <a class="nav-link collapsed" href="">
+    <a class="nav-link collapsed" href="{{ route('ta_registration') }}">
       <i class="bi bi-people-fill"></i>
       <span>Registration for TA's</span>
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link collapsed" href="">
+    <a class="nav-link collapsed" href="{{ route('adminseatview') }}">
       <i class="bi bi-person-square"></i>
       <span>seatview</span>
     </a>

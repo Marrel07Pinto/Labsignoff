@@ -254,14 +254,14 @@
     </a>
   </li><!-- End Dashboard Nav -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="">
+    <a class="nav-link collapsed" href="{{ route('admintask') }}">
       <i class="bi bi-book"></i>
       <span>Task</span>
     </a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link collapsed" href="">
+    <a class="nav-link collapsed" href="{{ route('adminchat') }}">
     <i class="bi bi-chat-left-text"></i>
       <span>Chat</span>
     </a>

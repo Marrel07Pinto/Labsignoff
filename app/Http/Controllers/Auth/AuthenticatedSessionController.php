@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -25,19 +26,18 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         if ($request->email === 'admin@gmail.com' && $request->password === 'Admin@123') {
+            // Manually log in the admin user if credentials match
+            auth()->loginUsingId(1); // Assuming the admin has an ID of 1
             return redirect()->route('ta_registration');
         }
-        if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
-            ]);
-        }
 
+        // Regular authentication for other users
         $request->authenticate();
 
         $request->session()->regenerate();
 
         return redirect()->route('seat');
+    
     }
 
     /**

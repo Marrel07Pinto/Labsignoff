@@ -69,7 +69,30 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+
+</br>
 <hr>
+</br>
+<h5><center><b>Registered TA's</b></center></h5>
+</br>
+@if($datata->isEmpty())
+                <p>Registration for TA has not been done</p>
+            @else
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <th style="width: 40%;">University Number</th>
+                        <th style="width: 40%;">Username</th>
+                        
+                    </tr>
+                    @foreach($datata as $tadata)  
+                        <tr>
+                            <td>{{ $tadata->u_num}}</td>
+                            <td>{{ $tadata->email }}</td>                 
+                            <td><a href="{{ url('ta_registration/'.$tadata->id) }}" onclick="return confirm('Are you sure you want to delete this credentials?');"><button>Delete</button></a></td>
+                        </tr>
+                    @endforeach
+                </table>
+            @endif
+    </x-guest-layout>
 </body>
 @endsection

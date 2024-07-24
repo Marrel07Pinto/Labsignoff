@@ -12,6 +12,7 @@ use App\Http\Controllers\TaregistrationController;
 
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -80,6 +81,8 @@ Route::put('profileuserupdate/{id}',[ProfileController::class,'profileuupdate'])
 Route::get('/delete/{id}', [ProfileController::class, 'delete'])->name('profileuser.delete');
 Route::post('/ta_registration', [TaregistrationController::class, 'store'])->name('t_registration');
 
+Route::get('/ta_registration', [TaregistrationController::class, 'show'])->name('ta_registration');
+Route::get('/ta_registration/{id}', [TaregistrationController::class, 'destroy'])->name('tadata.delete');
 
 });
 

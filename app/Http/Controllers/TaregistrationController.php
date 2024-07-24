@@ -64,9 +64,11 @@ class TaregistrationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        
+        $datata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->get();
+        return view('ta_registration',compact('datata'));
     }
 
     /**
@@ -90,6 +92,9 @@ class TaregistrationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
+        $tadata = User::find($id);
+        $tadata->delete();
+        return back()->with('success', 'Credentials has been deleted successfully!');
     }
 }

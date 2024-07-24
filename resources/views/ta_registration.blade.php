@@ -70,6 +70,6 @@
         </div>
     </form>
 </x-guest-layout>
-
+<hr>
 </body>
 @endsection

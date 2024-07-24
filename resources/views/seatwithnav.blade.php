@@ -32,7 +32,7 @@ form {
         <main id="main" class="main">
 
             <div class="pagetitle">
-                <h1>Please select your seat</h1>
+                <h1>Please select another seat to change your seat</h1>
             </div><!-- End Page Title -->
 
             <section class="section">

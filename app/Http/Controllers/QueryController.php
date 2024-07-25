@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Seat;
 use App\Models\Query;
+use App\Models\User;
 
 class QueryController extends Controller
 {
@@ -50,6 +51,14 @@ class QueryController extends Controller
         $user_id = auth()->user()->id;
         $data = Query::where('users_id', $user_id)->get();
         return view('query',compact('data'));
+    }
+
+    public function adminqueryshow()
+    {
+        $adminquerydata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->get();
+        $qdata = Query::all();
+        return view('adminquery', compact('adminquerydata', 'qdata'));
+
     }
 
     /**

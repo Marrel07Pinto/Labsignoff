@@ -92,7 +92,6 @@ Route::post('/ta_registration', [TaregistrationController::class, 'store'])->nam
 Route::get('/ta_registration', [TaregistrationController::class, 'show'])->name('ta_registration');
 Route::get('/ta_registration/{id}', [TaregistrationController::class, 'destroy'])->name('tadata.delete');
 Route::get('/adminseatview', [SeatController::class, 'adminseatshow'])->name('adminseatview');
-
 Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat');
 });
 

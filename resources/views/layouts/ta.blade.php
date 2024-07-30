@@ -296,7 +296,7 @@
   </li>
 
   <li class="nav-item">
-          <a class="nav-link collapsed" href="{{ route('adminquery') }}">
+          <a class="nav-link collapsed" href="{{ route('taqueries') }}">
           <i class="bi bi-question-circle"></i>
           <span>Queries</span>
         </a>

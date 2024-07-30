@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends($TA ? 'layouts.ta' : 'layouts.admin')
 
 @section('content')
 <style>

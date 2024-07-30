@@ -53,14 +53,6 @@ class QueryController extends Controller
         return view('query',compact('data'));
     }
 
-    public function adminqueryshow()
-    {
-        $adminquerydata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->get();
-        $qdata = Query::all();
-        return view('adminquery', compact('adminquerydata', 'qdata'));
-
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -85,5 +77,22 @@ class QueryController extends Controller
         $data = Query::find($id);
         $data->delete();
         return back()->with('success', 'Query has been deleted successfully!');
+    }
+
+    public function showQueries() {
+        $adminquerydata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->orderBy('id', 'asc')->get();
+        $qdata = Query::all();
+    
+        // Prepare the data to be passed to the view
+        $queriesGroupedByTA = [];
+    
+        foreach ($adminquerydata as $index => $ta) {
+            $queriesGroupedByTA[$index]['ta'] = $ta;
+            $queriesGroupedByTA[$index]['queries'] = $qdata->filter(function ($query, $key) use ($index, $adminquerydata) {
+                return $key % count($adminquerydata) == $index;
+            });
+        }
+    
+        return view('adminquery', compact('queriesGroupedByTA'));
     }
 }

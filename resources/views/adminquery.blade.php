@@ -1,5 +1,4 @@
-@extends($TA ? 'layouts.ta' : 'layouts.admin')
-
+@extends('layouts.admin')
 @section('content')
 <style>
     .btn-size {
@@ -13,12 +12,12 @@
         <h1>Raised Queries</h1>
     </div><!-- End Page Title -->
     </br>
-    @if(empty($queriesGroupedByTA))
+    @if(empty($queriesgiventoTA))
         <p>No Teaching Assistance</p>
     @else
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">
-                @foreach($queriesGroupedByTA as $group)
+                @foreach($queriesgiventoTA as $group)
                     <div class="col-lg-6">
                         <a href="" class="text-decoration-none">
                             <div class="card">

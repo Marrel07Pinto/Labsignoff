@@ -35,6 +35,11 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $user = auth()->user();
+    
+        if (str_starts_with($user->u_num, 'TA-')) {
+            return redirect()->route('taskupload'); 
+        }
 
         return redirect()->route('seat');
     

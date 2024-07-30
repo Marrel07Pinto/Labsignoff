@@ -97,7 +97,8 @@ Route::get('/ta_registration/{id}', [TaregistrationController::class, 'destroy']
 Route::get('/adminseatview', [SeatController::class, 'adminseatshow'])->name('adminseatview');
 Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat');
 
-Route::get('/adminquery', [QueryController::class, 'adminqueryshow'])->name('adminquery');
+Route::get('/adminquery', [QueryController::class, 'showQueries'])->name('adminquery');
+
 });
 
 

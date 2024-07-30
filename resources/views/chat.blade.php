@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends($TA ? 'layouts.ta' : 'layouts.app')
 @section('content')
 <!DOCTYPE html>
 <html>

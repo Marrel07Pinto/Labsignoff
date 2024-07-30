@@ -67,7 +67,7 @@ class TaregistrationController extends Controller
     public function show()
     {
         
-        $datata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->get();
+        $datata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->orderBy('id', 'asc')->get();
         return view('ta_registration',compact('datata'));
     }
 

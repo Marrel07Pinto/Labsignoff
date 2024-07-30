@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->biginteger('users_id')->unsigned();
             $table->string('q_seat');
-            $table->string('q_query');
+            $table->text('q_query');
+            $table->string('resolved_by')->nullable();
+            $table->string('solution')->nullable();
 
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');

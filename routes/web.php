@@ -70,6 +70,9 @@ Route::get('/adminchat', function() {
 Route::get('/adminquery', function() {
                         return view('adminquery');
                     })->name('adminquery');
+Route::get('/taskupload', function() {
+                        return view('taskupload');
+                    })->name('taskupload');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -98,6 +101,8 @@ Route::get('/adminseatview', [SeatController::class, 'adminseatshow'])->name('ad
 Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat');
 
 Route::get('/adminquery', [QueryController::class, 'showQueries'])->name('adminquery');
+Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
+
 
 });
 

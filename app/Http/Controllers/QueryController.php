@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Seat;
 use App\Models\Query;
 use App\Models\User;
@@ -80,12 +81,16 @@ class QueryController extends Controller
     }
 
     public function showQueries() {
-        $adminquerydata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->orderBy('id', 'asc')->get();
-        $qdata = Query::all();
+        $adminquerydata = User::select('id', 'name', 'email', 'password', 'u_num')
+            ->where('u_num', 'like', 'TA-%')
+            ->orderBy('id', 'asc')
+            ->get();
     
+        $qdata = Query::all();
+        
         // Prepare the data to be passed to the view
         $queriesGroupedByTA = [];
-    
+        
         foreach ($adminquerydata as $index => $ta) {
             $queriesGroupedByTA[$index]['ta'] = $ta;
             $queriesGroupedByTA[$index]['queries'] = $qdata->filter(function ($query, $key) use ($index, $adminquerydata) {
@@ -93,6 +98,16 @@ class QueryController extends Controller
             });
         }
     
-        return view('adminquery', compact('queriesGroupedByTA'));
+        // Determine if the current user is a TA
+        $user = Auth::user();
+        $TA = strpos($user->u_num, 'TA-') === 0;
+    
+        // Pass data to the view
+        return view('adminquery', [
+            'queriesGroupedByTA' => $queriesGroupedByTA,
+            'TA' => $TA
+        ]);
     }
 }
+
+

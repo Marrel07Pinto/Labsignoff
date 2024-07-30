@@ -125,7 +125,12 @@ class SeatController extends Controller
     }
     public function adminseatshow()
     {
-        $seatview = Seat::all();
-        return view('adminseatview',compact('seatview'));
+        $user = Auth::user();
+        $TA = strpos($user->u_num, 'TA-') === 0;
+        return view('adminseatview', [
+            'seatview' => Seat::all(),
+            'TA' => $TA
+        ]);
     }
+
 }

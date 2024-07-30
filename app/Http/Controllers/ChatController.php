@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Chat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -41,12 +42,16 @@ class ChatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function showlayout()
     {
-        $chatmessages = Chat::all();
-        return view('chat',compact('chatmessages'));
+        $user = Auth::user();
+        $TA = strpos($user->u_num, 'TA-') === 0;
+        return view('chat', [
+            'chatmessages' => Chat::all(),
+            'TA' => $TA
+        ]);
+        
     }
-
     public function adminshow()
     {
         $chatmessages = Chat::all();
@@ -76,4 +81,5 @@ class ChatController extends Controller
     {
         //
     }
+    
 }

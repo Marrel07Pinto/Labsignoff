@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Seat;
 use App\Models\Query;
 use App\Models\User;
@@ -81,33 +80,38 @@ class QueryController extends Controller
     }
 
     public function showQueries() {
-        $adminquerydata = User::select('id', 'name', 'email', 'password', 'u_num')
-            ->where('u_num', 'like', 'TA-%')
-            ->orderBy('id', 'asc')
-            ->get();
-    
+        $querydata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->orderBy('id', 'asc')->get();
         $qdata = Query::all();
-        
+    
         // Prepare the data to be passed to the view
-        $queriesGroupedByTA = [];
-        
-        foreach ($adminquerydata as $index => $ta) {
-            $queriesGroupedByTA[$index]['ta'] = $ta;
-            $queriesGroupedByTA[$index]['queries'] = $qdata->filter(function ($query, $key) use ($index, $adminquerydata) {
-                return $key % count($adminquerydata) == $index;
+        $queriesgiventoTA = [];
+    
+        foreach ($querydata as $index => $ta) {
+            $queriesgiventoTA [$index]['ta'] = $ta;
+            $queriesgiventoTA [$index]['queries'] = $qdata->filter(function ($query, $key) use ($index, $querydata) {
+                return $key % count($querydata) == $index;
             });
         }
     
-        // Determine if the current user is a TA
-        $user = Auth::user();
-        $TA = strpos($user->u_num, 'TA-') === 0;
+        return view('adminquery', compact('queriesgiventoTA'));
+        
+    }
+
+    public function taQueries() {
+        $querydata = User::select('id','name', 'email', 'password','u_num')->where('u_num', 'like', 'TA-%')->orderBy('id', 'asc')->get();
+        $qdata = Query::all();
     
-        // Pass data to the view
-        return view('adminquery', [
-            'queriesGroupedByTA' => $queriesGroupedByTA,
-            'TA' => $TA
-        ]);
+        // Prepare the data to be passed to the view
+        $queriesgiventoTA = [];
+    
+        foreach ($querydata as $index => $ta) {
+            $queriesgiventoTA [$index]['ta'] = $ta;
+            $queriesgiventoTA [$index]['queries'] = $qdata->filter(function ($query, $key) use ($index, $querydata) {
+                return $key % count($querydata) == $index;
+            });
+        }
+    
+        return view('taqueries', compact('queriesgiventoTA'));
+        
     }
 }
-
-

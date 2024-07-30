@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('s_clink')->nullable();
             $table->string('s_img')->nullable();
             $table->text('s_description');
+            $table->string('resolved_by')->nullable();
             $table->timestamps();
 
             $table->foreign('users_id')->references('id')->on('users')

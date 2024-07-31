@@ -13,43 +13,43 @@
         <h1>Raised Queries</h1>
     </div><!-- End Page Title -->
     </br>
-    @if(empty($queriesgiventoTA))
-        <p>No Teaching Assistance</p>
-    @else
+    @if(!empty($queriesGivenToTA))
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">
-                @foreach($queriesgiventoTA as $group)
+                @foreach($queriesGivenToTA as $group)
                     @if ($group['ta']->id == auth()->user()->id) 
-                        <div class="col-lg-6">
-                            <div class="text-decoration-none">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $group['ta']->name }}</h5>
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item">Teaching Assistant</li>
-                                        </ol>
-                                        <br>
-                                        @foreach($group['queries'] as $querydata)
+                    <div class="col-lg-6">
+                        <a class="text-decoration-none">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $group['ta']->name }}</h5>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">Teaching Assistant</li>
+                                    </ol>
+                                    <br>
+                                    @foreach($group['queries'] as $querydata)
                                         @php
-                                            $alertClass = !empty($querydata->resolved_by) && !empty($querydata->solution) ? 'alert-success' : 'alert-danger';
+                                            $alertClass = !empty($querydata->solution) ? 'alert-success' : 'alert-danger';
                                         @endphp
-                                            <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}">
-                                                <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
-                                                    <button type="button" class="btn btn-dark btn-size">
-                                                        <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
-                                                    </button> 
-                                                    {{ Str::limit($querydata->q_query, 30, '...') }}
-                                                </div>
-                                            </a>
-                                        @endforeach
-                                    </div>
+                                        <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}">
+                                            <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
+                                                <button type="button" class="btn btn-dark btn-size">
+                                                    <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
+                                                </button> 
+                                                {{ Str::limit($querydata->q_query, 30, '...') }}
+                                            </div>
+                                        </a>
+                                    @endforeach
                                 </div>
                             </div>
-                        </div>
+                        </a>
+                    </div>
                     @endif
                 @endforeach
             </div>
         </section>
+    @else
+        <p>No queries</p>
     @endif
 </main>
 

@@ -19,7 +19,7 @@
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">
                 @foreach($queriesgiventoTA as $group)
-                    @if ($group['ta']->id == auth()->user()->id) <!-- Only show queries for the logged-in TA -->
+                    @if ($group['ta']->id == auth()->user()->id) 
                         <div class="col-lg-6">
                             <div class="text-decoration-none">
                                 <div class="card">
@@ -30,8 +30,11 @@
                                         </ol>
                                         <br>
                                         @foreach($group['queries'] as $querydata)
+                                        @php
+                                            $alertClass = !empty($querydata->resolved_by) && !empty($querydata->solution) ? 'alert-success' : 'alert-danger';
+                                        @endphp
                                             <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}">
-                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
                                                     <button type="button" class="btn btn-dark btn-size">
                                                         <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
                                                     </button> 

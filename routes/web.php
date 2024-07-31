@@ -107,6 +107,9 @@ Route::get('/taqueries', [QueryController::class, 'taQueries'])->name('taqueries
 Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
 
 
+Route::post('/taqueries', [QueryController::class, 'query_solution'])->name('query_solution');
+
+
 });
 
 

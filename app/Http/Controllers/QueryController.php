@@ -42,7 +42,18 @@ class QueryController extends Controller
         $query->save();
         return back()->with('success', 'Query has been raised successfully!');
     }
-
+    public function query_solution(Request $request)
+    {
+        $query = Query::find($request->input('query_id'));
+        if ($query) {
+            $query->resolved_by = auth()->user()->name;
+            $query->solution = $request->input('solution'); 
+            $query->save();
+        }
+        
+        return redirect()->back()->with('success', 'Query resolved successfully.');
+    
+    }
     /**
      * Display the specified resource.
      */

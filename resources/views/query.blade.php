@@ -38,10 +38,14 @@
                         <th style="width: 80%;">Query</th>
                         <th style="width: 20%;">Delete</th>
                     </tr>
-                    @foreach($data as $item)  
+                    @foreach($data as $query)  
                         <tr>
-                            <td>{{ $item->q_query }}</td>
-                            <td><a href="{{ url('delete/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete this query?');"><button>Delete</button></a></td>
+                            <td>{{ $query->q_query }}</td>
+                            <td>
+                            <a href="{{ route('query.delete', $query->id) }}" onclick="return confirm('Are you sure you want to delete this query?');">
+                                    <button>Delete</button>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </table>

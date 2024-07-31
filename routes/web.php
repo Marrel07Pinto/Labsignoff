@@ -85,7 +85,7 @@ Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
 Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
 Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
 Route::get('/query', [QueryController::class, 'show'])->name('query');
-Route::get('/delete/{id}', [QueryController::class, 'destroy'])->name('item.delete');
+Route::get('/query/{id}', [QueryController::class, 'destroy'])->name('query.delete');
 Route::get('/sign', [SignController::class, 'show'])->name('sign');
 Route::get('/signd/{id}', [SignController::class, 'destroy'])->name('item.delete');
 Route::get('signview/{sign}', [SignController::class, 'signView'])->name('signview');

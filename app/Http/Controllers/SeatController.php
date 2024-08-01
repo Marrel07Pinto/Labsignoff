@@ -70,15 +70,19 @@ class SeatController extends Controller
     }
     public function showSeatSelection()
     {
-        return view('seat');  // Ensure this corresponds to resources/views/seat.blade.php
+        $user_id = auth()->user()->id;
+        $seatsoccupied = seat::all();
+        return view('seat',compact('seatsoccupied')); 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $user_id = auth()->user()->id;
+        $seatswithnav = seat::all();
+        return view('seatwithnav',compact('seatswithnav')); 
     }
 
     /**

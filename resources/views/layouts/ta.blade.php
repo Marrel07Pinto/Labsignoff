@@ -304,7 +304,7 @@
   <li class="nav-item">
     <a class="nav-link collapsed" href="">
       <i class="bi bi-clipboard2-check"></i>
-      <span>Request for Signoff</span>
+      <span>Signoff</span>
     </a>
   </li>
   <li class="nav-item">

@@ -37,7 +37,6 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-
 <body>
 
   <!-- ======= Header ======= -->
@@ -210,9 +209,13 @@
         @php
           $userName = auth()->user()->name;
           $uni_num = auth()->user()->u_num;
+          $seat_num = auth()->user()->profile->seat_num;
           $profileImage = auth()->user() ? asset('images/profile_images/' . (auth()->user()->profile->p_img ?? 'default_image/765-default-avatar.png')) : asset('images/profile_images/default_image/765-default-avatar.png');
         @endphp
-
+        <button type="button" class="btn btn-customforseatnav" title="Your seat number is {{ $seat_num }}">
+          <i class="bi bi-person"></i>&nbsp;{{$seat_num}}
+        </button> 
+        &nbsp;
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">

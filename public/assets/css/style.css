@@ -1231,3 +1231,27 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+/*--------------------------------------------------------------
+# nav bar that displays the seat 
+--------------------------------------------------------------*/
+
+.btn-customforseatnav {
+  background-color: yellow; /* Button color */
+  color: black; /* Text color for contrast */
+  font-size: 0.8rem; /* Adjust the font size if needed */
+  padding: 0.2rem 0.65rem; /* Adjust padding for size */
+  border: none; /* Remove border if needed */
+  border-radius: 0.45rem; /* Rounded corners, adjust if needed */
+  display: flex; /* Align items inside the button */
+  align-items: center; /* Center icon and text */
+  justify-content: center; /* Center icon and text */
+  margin-right: 10px;
+}
+.btn-customforseatnav i {
+  font-size: 1rem; /* Adjust icon size if needed */
+}
+.btn-customforseatnav:hover {
+  background-color: yellow; /* Keep background color same on hover */
+  color: black; /* Keep text color same on hover */
+  cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}

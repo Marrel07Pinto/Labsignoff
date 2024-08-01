@@ -83,6 +83,8 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('l
 Route::post('/query_form',[QueryController::class,'store'])->name('query_form');
 Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
 Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
+Route::get('/seatwithnav', [SeatController::class, 'show'])->name('seatwithnav');
+
 Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
 Route::get('/query', [QueryController::class, 'show'])->name('query');
 Route::get('/query/{id}', [QueryController::class, 'destroy'])->name('query.delete');

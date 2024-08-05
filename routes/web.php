@@ -111,9 +111,6 @@ Route::post('/taqueries', [QueryController::class, 'query_solution'])->name('que
 Route::get('/refresh-queries', [QueryController::class, 'refreshqueries'])->name('refresh_queries');
 Route::post('/update-query-status', [QueryController::class, 'QueryStatus'])->name('query_status');
 
-
-
-
 });
 
 

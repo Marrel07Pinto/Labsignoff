@@ -104,7 +104,7 @@
             });
         }
 
-        
+        // Bind click event handler for query-link
         function bindQueryLinkHandler() {
             $('.query-link').click(function(event) {
                 event.preventDefault(); // Prevent default link behavior
@@ -130,7 +130,7 @@
             });
         }
 
-      
+        // Handle form submission
         $('#resolveQueryForm').submit(function(event) {
             event.preventDefault();
             $.post($(this).attr('action'), $(this).serialize(), function() {
@@ -139,6 +139,7 @@
             });
         });
 
+        // Handle modal close event to reset the query status
         $('#queryModal').on('hidden.bs.modal', function () {
             var queryId = $('#queryId').val();
             if (queryId) {
@@ -148,15 +149,21 @@
                     data: {
                         _token: '{{ csrf_token() }}',
                         id: queryId,
-                        status: null 
+                        status: null // Reset status to NULL
                     },
                     success: function() {
-                        
+                        // Optionally handle success
                     }
                 });
             }
         });
+
+        // Initial binding of query-link handler
         bindQueryLinkHandler();
-        setInterval(refreshQueries, 1000);
+
+        // Set up periodic refresh of queries section
+        setInterval(refreshQueries, 500); // Change to 10000 ms (10 seconds) or your preferred interval
+    });
+
 </script>
 @endsection

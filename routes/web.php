@@ -107,9 +107,11 @@ Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat'
 Route::get('/adminquery', [QueryController::class, 'showQueries'])->name('adminquery');
 Route::get('/taqueries', [QueryController::class, 'taQueries'])->name('taqueries');
 Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
-
-
 Route::post('/taqueries', [QueryController::class, 'query_solution'])->name('query_solution');
+Route::get('/refresh-queries', [QueryController::class, 'refreshqueries'])->name('refresh_queries');
+Route::post('/update-query-status', [QueryController::class, 'QueryStatus'])->name('query_status');
+
+
 
 
 });

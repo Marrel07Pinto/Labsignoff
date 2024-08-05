@@ -14,7 +14,7 @@
     </div><!-- End Page Title -->
     </br>
     @if(!empty($queriesGivenToTA))
-        <section class="section">
+        <section class="section" id="queriesSection">
             <div class="row flex-row flex-nowrap overflow-auto">
                 @foreach($queriesGivenToTA as $group)
                     @if ($group['ta']->id == auth()->user()->id) 
@@ -28,17 +28,16 @@
                                     </ol>
                                     <br>
                                     @foreach($group['queries'] as $querydata)
-                                        @php
-                                            $alertClass = !empty($querydata->solution) ? 'alert-success' : 'alert-danger';
-                                        @endphp
-                                        <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}">
-                                            <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
-                                                <button type="button" class="btn btn-dark btn-size">
-                                                    <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
-                                                </button> 
-                                                {{ Str::limit($querydata->q_query, 30, '...') }}
-                                            </div>
-                                        </a>
+                                        @if (empty($querydata->solution)) <!-- Filter out solved queries -->
+                                            <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}">
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <button type="button" class="btn btn-dark btn-size">
+                                                        <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
+                                                    </button> 
+                                                    {{ Str::limit($querydata->q_query, 30, '...') }}
+                                                </div>
+                                            </a>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
@@ -96,14 +95,68 @@
 
 <script>
     $(document).ready(function(){
-        $('.query-link').click(function(event){
-            event.preventDefault(); // Prevent default link behavior
-            var query = $(this).data('query');
-            var id = $(this).data('id');
-            $('#queryText').val(query);
-            $('#queryId').val(id);
-            $('#queryModal').modal('show'); // Show the modal
+        // Function to refresh the queries section
+        function refreshQueries() {
+            $.get('{{ route("refresh_queries") }}', function(data) {
+                $('#queriesSection').html(data);
+                // Re-bind the query-link click event handler after content update
+                bindQueryLinkHandler();
+            });
+        }
+
+        
+        function bindQueryLinkHandler() {
+            $('.query-link').click(function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                var query = $(this).data('query');
+                var id = $(this).data('id');
+
+                // Update the query status to 'in-progress'
+                $.ajax({
+                    url: '{{ route("query_status") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: id,
+                        status: 'in-progress'
+                    },
+                    success: function() {
+                        $('#queryText').val(query);
+                        $('#queryId').val(id);
+                        $('#queryModal').modal('show'); // Show the modal
+                    }
+                });
+            });
+        }
+
+      
+        $('#resolveQueryForm').submit(function(event) {
+            event.preventDefault();
+            $.post($(this).attr('action'), $(this).serialize(), function() {
+                $('#queryModal').modal('hide'); // Hide the modal
+                refreshQueries(); // Refresh queries after form submission
+            });
         });
-    });
+
+        $('#queryModal').on('hidden.bs.modal', function () {
+            var queryId = $('#queryId').val();
+            if (queryId) {
+                $.ajax({
+                    url: '{{ route("query_status") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: queryId,
+                        status: null 
+                    },
+                    success: function() {
+                        
+                    }
+                });
+            }
+        });
+        bindQueryLinkHandler();
+        setInterval(refreshQueries, 1000);
 </script>
 @endsection

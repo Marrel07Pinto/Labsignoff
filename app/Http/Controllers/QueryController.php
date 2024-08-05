@@ -91,31 +91,30 @@ class QueryController extends Controller
     }
 
     public function showQueries() {
-        // Fetch all TAs
         $querydata = User::select('id', 'name', 'email', 'password', 'u_num')
-                         ->where('u_num', 'like', 'TA-%')
-                         ->orderBy('id', 'asc')
-                         ->get();
-        
+            ->where('u_num', 'like', 'TA-%')
+            ->orderBy('id', 'asc')
+            ->get();
+    
         // Fetch all queries
         $qdata = Query::all();
-        
+    
         // Prepare the data to be passed to the view
         $queriesGivenToTA = [];
-        
+    
         // Initialize the array for queries per TA
         $taQueries = [];
-
+    
         $pendingQueries = [];
     
-    // Get the list of TA names for quick lookup
-         $taNames = $querydata->pluck('name')->toArray();
-        
+        // Get the list of TA names for quick lookup
+        $taNames = $querydata->pluck('name')->toArray();
+    
         // Assign queries based on `resolved_by`
         foreach ($querydata as $ta) {
             $taQueries[$ta->id] = collect();
         }
-        
+    
         foreach ($qdata as $query) {
             if (!empty($query->resolved_by)) {
                 // Check if the resolved_by TA exists
@@ -135,95 +134,161 @@ class QueryController extends Controller
             // If resolved_by TA not found or empty, add to pending queries for distribution
             $pendingQueries[] = $query;
         }
-        
+    
+        // Filter out queries where q_state is not null
+        $unresolvedQueries = array_filter($pendingQueries, function($query) {
+            return $query->q_state === null;
+        });
+    
         // Distribute remaining queries
         $taIds = $querydata->pluck('id')->toArray();
         $taCount = count($taIds);
-        
-        if ($taCount > 0 && !empty($pendingQueries)) {
+    
+        if ($taCount > 0 && !empty($unresolvedQueries)) {
             $taIndex = 0;
-            foreach ($pendingQueries as $query) {
+            foreach ($unresolvedQueries as $query) {
                 $taId = $taIds[$taIndex % $taCount];
                 $taQueries[$taId][] = $query;
                 $taIndex++;
             }
         }
-        
+    
         // Prepare data for view
         foreach ($querydata as $index => $ta) {
             $queriesGivenToTA[$index]['ta'] = $ta;
             $queriesGivenToTA[$index]['queries'] = $taQueries[$ta->id];
         }
-        
+    
         return view('adminquery', compact('queriesGivenToTA'));
     }
     
 
     public function taQueries() {
         $querydata = User::select('id', 'name', 'email', 'password', 'u_num')
-        ->where('u_num', 'like', 'TA-%')
-        ->orderBy('id', 'asc')
-        ->get();
-
-            // Fetch all queries
-            $qdata = Query::all();
-
-            // Prepare the data to be passed to the view
-            $queriesGivenToTA = [];
-
-            // Initialize the array for queries per TA
-            $taQueries = [];
-
-            $pendingQueries = [];
-
-            // Get the list of TA names for quick lookup
-            $taNames = $querydata->pluck('name')->toArray();
-
-            // Assign queries based on `resolved_by`
-            foreach ($querydata as $ta) {
+            ->where('u_num', 'like', 'TA-%')
+            ->orderBy('id', 'asc')
+            ->get();
+        $qdata = Query::all();
+        $queriesGivenToTA = [];
+        $taQueries = [];
+        $pendingQueries = [];
+        $tanames = $querydata->pluck('name')->toArray();
+        foreach ($querydata as $ta) {
             $taQueries[$ta->id] = collect();
-            }
-
-            foreach ($qdata as $query) {
+        }
+    
+        foreach ($qdata as $query) {
             if (!empty($query->resolved_by)) {
-            // Check if the resolved_by TA exists
-            if (in_array($query->resolved_by, $taNames)) {
-            // Get the TA object
-            $ta = $querydata->firstWhere('name', $query->resolved_by);
-            if ($ta) {
-                // Add query to the TA's list
-                $taQueries[$ta->id][] = $query;
-                continue; // Skip to the next query
+                if (in_array($query->resolved_by, $tanames)) {
+                    $ta = $querydata->firstWhere('name', $query->resolved_by);
+                    if ($ta) {
+                        $taQueries[$ta->id][] = $query;
+                        continue; 
+                    }
+                } else {
+                   
+                    continue;
+                }
             }
-            } else {
-            // If resolved_by TA does not exist, do not distribute this query
-            continue;
-            }
-            }
-            // If resolved_by TA not found or empty, add to pending queries for distribution
             $pendingQueries[] = $query;
+        }
+    
+        
+        $unresolvedQueries = array_filter($pendingQueries, function($query) {
+            return $query->q_state === null;
+        });
+    
+        
+        $taIds = $querydata->pluck('id')->toArray();
+        $taCount = count($taIds);
+    
+        if ($taCount > 0 && !empty($unresolvedQueries)) {
+            $taIndex = 0;
+            foreach ($unresolvedQueries as $query) {
+                $taId = $taIds[$taIndex % $taCount];
+                $taQueries[$taId][] = $query;
+                $taIndex++;
             }
-
-            // Distribute remaining queries
+        }
+    
+        
+        foreach ($querydata as $index => $ta) {
+            $queriesGivenToTA[$index]['ta'] = $ta;
+            $queriesGivenToTA[$index]['queries'] = $taQueries[$ta->id];
+        }
+    
+        return view('taqueries', compact('queriesGivenToTA'));
+    }
+    
+    public function refreshqueries() 
+    {
+            $querydata = User::select('id', 'name', 'email', 'password', 'u_num')
+                ->where('u_num', 'like', 'TA-%')
+                ->orderBy('id', 'asc')
+                ->get();
+            $qdata = Query::all();
+            $queriesGivenToTA = [];
+            $taQueries = [];
+            $pendingQueries = [];
+            $tanames = $querydata->pluck('name')->toArray();
+            foreach ($querydata as $ta) 
+            {
+                $taQueries[$ta->id] = collect();
+            }
+            foreach ($qdata as $query) 
+            {
+                if (!empty($query->resolved_by)) 
+                {
+                    if (in_array($query->resolved_by, $tanames)) 
+                    {
+                        $ta = $querydata->firstWhere('name', $query->resolved_by);
+                        if ($ta) 
+                        {
+                            $taQueries[$ta->id][] = $query;
+                            continue; 
+                        }
+                    }    
+                    else 
+                    {
+                            
+                            continue;
+                    }
+                }
+                $pendingQueries[] = $query;
+            }
+            $unresolvedQueries = array_filter($pendingQueries, function($query) 
+            {
+                return $query->q_state === null;
+            });
             $taIds = $querydata->pluck('id')->toArray();
             $taCount = count($taIds);
 
-            if ($taCount > 0 && !empty($pendingQueries)) {
-            $taIndex = 0;
-            foreach ($pendingQueries as $query) {
-            $taId = $taIds[$taIndex % $taCount];
-            $taQueries[$taId][] = $query;
-            $taIndex++;
+            if ($taCount > 0 && !empty($unresolvedQueries)) 
+            {
+                $taIndex = 0;
+                foreach ($unresolvedQueries as $query) 
+                {
+                    $taId = $taIds[$taIndex % $taCount];
+                    $taQueries[$taId][] = $query;
+                    $taIndex++;
+                }
             }
-            }
-
-            // Prepare data for view
-            foreach ($querydata as $index => $ta) {
+            foreach ($querydata as $index => $ta) 
+            {
             $queriesGivenToTA[$index]['ta'] = $ta;
             $queriesGivenToTA[$index]['queries'] = $taQueries[$ta->id];
             }
+        return view('partials.refreshqueries', compact('queriesGivenToTA'));
+    }
 
-            return view('taqueries', compact('queriesGivenToTA'));
-                
+    public function QueryStatus(Request $request)
+    {
+        $query = Query::find($request->input('id'));
+        if ($query) 
+        {
+            $query->q_state = $request->input('status');
+            $query->save();
+        }
+        return response()->json(['success' => true]);
     }
 }

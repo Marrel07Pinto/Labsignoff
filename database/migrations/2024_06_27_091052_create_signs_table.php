@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('signs', function (Blueprint $table) {
             $table->id();
             $table->biginteger('users_id')->unsigned();
-            $table->string('s_seat');
+            $table->string('s_seat')->nullable();
             $table->string('s_clink')->nullable();
             $table->string('s_img')->nullable();
             $table->text('s_description');
-            $table->string('resolved_by')->nullable();
+            $table->text('s_state')->nullable();
+            $table->string('s_resolved_by')->nullable();
+            $table->string('s_solution')->nullable();
             $table->timestamps();
 
             $table->foreign('users_id')->references('id')->on('users')

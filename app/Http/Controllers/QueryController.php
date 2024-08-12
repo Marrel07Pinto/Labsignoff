@@ -30,15 +30,38 @@ class QueryController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            
+            's_img' => 'nullable|array',
+            's_img.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            's_img.*.mimes' => 'Each image should be of type jpeg, png, jpg.',
+            's_img.*.max' => 'Each image should not be larger than 2MB.',
+
+        ]);
+
+        $validatedData = $request->validate([
+            'q_query' => 'required|string|max:10000', // Example: max length of 10,000 characters
+        ]);
         $user_id = auth()->user()->id;
         $seat = Seat::where('users_id', $user_id)->first();
         $seat_number = $seat->seat_num;
+        $imageNames = [];
+
+        
+        if ($request->has('q_img')) {
+            foreach ($request->q_img as $img) {
+                $imageName = time().'_'.$img->getClientOriginalName();
+                $img->move(public_path('/images/query_images'), $imageName);
+                $imageNames[] = $imageName; // Store each image name in the array
+            }
+        }
 
         $query = new Query();
         $query->users_id = $user_id;
         $query->q_seat = $seat_number;
-        $query->q_query=$request->input('q_query');
+        $query->q_img = json_encode($imageNames);
+        $query->q_query= $validatedData['q_query'];
         $query->save();
         return back()->with('success', 'Query has been raised successfully!');
     }

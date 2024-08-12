@@ -25,24 +25,28 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        if ($request->email === 'admin@gmail.com' && $request->password === 'Admin@123') {
-            // Manually log in the admin user if credentials match
-            auth()->loginUsingId(1); // Assuming the admin has an ID of 1
-            return redirect()->route('ta_registration');
+        if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) 
+        {
+                $user = auth()->user();
+        
+                // Check if the user's role is 'ADMIN'
+                if ($user->role === 'ADMIN') {
+                    return redirect()->route('adminseatview');
+                }
+
+            // Regular authentication for other users
+            $request->authenticate();
+
+            $request->session()->regenerate();
+            $user = auth()->user();
+        
+            if (str_starts_with($user->role, 'TA')) {
+                return redirect()->route('taskupload');
+            }
+
+             return redirect()->route('seat');
         }
-
-        // Regular authentication for other users
-        $request->authenticate();
-
-        $request->session()->regenerate();
-        $user = auth()->user();
-    
-        if (str_starts_with($user->u_num, 'TA-')) {
-            return redirect()->route('taskupload'); 
-        }
-
-        return redirect()->route('seat');
-    
+        return redirect()->back()->withErrors(['email' => 'credentials do not match our records.']);
     }
 
     /**

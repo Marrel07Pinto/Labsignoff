@@ -9,7 +9,7 @@
                     @foreach($chatmessages as $item)
                         <div class="chat-container">
                             <div class="chat-messages">
-                                @if (Str::startsWith($item->user->u_num, 'TA-'))
+                            @if (Str::startsWith($item->user->role, 'TA') || Str::startsWith($item->user->role, 'ADMIN'))
                                     <div class="message right-message" style="text-align: right">
                                         <span style="font-size: 60%">{{ $item->user->name }}</span>
                                         <h4>{{ $item->c_messages }}<span style="font-size: 40%; margin-left: 10px;">{{ $item->created_at->toTimeString() }}</span></h4>                                    
@@ -23,6 +23,13 @@
                             </div>
                         </div>
                     @endforeach
+                    <form id="chat_form" action="{{route('chat_form') }}" method="POST">
+                            @csrf
+                                <div class="chat-input">
+                                    <input type="text" placeholder="Type a message..." id="c_messages" name="c_messages" required>
+                                    <button>Send</button>
+                                </div>
+                        </form>
                 </section>           
         </main>
 </body>

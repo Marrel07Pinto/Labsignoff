@@ -45,7 +45,7 @@ class ChatController extends Controller
     public function showlayout()
     {
         $user = Auth::user();
-        $TA = strpos($user->u_num, 'TA-') === 0;
+        $TA = strpos($user->role, 'TA') === 0;
         return view('chat', [
             'chatmessages' => Chat::all(),
             'TA' => $TA

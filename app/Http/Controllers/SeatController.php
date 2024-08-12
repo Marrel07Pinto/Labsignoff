@@ -130,7 +130,7 @@ class SeatController extends Controller
     public function adminseatshow()
     {
         $user = Auth::user();
-        $TA = strpos($user->u_num, 'TA-') === 0;
+        $TA = strpos($user->role, 'TA') === 0;
         return view('adminseatview', [
             'seatview' => Seat::all(),
             'TA' => $TA

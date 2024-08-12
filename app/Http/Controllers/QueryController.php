@@ -92,7 +92,7 @@ class QueryController extends Controller
 
     public function showQueries() {
         $querydata = User::select('id', 'name', 'email', 'password', 'u_num')
-            ->where('u_num', 'like', 'TA-%')
+            ->where('role', 'like', 'TA')
             ->orderBy('id', 'asc')
             ->get();
     
@@ -165,7 +165,7 @@ class QueryController extends Controller
 
     public function taQueries() {
         $querydata = User::select('id', 'name', 'email', 'password', 'u_num')
-            ->where('u_num', 'like', 'TA-%')
+            ->where('role', 'like', 'TA')
             ->orderBy('id', 'asc')
             ->get();
         $qdata = Query::all();
@@ -223,7 +223,7 @@ class QueryController extends Controller
     public function refreshqueries() 
     {
             $querydata = User::select('id', 'name', 'email', 'password', 'u_num')
-                ->where('u_num', 'like', 'TA-%')
+                ->where('role', 'like', 'TA')
                 ->orderBy('id', 'asc')
                 ->get();
             $qdata = Query::all();

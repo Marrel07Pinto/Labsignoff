@@ -18,6 +18,8 @@
     <br>
     <form id="signform" action="{{ route('query_form') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <label for="q_img">Image:</label>
+        <input type="file" id="s_img" name="q_img[]" accept="image/*" multiple><br><br>
         <label for="q_query">Query:</label>
         <textarea id="q_query" name="q_query" required></textarea><br><br>              
         <input type="submit" value="Submit">

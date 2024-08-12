@@ -207,16 +207,47 @@
           </ul><!-- End Messages Dropdown Items -->
 
         </li><!-- End Messages Nav -->
-        
+        @php
+          $userName = auth()->user()->name;
+          $role = auth()->user()->role;
+          $profileImage = auth()->user() ? asset('images/profile_images/' . (auth()->user()->profile->p_img ?? 'default_image/765-default-avatar.png')) : asset('images/profile_images/default_image/765-default-avatar.png');
+        @endphp
 
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-           <h6>ADMIN</h6>
+           <h6>{{$role}}</h6>
             <span class="d-none d-md-block dropdown-toggle ps-2"></span>
           </a><!-- End Profile Iamge Icon -->
-
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+              <h6>{{ $userName }}</h6>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('adminedit') }}">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf
@@ -241,12 +272,6 @@
 
 <ul class="sidebar-nav" id="sidebar-nav">
 
-<li class="nav-item">
-    <a class="nav-link collapsed" href="{{ route('ta_registration') }}">
-      <i class="bi bi-people-fill"></i>
-      <span>Registration for TA's</span>
-    </a>
-  </li>
   <li class="nav-item">
     <a class="nav-link collapsed" href="{{ route('adminseatview') }}">
       <i class="bi bi-person-square"></i>

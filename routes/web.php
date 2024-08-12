@@ -55,9 +55,14 @@ Route::get('/edit', function()
                     {
                         return view('edit');
                     })->name('edit');
-Route::get('/ta_registration', function() {
-                        return view('ta_registration');
-                    })->name('ta_registration');
+Route::get('/adminedit', function()
+                    {
+                        return view('adminedit');
+                    })->name('adminedit');
+Route::get('/taedit', function()
+                    {
+                        return view('taedit');
+                    })->name('taedit');
 Route::get('/adminseatview', function() {
                         return view('adminseatview');
                     })->name('adminseatview');
@@ -99,9 +104,6 @@ Route::post('/feedback_form',[FeedbackController::class,'store'])->name('feedbac
 Route::get('/usersprofile', [ProfileController::class, 'show'])->name('usersprofile');
 Route::put('profileuserupdate/{id}',[ProfileController::class,'profileuupdate'])->name('profileuserupdate');
 Route::get('/delete/{id}', [ProfileController::class, 'delete'])->name('profileuser.delete');
-Route::post('/ta_registration', [TaregistrationController::class, 'store'])->name('t_registration');
-Route::get('/ta_registration', [TaregistrationController::class, 'show'])->name('ta_registration');
-Route::get('/ta_registration/{id}', [TaregistrationController::class, 'destroy'])->name('tadata.delete');
 Route::get('/adminseatview', [SeatController::class, 'adminseatshow'])->name('adminseatview');
 Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat');
 Route::get('/adminquery', [QueryController::class, 'showQueries'])->name('adminquery');

@@ -7,7 +7,12 @@
         align-items: center;
         justify-content: center;
     }
+    .query-image {
+        max-width: 100%;
+        height: auto;
+    }
 </style>
+
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Raised Queries</h1>
@@ -28,8 +33,12 @@
                                     </ol>
                                     <br>
                                     @foreach($group['queries'] as $querydata)
-                                        @if (empty($querydata->solution)) <!-- Filter out solved queries -->
-                                            <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}">
+                                        @if (empty($querydata->solution))
+                                            <a href="#" class="query-link" 
+                                               data-query="{{ $querydata->q_query }}" 
+                                               data-seat="{{ $querydata->q_seat }}" 
+                                               data-id="{{ $querydata->id }}" 
+                                               data-images="{{ json_encode($querydata->q_img ? json_decode($querydata->q_img) : []) }}">
                                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                     <button type="button" class="btn btn-dark btn-size">
                                                         <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
@@ -53,40 +62,45 @@
 </main>
 
 <!-- Modal Structure -->
-<div class="modal fade" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="queryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-            @if (session('success'))
-                <script>
-                    alert('{{ session('success') }}');
-                </script>
-            @endif
-                <form id="resolveQueryForm" action="{{ route('query_solution') }}" method="POST">
-                    @csrf
-                    <input type="hidden" id="queryId" name="query_id">
-                    <div class="form-group">
-                        <label for="queryText">Query</label>
-                        <textarea class="form-control" id="queryText" rows="3" readonly></textarea>
-                    </div>
-                    </br>
-                    <div class="form-group">
-                        <label for="resolvedStatus">Status</label>
-                        <select class="form-control" id="resolvedStatus" name="status">
-                            <option value="resolved">Resolved</option>
-                        </select>
-                    </div>
-                    </br>
-                    <div class="form-group">
-                        <label for="solutionText">Solution</label>
-                        <textarea class="form-control" id="solutionText" name="solution" rows="3" required></textarea>
-                    </div>
-                    </br>
-                  <center><button type="submit" class="btn btn-primary">Submit</button></center>
-                </form>
-            </div>
-        </div>
+<div class="modal fade" id="queryform" tabindex="-1" role="dialog" aria-labelledby="queryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        @if (session('success'))
+          <script>
+            alert('{{ session('success') }}');
+          </script>
+        @endif
+        <form id="resolveQueryForm" action="{{ route('query_solution') }}" method="POST">
+          @csrf
+          <div class="form-group">
+            <label for="queryImage">Attached Images</label>
+            <div id="queryImagebox"></div>
+          </div>
+          <br>
+          <input type="hidden" id="queryId" name="query_id">
+          <div class="form-group">
+            <label for="queryText">Query</label>
+            <textarea class="form-control" id="queryText" rows="3" readonly></textarea>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="resolvedStatus">Status</label>
+            <select class="form-control" id="resolvedStatus" name="status">
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="solutionText">Solution</label>
+            <textarea class="form-control" id="solutionText" name="solution" rows="3" required></textarea>
+          </div>
+          <br>
+          <center><button type="submit" class="btn btn-primary">Submit</button></center>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Bootstrap JS and jQuery -->
@@ -94,76 +108,102 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-        // Function to refresh the queries section
-        function refreshQueries() {
-            $.get('{{ route("refresh_queries") }}', function(data) {
-                $('#queriesSection').html(data);
-                // Re-bind the query-link click event handler after content update
-                bindQueryLinkHandler();
-            });
-        }
+$(document).ready(function() {
+    // Function to refresh the queries section
+    function refreshQueries() {
+        $.get('{{ route("refresh_queries") }}', function(data) {
+            $('#queriesSection').html(data);
+            bindQueryLinkHandler(); // Re-bind click handlers after updating the section
+        });
+    }
 
-        // Bind click event handler for query-link
-        function bindQueryLinkHandler() {
-            $('.query-link').click(function(event) {
-                event.preventDefault(); // Prevent default link behavior
-
-                var query = $(this).data('query');
-                var id = $(this).data('id');
-
-                // Update the query status to 'in-progress'
-                $.ajax({
-                    url: '{{ route("query_status") }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        id: id,
-                        status: 'in-progress'
-                    },
-                    success: function() {
-                        $('#queryText').val(query);
-                        $('#queryId').val(id);
-                        $('#queryModal').modal('show'); // Show the modal
-                    }
-                });
-            });
-        }
-
-        // Handle form submission
-        $('#resolveQueryForm').submit(function(event) {
+    // Bind click event handler for query-link
+    function bindQueryLinkHandler() {
+        $('.query-link').off('click').on('click', function(event) { 
             event.preventDefault();
-            $.post($(this).attr('action'), $(this).serialize(), function() {
-                $('#queryModal').modal('hide'); // Hide the modal
-                refreshQueries(); // Refresh queries after form submission
+            var query = $(this).data('query');
+            var id = $(this).data('id');
+            var images = $(this).data('images') || []; 
+
+            // Set query text and ID
+            $('#queryText').val(query);
+            $('#queryId').val(id);
+            $('#queryImagebox').empty(); 
+
+            
+            if (images.length > 0) {
+                images.forEach(function(img) {
+                    var imgUrl = "{{ asset('images/query_images') }}/" + img;
+                    var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
+                    $('#queryImagebox').append(imgElement);
+                });
+                $('#queryImagebox').show();
+            } else {
+                $('#queryImagebox').hide();
+            }
+
+            $('#queryform').modal('show');
+
+            
+            $.ajax({
+                url: '{{ route("query_status") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: id,
+                    status: 'in-progress'
+                },
+                success: function() {
+                    // Optionally handle success
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error updating query status:', textStatus, errorThrown);
+                }
             });
         });
+    }
 
-        // Handle modal close event to reset the query status
-        $('#queryModal').on('hidden.bs.modal', function () {
-            var queryId = $('#queryId').val();
-            if (queryId) {
-                $.ajax({
-                    url: '{{ route("query_status") }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        id: queryId,
-                        status: null // Reset status to NULL
-                    },
-                    success: function() {
-                        // Optionally handle success
-                    }
-                });
-            }
+    // Handle form submission
+    $('#resolveQueryForm').submit(function(event) {
+        event.preventDefault();
+        $.post($(this).attr('action'), $(this).serialize(), function() {
+            $('#queryform').modal('hide');
+            refreshQueries(); // Refresh queries after form submission
         });
-
-        // Initial binding of query-link handler
-        bindQueryLinkHandler();
-
-        // Set up periodic refresh of queries section
-        setInterval(refreshQueries, 500); // Change to 10000 ms (10 seconds) or your preferred interval
     });
 
+    // Handle modal close event
+    $('#queryform').on('hidden.bs.modal', function () {
+        var queryId = $('#queryId').val();
+        if (queryId) {
+            $.ajax({
+                url: '{{ route("query_status") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: queryId,
+                    status: null // Reset status to null when modal is closed
+                },
+                success: function() {
+                    // Optionally handle success
+                }
+            });
+        }
+    });
+
+    // Initial binding of query-link handler
+    bindQueryLinkHandler();
+
+    // Debounced refresh function
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(func, wait);
+        };
+    }
+    const debouncedRefreshQueries = debounce(refreshQueries, 500); 
+    setInterval(debouncedRefreshQueries, 1000); 
+});
 </script>
 @endsection

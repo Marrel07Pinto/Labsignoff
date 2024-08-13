@@ -29,7 +29,7 @@
                                         @php
                                             $alertClass = !empty($querydata->solution) ? 'alert-success' : 'alert-danger';
                                         @endphp
-                                        <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}">
+                                        <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}" data-images="{{ json_encode($querydata->q_img ? json_decode($querydata->q_img) : []) }}">
                                             <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
                                                 <button type="button" class="btn btn-dark btn-size">
                                                     <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
@@ -61,6 +61,10 @@
                 @endif
                 <form id="resolveQueryForm">
                     @csrf
+                    <div class="form-group">
+                        <label for="queryImage">Attached Images</label>
+                        <div id="queryImagebox"></div>
+                    </div>
                     <input type="hidden" id="queryId" name="query_id">
                     <div class="form-group">
                         <label for="queryText">Query</label>
@@ -92,6 +96,7 @@
             var query = $(this).data('query');
             var solution = $(this).data('solution');
             var id = $(this).data('id');
+            var images = $(this).data('images') || [];
             var alertBox = $(this).find('.alert');
 
             // Check if the alert box has the class 'alert-success'
@@ -99,6 +104,21 @@
                 $('#queryText').val(query);
                 $('#queryId').val(id);
                 $('#solutionText').val(solution ? solution : 'No solution provided.');
+                $('#queryImagebox').empty(); 
+                if (images.length > 0) {
+                images.forEach(function(img) 
+                {
+                    var imgUrl = "{{ asset('images/query_images') }}/" + img;
+                    var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
+                    $('#queryImagebox').append(imgElement);
+                });
+                    $('#queryImagebox').show();
+                } 
+                else 
+                {
+                    $('#queryImagebox').hide();
+                }
+
                 $('#queryModal').modal('show'); 
             }
         });

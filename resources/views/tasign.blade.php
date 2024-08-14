@@ -11,6 +11,9 @@
         max-width: 100%;
         height: auto;
     }
+    .reason-box {
+        display: none; /* Hide by default */
+    }
 </style>
 
 <main id="main" class="main">
@@ -33,7 +36,7 @@
                                     </ol>
                                     <br>
                                     @foreach($group['signs'] as $signdata)
-                                        @if (empty($signdata->s_solution))
+                                        @if ($signdata->s_result !== 'resolved' && $signdata->s_result !== 'unresolved')
                                             <a href="#" class="sign-link" 
                                                data-description="{{ $signdata->s_description }}" 
                                                data-id="{{ $signdata->id }}" 
@@ -85,15 +88,24 @@
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="resolvedStatus">Status</label>
-                        <select class="form-control" id="resolvedStatus" name="status">
-                            <option value="resolved">Resolved</option>
-                        </select>
+                        <label for="status">Status</label><br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="statusResolved" name="status" value="resolved">
+                            <label class="form-check-label" for="statusResolved">
+                                Resolved
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="statusUnresolved" name="status" value="unresolved">
+                            <label class="form-check-label" for="statusUnresolved">
+                                Unresolved
+                            </label>
+                        </div>
                     </div>
                     <br>
-                    <div class="form-group">
-                        <label for="solutionText">Solution</label>
-                        <textarea class="form-control" id="solutionText" name="solution" rows="3" required></textarea>
+                    <div class="form-group reason-box" id="reasonBox">
+                        <label for="reasonText">Reason for not given lab signoff</label>
+                        <textarea class="form-control" id="reasonText" name="reason" rows="3"></textarea>
                     </div>
                     <br>
                     <center><button type="submit" class="btn btn-primary">Submit</button></center>
@@ -133,7 +145,7 @@ $(document).ready(function() {
             if (images.length > 0) {
                 images.forEach(function(img) {
                     var imgUrl = "{{ asset('images/signoff_images') }}/" + img;
-                    var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
+                    var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 sign-image" />';
                     $('#signImagebox').append(imgElement);
                 });
                 $('#signImagebox').show();
@@ -168,6 +180,17 @@ $(document).ready(function() {
             $('#signform').modal('hide');
             refreshSigns(); // Refresh signs after form submission
         });
+    });
+
+    // Handle status radio button change
+    $('input[name="status"]').change(function() {
+        if ($('#statusUnresolved').is(':checked')) {
+            $('#reasonBox').show();
+            $('#solutionBox').show();
+        } else {
+            $('#reasonBox').hide();
+            $('#solutionBox').hide();
+        }
     });
 
     // Handle modal close event

@@ -11,7 +11,7 @@
                         </ol>
                         <br>
                         @foreach($group['signs'] as $signdata)
-                            @if (empty($signdata->s_solution)) 
+                            @if ($signdata->s_result !== 'resolved' && $signdata->s_result !== 'unresolved')
                                 <a href="#" class="sign-link" 
                                    data-description="{{ $signdata->s_description }}" 
                                    data-id="{{ $signdata->id }}" 

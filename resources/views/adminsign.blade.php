@@ -17,13 +17,27 @@
     .btn-right {
         float: right;
     }
+    .status-text {
+        font-weight: bold;
+    }
 </style>
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Raised Queries</h1>
+        <h1>Sign-Off Requests</h1>
     </div><!-- End Page Title -->
     <br>
+    <div class="card">
+        <div class="card-body">
+              <h5 class="card-title">Meaning of the colours</h5>
+              <center>
+              <span style = 'padding: 0.5rem 1rem' class="alert alert-danger alert-dismissible fade show"><i class="bi bi-star me-1"></i> Pending</span>
+              <span style = 'padding: 0.5rem 1rem' class="alert alert-warning alert-dismissible fade show"><i class="bi bi-collection me-1"></i> Unresolved</span>
+              <span style = 'padding: 0.5rem 1rem' class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-1"></i> Resolved</span>
+              </center>
+        </div>           
+    </div>
+          <br>
     @if(!empty($signsGivenToTA))
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">
@@ -38,14 +52,18 @@
                                 <br>
                                 @foreach($group['signs'] as $signdata)
                                     @php
-                                        $alertClass = !empty($signdata->s_solution) ? 'alert-success' : 'alert-danger';
+                                    $alertClass = !empty($signdata->s_result) ? (
+                                            $signdata->s_result === 'resolved' ? 'alert-success' :
+                                            ($signdata->s_result === 'unresolved' ? 'alert-warning' : 'alert-danger')
+                                        ) : 'alert-danger';
                                     @endphp
-                                    <a href="#" class="query-link" 
-                                       data-query="{{ $signdata->s_description }}" 
-                                       data-seat="{{ $signdata->s_seat }}" 
+                                    <a href="#" class="sign-link" 
+                                       data-description="{{ $signdata->s_description }}" 
                                        data-id="{{ $signdata->id }}" 
                                        data-solution="{{ $signdata->s_solution }}" 
-                                       data-images="{{ json_encode($signdata->s_img ? json_decode($signdata->s_img) : []) }}">
+                                       data-reason="{{ $signdata->s_reason }}" 
+                                       data-images="{{ json_encode($signdata->s_img ? json_decode($signdata->s_img) : []) }}"
+                                       data-status="{{ $signdata->s_result }}">
                                         <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
                                             <button type="button" class="btn btn-dark btn-size">
                                                 <i class="bi bi-person"></i>&nbsp;{{ $signdata->s_seat }}
@@ -61,7 +79,7 @@
             </div>
         </section>
     @else
-        <p>No teaching assistance.</p>
+        <p>No sign-off requests.</p>
     @endif
 </main>
 
@@ -75,7 +93,7 @@
                         alert('{{ session('success') }}');
                     </script>
                 @endif
-                <form id="resolveQueryForm">
+                <form id="resolveSignForm">
                     @csrf
                     <div class="form-group">
                         <label for="signImage">Attached Images</label>
@@ -83,17 +101,17 @@
                     </div>
                     <input type="hidden" id="signId" name="sign_id">
                     <div class="form-group">
-                        <label for="signText">Query</label>
+                        <label for="signText">Sign-Off Description</label>
                         <textarea class="form-control" id="signText" rows="3" readonly></textarea>
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="resolvedStatus">Status: Resolved</label>
+                        <span id="statusText" class="status-text"></span>
                     </div>
                     <br>
-                    <div class="form-group">
-                        <label for="solutionText">Solution</label>
-                        <textarea class="form-control" id="solutionText" name="solution" rows="3" readonly></textarea>
+                    <div class="form-group" id="reasonBox" style="display: none;">
+                        <label for="reasonText">Reason for not giving lab signoff</label>
+                        <textarea class="form-control" id="reasonText" name="reason" rows="3" readonly></textarea>
                     </div>
                 </form>
             </div>
@@ -106,45 +124,50 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-$(document).ready(function(){
-    $('.query-link').click(function(event){
+$(document).ready(function() {
+    // Handle click on sign-link
+    $('.sign-link').click(function(event) {
         event.preventDefault(); // Prevent default link behavior
         
-        // Determine the alert class to check if it's a resolved query
-        var alertClass = $(this).find('.alert').attr('class');
-        
-        // Proceed only if the alert class contains 'alert-success' indicating resolved queries
-        if (alertClass.includes('alert-success')) {
-            var query = $(this).data('query');
-            var solution = $(this).data('solution');
-            var id = $(this).data('id');
-            var images = $(this).data('images') || [];
+        var description = $(this).data('description');
+        var id = $(this).data('id');
+        var reason = $(this).data('reason');
+        var images = $(this).data('images') || [];
+        var status = $(this).data('status');
+        var alertBox = $(this).find('.alert');
 
-            $('#signText').val(query);
-            $('#signId').val(id);
+        // Set the status text and show/hide elements accordingly
+        var statusText = status === 'resolved' ? 'Status: Resolved' :
+                          (status === 'unresolved' ? 'Status: Unresolved' : 'Status: Unknown');
 
-            // Display the solution text or a default message
-            $('#solutionText').val(solution ? solution : 'No solution provided.');
+        $('#signText').val(description);
+        $('#signId').val(id);
+        $('#statusText').text(statusText);
 
-            $('#signImagebox').empty(); 
-
-            if (images.length > 0) {
-                images.forEach(function(img) {
-                    var imgUrl = "{{ asset('images/signoff_images') }}/" + img;
-                    var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
-                    $('#signImagebox').append(imgElement);
-                });
-                $('#signImagebox').show();
-            } else {
-                $('#signImagebox').hide();
-            }
-
-            $('#signModal').modal('show');
-        } else {
-            // Optionally handle cases where the alert class is not 'alert-success'
-            console.log('Query is not resolved, modal will not appear.');
+        if (status === 'resolved') {
+            $('#reasonBox').hide();
+        } else if (status === 'unresolved') {
+            $('#solutionBox').hide();
+            $('#reasonText').val(reason ? reason : 'No reason provided by the teaching assistance.');
+            $('#reasonBox').show();
         }
+
+        $('#signImagebox').empty(); 
+
+        if (images.length > 0) {
+            images.forEach(function(img) {
+                var imgUrl = "{{ asset('images/signoff_images') }}/" + img;
+                var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
+                $('#signImagebox').append(imgElement);
+            });
+            $('#signImagebox').show();
+        } else {
+            $('#signImagebox').hide();
+        }
+
+        $('#signModal').modal('show');
     });
 });
 </script>
+
 @endsection

@@ -292,7 +292,7 @@
   </li>
 
   <li class="nav-item">
-          <a class="nav-link collapsed" href="">
+          <a class="nav-link collapsed" href="{{route('adminsign')}}">
           <i class="bi bi-question-circle"></i>
           <span>Sign-off</span>
         </a>

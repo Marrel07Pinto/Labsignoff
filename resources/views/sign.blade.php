@@ -1,8 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<!DOCTYPE html>
-<html>
-    <body>
+
         <main id="main" class="main">
             <div class="pagetitle">
                 <h1>Request for sign-off</h1>
@@ -35,31 +33,33 @@
                 
             @endif
             @if($signoff->isEmpty())
-                <p>No request as been raised for lab signoff</p>
+                <p>No request has been raised for lab sign-off</p>
             @else
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <th style="width: 60%;">Explanation</th>
-                        <th style="width: 25%;">CodeLink</th>
-                        <th style="width: 5%;">View</th>
-                        <th style="width: 5%;">Edit</th>
-                        <th style="width: 5%;">Delete</th>
-                    </tr>
-                    @foreach($signoff as $item)  
-                        <tr>
-                            <td>@if (strlen($item->s_description) > 50)
+            @foreach($signoff as $item)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                @if (strlen($item->s_description) > 50)
                                     {{ substr($item->s_description, 0, 50) }}...
                                 @else
                                     {{ $item->s_description }}
                                 @endif
-                            </td>
-                            <td>{{ $item->s_clink }}</td>
-                            <td><button onclick="openPopup('{{ route('signview', $item) }}')">View</button></td>
-                            <td><a onclick="openPopup( '{{ route('signedit', $item) }}')"><button>Edit</button></a></td>
-                            <td><a href="{{ url('signd/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete the request for lab sign-off?');"><button>Delete</button></a></td>
-                        </tr>
-                    @endforeach
-                </table>
+                            </div>
+                            <div class="d-flex">
+                                <a href="#" onclick="openPopup('{{ route('signview', $item) }}')">
+                                    <button class="btn btn-primary btn-sm me-2">View</button>
+                                </a>
+                                <a href="#" onclick="openPopup('{{ route('signedit', $item) }}')">
+                                    <button class="btn btn-secondary btn-sm me-2">Edit</button>
+                                </a>
+                                <a href="{{ url('signd/'.$item->id) }}" onclick="return confirm('Are you sure you want to delete the request for lab sign-off?');">
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                 @endforeach
             @endif
         </main>
         <script>
@@ -68,8 +68,6 @@
             window.open(url, 'popupWindow', 'width=600,height=400,scrollbars=yes');
             }
         </script>
-    </body>
-</html>
 @endsection
 
 

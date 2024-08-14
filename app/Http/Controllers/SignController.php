@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Seat;
 use App\Models\Sign;
+use App\Models\User;
 class SignController extends Controller
 {
     /**
@@ -154,5 +155,232 @@ class SignController extends Controller
     {
         $signview = Sign::findOrFail($sign);
         return view('signview', compact('signview'));
+    }
+    
+    public function signsolution(Request $request)
+    {
+        $sign = Sign::find($request->input('sign_id'));
+        if ($sign) {
+            $sign->s_resolved_by = auth()->user()->name;
+            $sign->s_solution = $request->input('solution'); 
+            $sign->save();
+        }
+        
+        return redirect()->back()->with('success', 'Query resolved successfully.');
+    
+    }
+
+    public function showsign()
+{
+    $signdata = User::select('id', 'name', 'email', 'password', 'u_num')
+        ->where('role', 'TA')
+        ->orderBy('id', 'asc')
+        ->get();
+
+    // Fetch all queries
+    $sdata = Sign::all();
+
+    // Prepare the data to be passed to the view
+    $signsGivenToTA = [];
+    $tasign = [];
+    $pendingsign = [];
+
+    // Get the list of TA names for quick lookup
+    $taNames = $signdata->pluck('name')->toArray();
+
+    // Assign queries based on `resolved_by`
+    foreach ($signdata as $ta) {
+        $tasign[$ta->id] = collect();
+    }
+
+    foreach ($sdata as $sign) {
+        if (!empty($sign->s_resolved_by)) {
+            if (in_array($sign->s_resolved_by, $taNames)) {
+                $ta = $signdata->firstWhere('name', $sign->s_resolved_by);
+                if ($ta) {
+                    $tasign[$ta->id][] = $sign;
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        }
+        $pendingsign[] = $sign;
+    }
+
+    // Filter out queries where s_state is not null
+    $unresolvedsign = array_filter($pendingsign, function ($sign) {
+        return $sign->s_state === null;
+    });
+
+    // Distribute remaining queries
+    $taIds = $signdata->pluck('id')->toArray();
+    $taCount = count($taIds);
+
+    if ($taCount > 0 && !empty($unresolvedsign)) {
+        $taIndex = 0;
+        foreach ($unresolvedsign as $sign) {
+            $taId = $taIds[$taIndex % $taCount];
+            $tasign[$taId][] = $sign;
+            $taIndex++;
+        }
+    }
+
+    // Prepare data for view
+    foreach ($signdata as $index => $ta) {
+        $signsGivenToTA[$index]['ta'] = $ta;
+        $signsGivenToTA[$index]['signs'] = $tasign[$ta->id];
+    }
+
+    return view('adminsign', compact('signsGivenToTA'));
+}
+public function tasign()
+{
+    $signdata = User::select('id', 'name', 'email', 'password', 'u_num')
+        ->where('role', 'TA')
+        ->orderBy('id', 'asc')
+        ->get();
+
+    // Fetch all queries
+    $sdata = Sign::all();
+
+    // Prepare the data to be passed to the view
+    $signsGivenToTA = [];
+    $tasign = [];
+    $pendingsign = [];
+
+    // Get the list of TA names for quick lookup
+    $taNames = $signdata->pluck('name')->toArray();
+
+    // Assign queries based on `resolved_by`
+    foreach ($signdata as $ta) {
+        $tasign[$ta->id] = collect();
+    }
+
+    foreach ($sdata as $sign) {
+        if (!empty($sign->s_resolved_by)) {
+            if (in_array($sign->s_resolved_by, $taNames)) {
+                $ta = $signdata->firstWhere('name', $sign->s_resolved_by);
+                if ($ta) {
+                    $tasign[$ta->id][] = $sign;
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        }
+        $pendingsign[] = $sign;
+    }
+
+    // Filter out queries where s_state is not null
+    $unresolvedsign = array_filter($pendingsign, function ($sign) {
+        return $sign->s_state === null;
+    });
+
+    // Distribute remaining queries
+    $taIds = $signdata->pluck('id')->toArray();
+    $taCount = count($taIds);
+
+    if ($taCount > 0 && !empty($unresolvedsign)) {
+        $taIndex = 0;
+        foreach ($unresolvedsign as $sign) {
+            $taId = $taIds[$taIndex % $taCount];
+            $tasign[$taId][] = $sign;
+            $taIndex++;
+        }
+    }
+
+    // Prepare data for view
+    foreach ($signdata as $index => $ta) {
+        $signsGivenToTA[$index]['ta'] = $ta;
+        $signsGivenToTA[$index]['signs'] = $tasign[$ta->id];
+    }
+
+    return view('tasign', compact('signsGivenToTA'));
+}
+public function refreshsigns() 
+{
+    // Fetch all TAs
+    $taData = User::select('id', 'name', 'email', 'password', 'u_num')
+        ->where('role', 'like', 'TA')
+        ->orderBy('id', 'asc')
+        ->get();
+
+    // Fetch all sign-off requests
+    $signData = Sign::all();
+
+    $signsGivenToTA = [];
+    $taSigns = [];
+    $pendingSigns = [];
+    $taNames = $taData->pluck('name')->toArray();
+
+    // Initialize array for signs per TA
+    foreach ($taData as $ta) 
+    {
+        $taSigns[$ta->id] = collect();
+    }
+
+    // Assign signs based on `resolved_by`
+    foreach ($signData as $sign) 
+    {
+        if (!empty($sign->s_resolved_by)) 
+        {
+            if (in_array($sign->s_resolved_by, $taNames)) 
+            {
+                $ta = $taData->firstWhere('name', $sign->s_resolved_by);
+                if ($ta) 
+                {
+                    $taSigns[$ta->id][] = $sign;
+                    continue;
+                }
+            } 
+            else 
+            {
+                continue;
+            }
+        }
+        $pendingSigns[] = $sign;
+    }
+
+    // Filter out signs where `s_state` is null
+    $unresolvedSigns = array_filter($pendingSigns, function($sign) 
+    {
+        return $sign->s_state === null;
+    });
+
+    // Distribute remaining signs
+    $taIds = $taData->pluck('id')->toArray();
+    $taCount = count($taIds);
+
+    if ($taCount > 0 && !empty($unresolvedSigns)) 
+    {
+        $taIndex = 0;
+        foreach ($unresolvedSigns as $sign) 
+        {
+            $taId = $taIds[$taIndex % $taCount];
+            $taSigns[$taId][] = $sign;
+            $taIndex++;
+        }
+    }
+
+    // Prepare data for view
+    foreach ($taData as $index => $ta) 
+    {
+        $signsGivenToTA[$index]['ta'] = $ta;
+        $signsGivenToTA[$index]['signs'] = $taSigns[$ta->id];
+    }
+
+    return view('partials.refreshsign', compact('signsGivenToTA'));
+}
+
+public function SignStatus(Request $request)
+    {
+        $sign = Sign::find($request->input('id'));
+        if ($sign) 
+        {
+            $sign->s_state = $request->input('status');
+            $sign->save();
+        }
+        return response()->json(['success' => true]);
     }
 }

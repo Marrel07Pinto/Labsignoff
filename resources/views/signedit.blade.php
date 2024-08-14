@@ -42,12 +42,15 @@
                                 <p>No images available.</p>
                             @endif
                         </div>
-                    <label for="s_img">Upload New Screenshots:</label> 
-                    <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple> 
-                    <label for="s_description">Explanation:</label>
-                    <textarea id="s_description" name="s_description">{{ $signedit->s_description }}</textarea><br><br>
-                    <label for="s_clink">Codeshare Link:</label>
-                    <input type="text" id="s_clink" name="s_clink" value="{{ $signedit->s_clink }}"><br><br>
+                    <label for="s_img">Upload New Screenshots:</label>
+                    <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple>
+                    <br>
+                    <label for="s_description">Explanation:</label></br>
+                    <textarea id="s_description" name="s_description">{{ $signedit->s_description }}</textarea><br>
+                    <br>
+                    <label for="s_clink">Codeshare Link:</label></br>
+                    <input type="text" id="s_clink" name="s_clink" value="{{ $signedit->s_clink }}"><br>
+                    <br>
                     <button type="submit">Update </button>
                 </form>
                 @if (session('success'))

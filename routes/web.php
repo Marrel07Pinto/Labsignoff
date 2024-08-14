@@ -81,6 +81,9 @@ Route::get('/taskupload', function() {
 Route::get('/taqueries', function() {
                         return view('taqueries');
                     })->name('taqueries');
+Route::get('/tasign', function() {
+                        return view('tasign');
+                    })->name('tasign');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -89,7 +92,6 @@ Route::post('/query_form',[QueryController::class,'store'])->name('query_form');
 Route::post('/sign_form',[SignController::class,'store'])->name('sign_form');
 Route::get('/seat', [SeatController::class, 'showSeatSelection'])->name('seat');
 Route::get('/seatwithnav', [SeatController::class, 'show'])->name('seatwithnav');
-
 Route::get('/home', [SeatController::class, 'homeindex'])->name('home');
 Route::get('/query', [QueryController::class, 'show'])->name('query');
 Route::get('/query/{id}', [QueryController::class, 'destroy'])->name('query.delete');
@@ -108,10 +110,21 @@ Route::get('/adminseatview', [SeatController::class, 'adminseatshow'])->name('ad
 Route::get('/adminchat', [ChatController::class, 'adminshow'])->name('adminchat');
 Route::get('/adminquery', [QueryController::class, 'showQueries'])->name('adminquery');
 Route::get('/taqueries', [QueryController::class, 'taQueries'])->name('taqueries');
-Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
 Route::post('/taqueries', [QueryController::class, 'query_solution'])->name('query_solution');
 Route::get('/refresh-queries', [QueryController::class, 'refreshqueries'])->name('refresh_queries');
 Route::post('/update-query-status', [QueryController::class, 'QueryStatus'])->name('query_status');
+
+
+
+Route::get('/adminsign', [SignController::class, 'showsign'])->name('adminsign');
+Route::get('/refresh-sign', [SignController::class, 'refreshsigns'])->name('refresh_signs');
+Route::post('/tasignoff', [SignController::class, 'signsolution'])->name('sign_solution');
+Route::post('/update-sign-status', [SignController::class, 'SignStatus'])->name('sign_status');
+Route::get('/tasign', [SignController::class, 'tasign'])->name('tasign');
+
+
+Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
+
 
 });
 

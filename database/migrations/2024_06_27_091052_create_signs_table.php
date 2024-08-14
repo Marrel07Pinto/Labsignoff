@@ -20,7 +20,9 @@ return new class extends Migration
             $table->text('s_description');
             $table->text('s_state')->nullable();
             $table->string('s_resolved_by')->nullable();
-            $table->string('s_solution')->nullable();
+            $table->string('s_result')->nullable();
+            $table->text('s_reason')->nullable();
+
             $table->timestamps();
 
             $table->foreign('users_id')->references('id')->on('users')

@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
             $user = auth()->user();
         
             if (str_starts_with($user->role, 'TA')) {
-                return redirect()->route('taskupload');
+                return redirect()->route('taqueries');
             }
 
              return redirect()->route('seat');

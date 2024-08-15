@@ -276,7 +276,7 @@
 
 <!-- End Dashboard Nav -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="{{ route('taskupload') }}">
+    <a class="nav-link collapsed" href="">
       <i class="bi bi-book"></i>
       <span>Task</span>
     </a>

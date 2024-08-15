@@ -67,10 +67,13 @@ class QueryController extends Controller
     }
     public function query_solution(Request $request)
     {
+        $validatedData = $request->validate([
+            'solution' => 'nullable|required|string|max:10000', // Example: max length of 10,000 characters
+        ]);
         $query = Query::find($request->input('query_id'));
         if ($query) {
             $query->resolved_by = auth()->user()->name;
-            $query->solution = $request->input('solution'); 
+            $query->solution = $validatedData['solution'];
             $query->save();
         }
         

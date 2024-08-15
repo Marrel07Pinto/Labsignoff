@@ -159,11 +159,14 @@ class SignController extends Controller
     
     public function signsolution(Request $request)
     {
+        $validatedData = $request->validate([
+            'reason' => 'nullable|string|max:10000', 
+        ]);
         $sign = Sign::find($request->input('sign_id'));
         if ($sign) {
             $sign->s_resolved_by = auth()->user()->name;
             $sign->s_result = $request->input('status'); 
-            $sign->s_reason = $request->input('reason');  
+            $sign->s_reason = $validatedData['reason'];  
             $sign->save();
         }
         

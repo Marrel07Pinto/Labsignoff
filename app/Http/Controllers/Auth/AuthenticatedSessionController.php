@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -54,12 +55,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+        $user = Auth::guard('web')->user();
+        if ($user) {
+            if ($user->role === 'student') {
+                $userId = $user->id;
+                DB::table('seats')->where('users_id', $userId)->delete();
+            }
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
-
+            $request->session()->regenerateToken();
+        }
         return redirect()->route('login');
     }
 }

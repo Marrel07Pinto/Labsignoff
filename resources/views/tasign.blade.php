@@ -115,7 +115,6 @@
     </div>
 </div>
 
-<!-- Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -176,6 +175,13 @@ $(document).ready(function() {
     // Handle form submission
     $('#resolveSignForm').submit(function(event) {
         event.preventDefault();
+
+        // Ensure that the status is selected before submitting
+        if (!$('input[name="status"]:checked').val()) {
+            alert('Please select a status.');
+            return;
+        }
+
         $.post($(this).attr('action'), $(this).serialize(), function() {
             $('#signform').modal('hide');
             refreshSigns(); // Refresh signs after form submission
@@ -186,10 +192,8 @@ $(document).ready(function() {
     $('input[name="status"]').change(function() {
         if ($('#statusUnresolved').is(':checked')) {
             $('#reasonBox').show();
-            $('#solutionBox').show();
         } else {
             $('#reasonBox').hide();
-            $('#solutionBox').hide();
         }
     });
 

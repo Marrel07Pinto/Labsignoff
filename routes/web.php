@@ -9,8 +9,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\TaregistrationController;
-
-
+use App\Http\Controllers\TaskuploadController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::middleware('auth')->group(function () {
@@ -113,18 +112,16 @@ Route::get('/taqueries', [QueryController::class, 'taQueries'])->name('taqueries
 Route::post('/taqueries', [QueryController::class, 'query_solution'])->name('query_solution');
 Route::get('/refresh-queries', [QueryController::class, 'refreshqueries'])->name('refresh_queries');
 Route::post('/update-query-status', [QueryController::class, 'QueryStatus'])->name('query_status');
-
-
-
 Route::get('/adminsign', [SignController::class, 'showsign'])->name('adminsign');
 Route::get('/refresh-sign', [SignController::class, 'refreshsigns'])->name('refresh_signs');
 Route::post('/tasign', [SignController::class, 'signsolution'])->name('sign_solution');
 Route::post('/update-sign-status', [SignController::class, 'SignStatus'])->name('sign_status');
 Route::get('/tasign', [SignController::class, 'tasign'])->name('tasign');
-
-
 Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
-
+Route::post('/taskupload',[TaskuploadController::class,'store'])->name('task_upload_form');
+Route::get('/taskupload', [TaskuploadController::class, 'show'])->name('taskupload');
+Route::get('/taskuploadedit/{id}', [TaskUploadController::class, 'edit'])->name('taskuploadedit');
+Route::put('/update-task/{id}', [TaskUploadController::class, 'update'])->name('task_update_form');
 
 });
 

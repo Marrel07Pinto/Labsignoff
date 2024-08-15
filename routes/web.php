@@ -118,7 +118,7 @@ Route::post('/update-query-status', [QueryController::class, 'QueryStatus'])->na
 
 Route::get('/adminsign', [SignController::class, 'showsign'])->name('adminsign');
 Route::get('/refresh-sign', [SignController::class, 'refreshsigns'])->name('refresh_signs');
-Route::post('/tasignoff', [SignController::class, 'signsolution'])->name('sign_solution');
+Route::post('/tasign', [SignController::class, 'signsolution'])->name('sign_solution');
 Route::post('/update-sign-status', [SignController::class, 'SignStatus'])->name('sign_status');
 Route::get('/tasign', [SignController::class, 'tasign'])->name('tasign');
 

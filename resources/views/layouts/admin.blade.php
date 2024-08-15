@@ -271,6 +271,12 @@
     <aside id="sidebar" class="sidebar">
 
 <ul class="sidebar-nav" id="sidebar-nav">
+<li class="nav-item">
+    <a class="nav-link collapsed" href="{{ route('taskupload') }}">
+      <i class="bi bi-book"></i>
+      <span>Task</span>
+    </a>
+  </li>
 
   <li class="nav-item">
     <a class="nav-link collapsed" href="{{ route('adminseatview') }}">

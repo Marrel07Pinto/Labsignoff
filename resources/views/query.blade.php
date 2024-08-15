@@ -9,22 +9,62 @@
     .btn-delete {
         margin-left: auto;
     }
+   
+   
+    .form-querygroup {
+            margin-bottom: 1rem;
+        }
+        .custom-file-label::after {
+            content: 'Choose';
+        }
+        .custom-imagefile-upload {
+            border: 1px solid #ced4da;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            background: #e9ecef;
+        }
+        .btn-custom {
+            background-color: #0040ff; 
+            color: white; 
+        }
+        .btn-custom:hover {
+            background-color: #0056b3; 
+        }
 </style>
+
 <main id="main" class="main">
 
     <div class="pagetitle">
         <h1>Raise a Query</h1>
     </div><!-- End Page Title -->
     <br>
-    <form id="signform" action="{{ route('query_form') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="q_img">Image:</label>
-        <input type="file" id="s_img" name="q_img[]" accept="image/*" multiple><br><br>
-        <label for="q_query">Query:</label>
-        <textarea id="q_query" name="q_query" required></textarea><br><br>              
-        <input type="submit" value="Submit">
-        <hr>
-    </form>
+    <div class="card">
+    <div class="card-body">
+    <div class="container mt-5">
+        <form id="signform" action="{{ route('query_form') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-querygroup">
+                <label for="q_img">Image:</label>
+                <div class="input-group">
+                    <label class="input-group-text custom-imagefile-upload" for="q_img">
+                        <i class="bi bi-image"></i> Choose Image
+                    </label>
+                    <input type="file" id="q_img" name="q_img[]" accept="image/*" multiple class="form-control d-none">
+                </div>
+            </div>
+            <div class="form-querygroup">
+                <label for="q_query">Query:</label>
+                <textarea id="q_query" name="q_query" class="form-control" required></textarea>
+            </div>
+            <div class="form-querygroup">
+                <input type="submit" value="Submit" class="btn btn-custom">
+            </div>
+        </form>
+    </div>
+    </div>
+    </div>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -40,7 +80,11 @@
         </script>
     @endif
     @if($data->isEmpty())
-        <p>No queries submitted yet.</p>
+    <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">No queries submitted yet.</h5>
+            </div>
+    </div>
     @else            
         @foreach($data->sortBy(function($query) { return empty($query->solution) ? 0 : 1; }) as $query) 
             @php

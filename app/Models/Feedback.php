@@ -9,4 +9,8 @@ class Feedback extends Model
 {
     use HasFactory;
     protected $table = 'feedbacks';
+    public function studentlab()
+    {
+        return $this->belongsTo(Studentlab::class,'id');
+    }
 }

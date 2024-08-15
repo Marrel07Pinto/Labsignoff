@@ -16,4 +16,8 @@ class Query extends Model
     {
         return $this->belongsTo(Seat::class, 'seat_num'); 
     }
+    public function studentlab()
+    {
+        return $this->belongsTo(Studentlab::class,'id');
+    }
 }

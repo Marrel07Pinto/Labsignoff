@@ -29,6 +29,9 @@ class AuthenticatedSessionController extends Controller
         if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) 
         {
                 $user = auth()->user();
+                $lab = $request->input('lab');
+                $user->lab = $lab;
+                $user->save();
         
                 // Check if the user's role is 'ADMIN'
                 if ($user->role === 'ADMIN') {

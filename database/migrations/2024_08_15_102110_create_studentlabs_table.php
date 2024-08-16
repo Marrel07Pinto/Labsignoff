@@ -16,9 +16,8 @@ return new class extends Migration
             $table->bigInteger('users_id')->unsigned();
             $table->bigInteger('labs_id')->unsigned();
             $table->string('s_seat')->nullable();
-            $table->bigInteger('queries_id')->unsigned();
-            $table->bigInteger('signs_id')->unsigned();
-            $table->bigInteger('feedbacks_id')->unsigned();
+            $table->bigInteger('queries_id')->unsigned()->nullable();
+            $table->bigInteger('signs_id')->unsigned()->nullable();
             
             
             $table->foreign('users_id')->references('id')->on('users')
@@ -28,8 +27,6 @@ return new class extends Migration
             $table->foreign('queries_id')->references('id')->on('queries')
             ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('signs_id')->references('id')->on('signs')
-            ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('feedbacks_id')->references('id')->on('feedbacks')
             ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('s_seat')->references('seat_num')->on('seats')
             ->onDelete('cascade')->onUpdate('cascade');

@@ -20,7 +20,8 @@ return new class extends Migration
             $table->text('q_state')->nullable();
             $table->string('resolved_by')->nullable();
             $table->string('solution')->nullable();
-
+            $table->string('lab');
+            
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('q_seat')->references('seat_num')->on('seats')

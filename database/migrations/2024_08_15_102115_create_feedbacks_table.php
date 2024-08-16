@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('labs_id')->unsigned();
+            $table->string('lab');
             $table->integer('f_understanding');
             $table->string('f_confusing');
             $table->text('f_interesting');
@@ -23,8 +23,7 @@ return new class extends Migration
             $table->integer('f_difficulty');
             
 
-            $table->foreign('labs_id')->references('id')->on('labs')
-            ->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
         });
     }

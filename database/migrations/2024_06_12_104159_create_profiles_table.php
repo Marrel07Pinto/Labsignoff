@@ -16,6 +16,7 @@ return new class extends Migration
             $table->biginteger('users_id')->unsigned();
             $table->string('seat_num')->nullable();
             $table->string('p_img')->nullable();
+            $table->string('lab');
 
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');

@@ -66,9 +66,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class,'users_id');
     }
-    public function studentlab()
-    {
-        return $this->hasOne(Studentlab::class,'users_id');
-    }
+    
 
 }

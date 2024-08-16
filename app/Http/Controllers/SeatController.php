@@ -31,6 +31,7 @@ class SeatController extends Controller
      */
     public function store(Request $request)
     {
+        $labnumber = auth()->user()->lab;
         $user_id = Auth::id();
         $seat_number = $request->input('seat_number');
 
@@ -58,6 +59,7 @@ class SeatController extends Controller
             $seat = new Seat();
             $seat->users_id = $user_id;
             $seat->seat_num = $seat_number;
+            $seat->lab = $labnumber;
             $seat->save();
 
             $userprofile = new Profile();

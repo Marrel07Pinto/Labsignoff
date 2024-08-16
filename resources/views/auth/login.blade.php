@@ -1,8 +1,7 @@
 <x-guest-layout>
     <!-- Session Status -->
-    
     <x-auth-session-status class="mb-4" :status="session('status')" />
-     <h1><Center><b>LOG IN</b></center></h1>
+    <h1><center><b>LOG IN</b></center></h1>
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -16,13 +15,22 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Lab Selection -->
+        <div class="mt-4">
+            <x-input-label for="lab" :value="__('Select Lab')" />
+            <select id="lab" name="lab" class="block mt-1 w-full">
+                <option value="">Select a Lab</option>
+                @for ($i = 1; $i <= 10; $i++)
+                    <option value="lab{{ $i }}">{{ __('Lab ' . $i) }}</option>
+                @endfor
+            </select>
         </div>
 
         <!-- Remember Me -->
@@ -32,7 +40,6 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
-        
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
@@ -44,10 +51,11 @@
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}   
             </x-primary-button>
-            <x-primary-button class="ms-3"><a href="{{ route('register') }}">
-                {{ __('Register') }}
+            <x-primary-button class="ms-3">
+                <a href="{{ route('register') }}">
+                    {{ __('Register') }}
+                </a>
             </x-primary-button>
-            </a>         
         </div>
     </form>
 </x-guest-layout>

@@ -29,14 +29,12 @@ class TaskuploadController extends Controller
     public function store(Request $request)
     {
         $user_id = auth()->user()->id;
-        $labname = $request->input('lab_id');
+        $labname = auth()->user()->lab;
         $request->validate([
-            'lab_id' => 'required|string',
             'files.*' => 'required|file|mimes:pdf|max:2048',
             'hints' => 'nullable|string|max:255',
         ]);
 
-        
         $filepaths = [];
 
         // Check if files are present and process them
@@ -49,7 +47,7 @@ class TaskuploadController extends Controller
         }
         $task = new Lab();
         $task->users_id = $user_id;
-        $task->t_lab = $request->input('lab_id');
+        $task->t_lab = $labname;
         $task->t_file = json_encode($filepaths);
         $task->t_hint = $request->input('hints');
         $task->save();
@@ -116,6 +114,21 @@ class TaskuploadController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $labd = Lab::find($id);
+        $labd->delete();
+        return back()->with('success', 'deleted successfully!');
     }
+    
+    public function labdetails()
+{
+    $labnumber = auth()->user()->lab;
+    $ldetail = Lab::where('t_lab', $labnumber)->first();
+    $filepaths = $ldetail ? json_decode($ldetail->t_file) : [];
+    return view('task', compact('ldetail', 'filepaths'));
+}
+
+    
+    
+   
+
 }

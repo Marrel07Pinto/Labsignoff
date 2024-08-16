@@ -43,6 +43,7 @@ class QueryController extends Controller
         $validatedData = $request->validate([
             'q_query' => 'required|string|max:10000', // Example: max length of 10,000 characters
         ]);
+        $labnumber = auth()->user()->lab;
         $user_id = auth()->user()->id;
         $seat = Seat::where('users_id', $user_id)->first();
         $seat_number = $seat->seat_num;
@@ -62,7 +63,9 @@ class QueryController extends Controller
         $query->q_seat = $seat_number;
         $query->q_img = json_encode($imageNames);
         $query->q_query= $validatedData['q_query'];
+        $query->lab =   $labnumber;
         $query->save();
+
         return back()->with('success', 'Query has been raised successfully!');
     }
     public function query_solution(Request $request)

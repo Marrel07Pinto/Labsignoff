@@ -33,7 +33,9 @@ class FeedbackController extends Controller
              'engaging'  => 'required|string|max:1000',
              
         ]);
+        $labnumber = auth()->user()->lab;
         $feedback = new Feedback();
+        $feedback->lab = $labnumber;
         $feedback->f_understanding = $request->input('understanding');
         $feedback->f_confusing = $request->input('confusing');
         $feedback->f_interesting =$validatedData['interesting'];

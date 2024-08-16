@@ -42,7 +42,7 @@ class SignController extends Controller
             's_description' => 'required|string|max:10000', // Example: max length of 10,000 characters
         ]);
 
-        
+        $labnumber = auth()->user()->lab;
         $user_id = auth()->user()->id;
         $seat = Seat::where('users_id', $user_id)->first();
         $seat_number = $seat->seat_num;
@@ -65,6 +65,7 @@ class SignController extends Controller
             $sign->s_clink =$request->input('s_clink');
             $sign->s_img = json_encode($imageNames);
             $sign->s_description= $validatedData['s_description'];
+            $sign->lab = $labnumber;
             $sign->save();
             return back()->with('success', 'Sign-off requested');
     }

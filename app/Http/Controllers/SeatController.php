@@ -65,6 +65,7 @@ class SeatController extends Controller
             $userprofile = new Profile();
             $userprofile->users_id = $user_id;
             $userprofile->seat_num = $seat_number;
+            $userprofile->lab = $labnumber;
             $userprofile->save();
             
             return redirect()->route('seat')->with('success', 'Seat selected successfully!');

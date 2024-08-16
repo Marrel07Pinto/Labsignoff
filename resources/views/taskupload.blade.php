@@ -22,22 +22,19 @@
                 </ul>
             </div>
         @endif
-
+        
+        @php
+          $labnumber = $user = auth()->user()->lab;
+        @endphp
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Upload lab task</h5>
                 <form action="{{ route('task_upload_form') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="lab_id">Select Lab</label>
-                            <select name="lab_id" id="lab_id" class="form-control" required>
-                                <option value="">Select a Lab </option>
-                                @for ($i = 1; $i <= 15; $i++)
-                                    <option value="lab{{ $i }}">Lab {{ $i }}</option>
-                                @endfor
-                            </select>
+                        <h5><strong>{{$labnumber}}</strong></h5>      
                     </div>
-
+                    </br>
                     <div class="form-group">
                         <label for="files">Upload PDF Files</label>
                         <input type="file" name="files[]" id="files" class="form-control" accept="application/pdf" multiple required>

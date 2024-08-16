@@ -120,8 +120,12 @@ Route::get('/tasign', [SignController::class, 'tasign'])->name('tasign');
 Route::get('/chat', [ChatController::class, 'showlayout'])->name('chat');
 Route::post('/taskupload',[TaskuploadController::class,'store'])->name('task_upload_form');
 Route::get('/taskupload', [TaskuploadController::class, 'show'])->name('taskupload');
-Route::get('/taskuploadedit/{id}', [TaskUploadController::class, 'edit'])->name('taskuploadedit');
-Route::put('/update-task/{id}', [TaskUploadController::class, 'update'])->name('task_update_form');
+Route::get('/taskuploadedit/{id}', [TaskuploadController::class, 'edit'])->name('taskuploadedit');
+Route::put('/task/update/{id}', [TaskuploadController::class, 'update'])->name('task_update_form');
+Route::delete('/task/delete/{id}', [TaskuploadController::class, 'destroy'])->name('edittaskadmin.delete');
+
+Route::get('/task', [TaskuploadController::class, 'labdetails'])->name('task');
+
 
 });
 

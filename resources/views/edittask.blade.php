@@ -6,21 +6,12 @@
         @method('PUT')
 
         <div class="form-group">
-            <label for="lab_id">Select Lab</label>
-            <select name="lab_id" id="lab_id" class="form-control" required>
-                <option value="">Select a Lab</option>
-                @for ($i = 1; $i <= 15; $i++)
-                    <option value="lab{{ $i }}" {{ $edittaskadmin->t_lab === "lab$i" ? 'selected' : '' }}>
-                        Lab {{ $i }}
-                    </option>
-                @endfor
-            </select>
+            <label for="lab_id"><strong>{{ $edittaskadmin->t_lab }}</strong></label>
         </div>
-
+        <br>
         <div class="form-group">
             <label for="files">Upload PDF Files</label>
             <input type="file" name="files[]" id="files" class="form-control" accept="application/pdf" multiple>
-            <!-- Display previously uploaded files -->
             @if($edittaskadmin->t_file)
                 @php
                     $filepaths = json_decode($edittaskadmin->t_file, true);
@@ -51,6 +42,16 @@
         </div>
         
         <br>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <div class="row">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+    <form action="{{ route('edittaskadmin.delete', $edittaskadmin->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete the request for lab sign-off?');">
+        @csrf
+        @method('DELETE')
+        <br>
+        <div class="row">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </div>
     </form>
 </div>

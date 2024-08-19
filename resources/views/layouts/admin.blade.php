@@ -208,10 +208,15 @@
 
         </li><!-- End Messages Nav -->
         @php
+          $labnumber = auth()->user()->lab;
           $userName = auth()->user()->name;
           $role = auth()->user()->role;
           $profileImage = auth()->user() ? asset('images/profile_images/' . (auth()->user()->profile->p_img ?? 'default_image/765-default-avatar.png')) : asset('images/profile_images/default_image/765-default-avatar.png');
         @endphp
+        <button type="button" class="btn btn-customforlab" title="You have logged to {{ $labnumber}}">
+          <i class="bi bi-person"></i>&nbsp;{{$labnumber}}
+        </button> 
+        &nbsp;
 
         <li class="nav-item dropdown pe-3">
 

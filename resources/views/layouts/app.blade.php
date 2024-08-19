@@ -207,11 +207,16 @@
 
         </li><!-- End Messages Nav -->
         @php
+          $labnumber = auth()->user()->lab;
           $userName = auth()->user()->name;
           $uni_num = auth()->user()->u_num;
           $seat_num = auth()->user()->profile->seat_num;
           $profileImage = auth()->user() ? asset('images/profile_images/' . (auth()->user()->profile->p_img ?? 'default_image/765-default-avatar.png')) : asset('images/profile_images/default_image/765-default-avatar.png');
         @endphp
+        <button type="button" class="btn btn-customforlab" title="You have logged to {{ $labnumber}}">
+          <i class="bi bi-person"></i>&nbsp;{{$labnumber}}
+        </button> 
+        &nbsp;
         <button type="button" class="btn btn-customforseatnav" title="Your seat number is {{ $seat_num }}">
           <i class="bi bi-person"></i>&nbsp;{{$seat_num}}
         </button> 

@@ -62,15 +62,26 @@ class SeatController extends Controller
             $seat->lab = $labnumber;
             $seat->save();
 
-            $userprofile = new Profile();
-            $userprofile->users_id = $user_id;
-            $userprofile->seat_num = $seat_number;
-            $userprofile->lab = $labnumber;
-            $userprofile->save();
-            
-            return redirect()->route('seat')->with('success', 'Seat selected successfully!');
+            $userprofile = Profile::where('users_id', $user_id)->first();
+
+            if ($userprofile) {
+                // Update existing profile
+                $userprofile->seat_num = $seat_number;
+                $userprofile->lab = $labnumber;
+                $userprofile->save();
+            } else {
+                // Create a new profile
+                $userprofile = new Profile();
+                $userprofile->users_id = $user_id;
+                $userprofile->seat_num = $seat_number;
+                $userprofile->lab = $labnumber;
+                $userprofile->save();
+            }
+                        
+                        return redirect()->route('seat')->with('success', 'Seat selected successfully!');
         }
     }
+    
     public function showSeatSelection()
     {
         $user_id = auth()->user()->id;

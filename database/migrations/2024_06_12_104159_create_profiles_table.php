@@ -16,13 +16,12 @@ return new class extends Migration
             $table->biginteger('users_id')->unsigned();
             $table->string('seat_num')->nullable();
             $table->string('p_img')->nullable();
-            $table->string('lab');
+            $table->string('lab')->nullable();
 
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('seat_num')->references('seat_num')->on('seats')
-            ->onDelete('cascade')->onUpdate('cascade');
-
+            ->onDelete('set null')->onUpdate('cascade');
             $table->timestamps();
         });
     }

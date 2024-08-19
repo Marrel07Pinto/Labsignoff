@@ -24,8 +24,6 @@ return new class extends Migration
             
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('q_seat')->references('seat_num')->on('seats')
-            ->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -11,6 +11,10 @@
         max-width: 100%;
         height: auto;
     }
+    .bg-danger-custom {
+        background-color: #dc3545;
+        color: white;
+    }
 </style>
 
 <main id="main" class="main">
@@ -22,7 +26,7 @@
         <section class="section" id="queriesSection">
             <div class="row flex-row flex-nowrap overflow-auto">
                 @foreach($queriesGivenToTA as $group)
-                    @if ($group['ta']->id == auth()->user()->id) 
+                    @if ($group['ta']->id == auth()->user()->id)
                     <div class="col-lg-6">
                         <a class="text-decoration-none">
                             <div class="card">
@@ -33,13 +37,18 @@
                                     </ol>
                                     <br>
                                     @foreach($group['queries'] as $querydata)
+                                        @php
+                                            $queryLabNumber = $querydata->lab;
+                                            $taLabNumber = auth()->user()->lab;
+                                            $isHighlighted = $queryLabNumber < $taLabNumber;
+                                        @endphp
                                         @if (empty($querydata->solution))
                                             <a href="#" class="query-link" 
                                                data-query="{{ $querydata->q_query }}" 
                                                data-seat="{{ $querydata->q_seat }}" 
                                                data-id="{{ $querydata->id }}" 
                                                data-images="{{ json_encode($querydata->q_img ? json_decode($querydata->q_img) : []) }}">
-                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <div class="alert alert-danger alert-dismissible fade show {{ $isHighlighted ? 'bg-danger-custom' : '' }}" role="alert">
                                                     <button type="button" class="btn btn-dark btn-size">
                                                         <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
                                                     </button> 
@@ -130,7 +139,6 @@ $(document).ready(function() {
             $('#queryId').val(id);
             $('#queryImagebox').empty(); 
 
-            
             if (images.length > 0) {
                 images.forEach(function(img) {
                     var imgUrl = "{{ asset('images/query_images') }}/" + img;
@@ -144,7 +152,6 @@ $(document).ready(function() {
 
             $('#queryform').modal('show');
 
-            
             $.ajax({
                 url: '{{ route("query_status") }}',
                 method: 'POST',

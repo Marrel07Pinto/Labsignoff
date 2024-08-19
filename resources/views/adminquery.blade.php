@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+
 @section('content')
 <style>
     .btn-size {
@@ -6,12 +7,17 @@
         align-items: center;
         justify-content: center;
     }
+    .alert-danger-custom {
+        background-color: #dc3545; /* Dark red background */
+        color: white; /* White text color */
+    }
 </style>
+
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Raised Queries</h1>
     </div><!-- End Page Title -->
-    </br>
+    <br>
     @if(!empty($queriesGivenToTA))
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">
@@ -27,9 +33,17 @@
                                     <br>
                                     @foreach($group['queries'] as $querydata)
                                         @php
-                                            $alertClass = !empty($querydata->solution) ? 'alert-success' : 'alert-danger';
+                                            $signLabNumber = $querydata->lab;
+                                            $taLabNumber = auth()->user()->lab;
+                                            $isHighlighted = $signLabNumber < $taLabNumber;
+                                            $alertClass = !empty($querydata->solution) ? 'alert-success' : ($isHighlighted ? 'alert-danger-custom' : 'alert-danger');
                                         @endphp
-                                        <a href="#" class="query-link" data-query="{{ $querydata->q_query }}" data-seat="{{ $querydata->q_seat }}" data-id="{{ $querydata->id }}" data-solution="{{ $querydata->solution }}" data-images="{{ json_encode($querydata->q_img ? json_decode($querydata->q_img) : []) }}">
+                                        <a href="#" class="query-link" 
+                                           data-query="{{ $querydata->q_query }}" 
+                                           data-seat="{{ $querydata->q_seat }}" 
+                                           data-id="{{ $querydata->id }}" 
+                                           data-solution="{{ $querydata->solution }}" 
+                                           data-images="{{ json_encode($querydata->q_img ? json_decode($querydata->q_img) : []) }}">
                                             <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
                                                 <button type="button" class="btn btn-dark btn-size">
                                                     <i class="bi bi-person"></i>&nbsp;{{ $querydata->q_seat }}
@@ -46,9 +60,10 @@
             </div>
         </section>
     @else
-        <p>No teaching assistance.</p>
+        <p>No queries raised.</p>
     @endif
 </main>
+
 <!-- Modal Structure -->
 <div class="modal fade" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="queryModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -70,11 +85,11 @@
                         <label for="queryText">Query</label>
                         <textarea class="form-control" id="queryText" rows="3" readonly></textarea>
                     </div>
-                    </br>
+                    <br>
                     <div class="form-group">
                         <label for="resolvedStatus">Status: Resolved</label>
                     </div>
-                    </br>
+                    <br>
                     <div class="form-group">
                         <label for="solutionText">Solution</label>
                         <textarea class="form-control" id="solutionText" name="solution" rows="3" readonly></textarea>
@@ -106,16 +121,13 @@
                 $('#solutionText').val(solution ? solution : 'No solution provided.');
                 $('#queryImagebox').empty(); 
                 if (images.length > 0) {
-                images.forEach(function(img) 
-                {
-                    var imgUrl = "{{ asset('images/query_images') }}/" + img;
-                    var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
-                    $('#queryImagebox').append(imgElement);
-                });
+                    images.forEach(function(img) {
+                        var imgUrl = "{{ asset('images/query_images') }}/" + img;
+                        var imgElement = '<img src="' + imgUrl + '?v=' + new Date().getTime() + '" class="img-fluid mb-2 query-image" />';
+                        $('#queryImagebox').append(imgElement);
+                    });
                     $('#queryImagebox').show();
-                } 
-                else 
-                {
+                } else {
                     $('#queryImagebox').hide();
                 }
 

@@ -13,12 +13,25 @@
     }
     .alert {
         position: relative;
+        padding-right: 2.5rem; /* Reserve space for the triangle icon */
     }
     .btn-right {
         float: right;
     }
     .status-text {
         font-weight: bold;
+    }
+    .triangle-icon {
+        font-size: 1.5rem;
+        color: red;
+        position: absolute;
+        right: 10px; 
+        top: 50%;
+        transform: translateY(-50%); 
+    }
+    .triangle
+    {
+        color: red;    
     }
 </style>
 
@@ -29,15 +42,16 @@
     <br>
     <div class="card">
         <div class="card-body">
-              <h5 class="card-title">Meaning of the colours</h5>
-              <center>
-              <span style = 'padding: 0.5rem 1rem' class="alert alert-danger alert-dismissible fade show"><i class="bi bi-star me-1"></i> Pending</span>
-              <span style = 'padding: 0.5rem 1rem' class="alert alert-warning alert-dismissible fade show"><i class="bi bi-collection me-1"></i> Unresolved</span>
-              <span style = 'padding: 0.5rem 1rem' class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-1"></i> Resolved</span>
-              </center>
+            <h5 class="card-title">Meaning of the colours</h5>
+            <center>
+                <span style='padding: 0.5rem 1rem' class="alert alert-danger alert-dismissible fade show"><i class="bi bi-triangle-fill triangle me-1"></i>Priority</span>
+                <span style='padding: 0.5rem 1rem' class="alert alert-danger alert-dismissible fade show"><i class="bi bi-star me-1"></i> Pending</span>
+                <span style='padding: 0.5rem 1rem' class="alert alert-warning alert-dismissible fade show"><i class="bi bi-collection me-1"></i> Unresolved</span>
+                <span style='padding: 0.5rem 1rem' class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-1"></i> Resolved</span>
+            </center>
         </div>           
     </div>
-          <br>
+    <br>
     @if(!empty($signsGivenToTA))
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">
@@ -56,6 +70,10 @@
                                             $signdata->s_result === 'resolved' ? 'alert-success' :
                                             ($signdata->s_result === 'unresolved' ? 'alert-warning' : 'alert-danger')
                                         ) : 'alert-danger';
+                                    $signLabNumber = $signdata->lab; 
+                                    $adminLabNumber = auth()->user()->lab;
+                                    $isHighlighted = $signLabNumber < $adminLabNumber; 
+                                    $showTriangle = $alertClass === 'alert-danger' && $isHighlighted;
                                     @endphp
                                     <a href="#" class="sign-link" 
                                        data-description="{{ $signdata->s_description }}" 
@@ -65,6 +83,9 @@
                                        data-images="{{ json_encode($signdata->s_img ? json_decode($signdata->s_img) : []) }}"
                                        data-status="{{ $signdata->s_result }}">
                                         <div class="alert {{ $alertClass }} alert-dismissible fade show" role="alert">
+                                            @if($showTriangle)
+                                                <i class="bi bi-triangle-fill triangle-icon"></i>
+                                            @endif
                                             <button type="button" class="btn btn-dark btn-size">
                                                 <i class="bi bi-person"></i>&nbsp;{{ $signdata->s_seat }}
                                             </button> 

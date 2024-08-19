@@ -25,7 +25,7 @@
         <!-- Lab Selection -->
         <div class="mt-4">
             <x-input-label for="lab" :value="__('Select Lab')" />
-            <select id="lab" name="lab" class="block mt-1 w-full">
+            <select id="lab" name="lab" class="block mt-1 w-full" required>
                 <option value="">Select a Lab</option>
                 @for ($i = 1; $i <= 10; $i++)
                     <option value="lab{{ $i }}">{{ __('Lab ' . $i) }}</option>

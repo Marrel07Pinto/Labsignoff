@@ -16,9 +16,10 @@ return new class extends Migration
             $table->bigInteger('users_id')->unsigned();
             $table->string('seat_num')->unique();
             $table->string('lab');
-            $table->timestamps();
+            
             $table->foreign('users_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 

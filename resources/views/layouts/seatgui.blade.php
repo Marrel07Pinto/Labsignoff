@@ -54,7 +54,7 @@
                 $profileImage = auth()->user() ? asset('images/profile_images/' . (auth()->user()->profile->p_img ?? 'default_image/765-default-avatar.png')) : asset('images/profile_images/default_image/765-default-avatar.png');
                 @endphp
                 <button type="button" class="btn btn-customforlab" title="You have logged to {{ $labnumber}}">
-                    <i class="bi bi-person"></i>&nbsp;{{$labnumber}}
+                    <i class="bi bi-clipboard2"></i>&nbsp;{{$labnumber}}
                 </button> 
                 &nbsp;
 

@@ -215,7 +215,7 @@
         @endphp
 
         <button type="button" class="btn btn-customforlab" title="You have logged to {{ $labnumber}}">
-          <i class="bi bi-person"></i>&nbsp;{{$labnumber}}
+          <i class="bi bi-clipboard2"></i>&nbsp;{{$labnumber}}
         </button> 
         &nbsp;
 

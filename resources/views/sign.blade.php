@@ -1,35 +1,84 @@
 @extends('layouts.app')
 @section('content')
+<style>
+    .form-querygroup {
+        margin-bottom: 1rem;
+    }
+    .custom-file-label::after {
+        content: 'Choose';
+    }
+    .custom-imagefile-upload {
+        border: 1px solid #ced4da;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        background: #e9ecef;
+    }
+    .btn-custom {
+        background-color: #0040ff; 
+        color: white; 
+    }
+    .btn-custom:hover {
+        background-color: #0056b3; 
+    }
+    .form-control {
+        border-radius: 4px;
+    }
+</style>
 
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Request for Sign-Off</h1>
     </div><!-- End Page Title -->
     <br>
-    <form id="signform" action="{{ route('sign_form') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="s_img">Image:</label>
-        <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple><br><br>
-        <label for="s_description">Explanation:</label>
-        <textarea id="s_description" name="s_description" required></textarea><br><br>
-        <label for="s_clink">Codeshare Link:</label>
-        <input type="text" id="s_clink" name="s_clink"><br><br>
-        <input type="submit" value="Submit">
-        <hr>
-    </form>
-
-  
     <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Meaning of the colours</h5>
-              <center>
-              <span style = 'padding: 0.5rem 1rem' class="alert alert-danger alert-dismissible fade show"><i class="bi bi-star me-1"></i> Pending</span>
-              <span style = 'padding: 0.5rem 1rem' class="alert alert-warning alert-dismissible fade show"><i class="bi bi-collection me-1"></i> Unresolved</span>
-              <span style = 'padding: 0.5rem 1rem' class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-1"></i> Resolved</span>
-              </center>
+        <div class="card-body">
+            <div class="container mt-5">
+                <form id="signform" action="{{ route('sign_form') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-querygroup">
+                        <label for="s_img">Image:</label>
+                        <div class="input-group">
+                            <label class="input-group-text custom-imagefile-upload" for="s_img">
+                                <i class="bi bi-image"></i> Choose Image
+                            </label>
+                            <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple class="form-control d-none">
+                        </div>
+                    </div>
+                    <div class="form-querygroup">
+                        <label for="s_description">Explanation:</label>
+                        <textarea id="s_description" name="s_description" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-querygroup">
+                        <label for="s_clink">Codeshare Link:</label>
+                        <input type="text" id="s_clink" name="s_clink" class="form-control">
+                    </div>
+                    <div class="form-querygroup">
+                        <input type="submit" value="Submit" class="btn btn-custom">
+                    </div>
+                </form>
             </div>
-          </div>
-    
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Meaning of the colours</h5>
+            <center>
+                <span style="padding: 0.5rem 1rem" class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-star me-1"></i> Pending
+                </span>
+                <span style="padding: 0.5rem 1rem" class="alert alert-warning alert-dismissible fade show">
+                    <i class="bi bi-collection me-1"></i> Unresolved
+                </span>
+                <span style="padding: 0.5rem 1rem" class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-1"></i> Resolved
+                </span>
+            </center>
+        </div>
+    </div>
+
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -50,7 +99,6 @@
         <p>No request has been raised for lab sign-off</p>
     @else
         @php
-            // Separate items by status
             $resolvedItems = $signoff->filter(fn($item) => $item->s_result === 'resolved');
             $unresolvedItems = $signoff->filter(fn($item) => $item->s_result === 'unresolved');
             $noResultItems = $signoff->filter(fn($item) => empty($item->s_result));

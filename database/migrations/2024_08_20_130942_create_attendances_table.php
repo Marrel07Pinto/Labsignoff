@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->string('u_num');
-            $table->string('lab');
-            $table->string('atten');
-
-            $table->foreign('u_num')->references('u_num')->on('users')
-            ->onDelete('cascade')->onUpdate('cascade');
+             $table->string('name')->nullable();
+            $table->string('u_num')->nullable();
+            $table->string('lab')->nullable();
+            $table->string('atten')->nullable();
             $table->timestamps();
         });
     }

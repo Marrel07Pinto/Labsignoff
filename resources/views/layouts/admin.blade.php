@@ -309,9 +309,9 @@
         </a>
       </li>
   <li class="nav-item">
-    <a class="nav-link collapsed" href="">
+    <a class="nav-link collapsed" href="{{'attendance'}}">
       <i class="bi bi-clipboard2-check"></i>
-      <span>Attendence</span>
+      <span>Attendance</span>
     </a>
   </li>
   <li class="nav-item">

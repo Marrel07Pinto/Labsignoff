@@ -1,7 +1,16 @@
 @extends('layouts.admin')
 
 @section('content')
-
+<style>
+     .date-time input[type="date"],
+        .date-time input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+</style>
 <main id="main" class="main">
     <div class="container">
 
@@ -39,12 +48,22 @@
                         <label for="files">Upload PDF Files</label>
                         <input type="file" name="files[]" id="files" class="form-control" accept="application/pdf" multiple required>
                     </div>
-
+                    </br>
                     <div class="form-group">
                         <label for="hints">Hints</label>
                         <textarea name="hints" id="hints" class="form-control" rows="4" placeholder="Enter hints here..." required></textarea>
                     </div>
-                    <br>
+                    </br>
+                    <div class="date-time">
+                            <label for="date">Select Date:</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        </br>
+                        <div class="date-time">
+                            <label for="time">Select Time:</label>
+                            <input type="time" id="time" name="time" required>
+                        </div>
+                        <br>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>

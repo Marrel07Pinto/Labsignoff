@@ -9,6 +9,7 @@
             <label for="lab_id"><strong>{{ $edittaskadmin->t_lab }}</strong></label>
         </div>
         <br>
+        
         <div class="form-group">
             <label for="files">Upload PDF Files</label>
             <input type="file" name="files[]" id="files" class="form-control" accept="application/pdf" multiple>
@@ -27,7 +28,7 @@
                                     $filename = preg_replace('/^\d+_/', '', $filenamewithnumbers);
                                 @endphp
                                 <li>
-                                   <label>Previously uploaded filename <strong>{{ $filename }}</strong> </label>
+                                    <label>Previously uploaded filename <strong>{{ $filename }}</strong></label>
                                 </li>
                             @endforeach
                         </ul>
@@ -35,17 +36,29 @@
                 @endif
             @endif
         </div>
-       
+
         <div class="form-group">
             <label for="hints">Hints</label>
             <textarea name="hints" id="hints" class="form-control" rows="4" required>{{ $edittaskadmin->t_hint }}</textarea>
         </div>
-        
+         <label> Time for lab : <strong>{{$edittaskadmin->date_time}}</strong> </label>
+        </br>
+        <div class="form-group">
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" name="date" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="time">Select Time:</label>
+            <input type="time" id="time" name="time" class="form-control">
+        </div>
+
         <br>
         <div class="row">
             <button type="submit" class="btn btn-primary">Update</button>
         </div>
     </form>
+
     <form action="{{ route('edittaskadmin.delete', $edittaskadmin->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete the request for lab sign-off?');">
         @csrf
         @method('DELETE')

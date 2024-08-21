@@ -66,9 +66,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class,'users_id');
     }
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class,'users_id');
-    }
-
 }

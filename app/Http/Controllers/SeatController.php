@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Seat;
 use App\Models\Profile;
+use App\Models\Attendance;
+use App\Models\Lab;
+use Carbon\Carbon;
+
 
 
 class SeatController extends Controller
@@ -60,17 +64,52 @@ class SeatController extends Controller
             $seat->users_id = $user_id;
             $seat->seat_num = $seat_number;
             $seat->lab = $labnumber;
-            $seat->save();
+            $seat->save();   
 
-            $userprofile = Profile::where('users_id', $user_id)->first();
+            $timeseatbooked = Carbon::parse($seat->created_at);
+            $labs = Lab::where('t_lab', $labnumber)->first();
+            if($labs)
+            {
+                $ans = 'Absent';
+                $Admintime = Carbon::parse($labs->date_time);
+                $timeWindowEnd = $Admintime->copy()->addMinutes(15);
+                if ($timeseatbooked->isSameDay($Admintime)) 
+                {
+                    if ($timeseatbooked->greaterThanOrEqualTo($Admintime) && $timeseatbooked->lessThanOrEqualTo($timeWindowEnd)) 
+                    {
+                        $ans = 'Present';
+                    } 
+                    
+                
+                }
+                $attendance = Attendance::where('u_num', auth()->user()->u_num)
+                            ->where('lab', $labnumber)
+                            ->first();
+                if ($attendance) 
+                    {
+                                
+                        $attendance->atten = $ans;
+                        $attendance->save();
+                    }
+                else
+                    {
+                        $attenstore = new Attendance();
+                        $attenstore->name = auth()->user()->name;
+                        $attenstore->u_num = auth()->user()->u_num;
+                        $attenstore->lab = $labnumber;
+                        $attenstore->atten = $ans;
+                        $attenstore->save();
+                    }
+            }
+            
+           
+        $userprofile = Profile::where('users_id', $user_id)->first();
 
             if ($userprofile) {
-                // Update existing profile
                 $userprofile->seat_num = $seat_number;
                 $userprofile->lab = $labnumber;
                 $userprofile->save();
             } else {
-                // Create a new profile
                 $userprofile = new Profile();
                 $userprofile->users_id = $user_id;
                 $userprofile->seat_num = $seat_number;
@@ -78,7 +117,7 @@ class SeatController extends Controller
                 $userprofile->save();
             }
                         
-                        return redirect()->route('seat')->with('success', 'Seat selected successfully!');
+                return redirect()->route('seat')->with('success', 'Seat selected successfully!');
         }
     }
     
@@ -92,12 +131,6 @@ class SeatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
-    {
-        $user_id = auth()->user()->id;
-        $seatswithnav = seat::all();
-        return view('seatwithnav',compact('seatswithnav')); 
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -150,5 +183,6 @@ class SeatController extends Controller
             'TA' => $TA
         ]);
     }
+
 
 }

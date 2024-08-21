@@ -72,16 +72,19 @@ class SeatController extends Controller
             {
                 $ans = 'Absent';
                 $Admintime = Carbon::parse($labs->date_time);
-                $timeWindowEnd = $Admintime->copy()->addMinutes(15);
+                $timeend = $Admintime->copy()->addMinutes(15);
+                $extendedtimeend = $Admintime->copy()->addMinutes(30);
                 if ($timeseatbooked->isSameDay($Admintime)) 
                 {
-                    if ($timeseatbooked->greaterThanOrEqualTo($Admintime) && $timeseatbooked->lessThanOrEqualTo($timeWindowEnd)) 
+                    if ($timeseatbooked->greaterThanOrEqualTo($Admintime) && $timeseatbooked->lessThanOrEqualTo($timeend)) 
                     {
                         $ans = 'Present';
-                    } 
-                    
+                    } else if ($timeseatbooked->greaterThan($timeend) && $timeseatbooked->lessThanOrEqualTo($extendedtimeend )) {
+                        $ans = 'Partial_Present';
+                    }   
                 
                 }
+                
                 $attendance = Attendance::where('u_num', auth()->user()->u_num)
                             ->where('lab', $labnumber)
                             ->first();

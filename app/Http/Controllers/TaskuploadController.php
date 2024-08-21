@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Lab;
+use Carbon\Carbon;
 
 class TaskuploadController extends Controller
 {
@@ -45,11 +46,18 @@ class TaskuploadController extends Controller
                 $filepaths[] = '/labtask/' . $filename;
             }
         }
+
+        $date = $request->input('date');
+        $time = $request->input('time');
+        $datetimestring = $date . ' ' . $time; 
+        $datetetime = Carbon::parse($datetimestring);
+
         $task = new Lab();
         $task->users_id = $user_id;
         $task->t_lab = $labname;
         $task->t_file = json_encode($filepaths);
         $task->t_hint = $request->input('hints');
+        $task->date_time = $datetetime;
         $task->save();
 
         return redirect()->route('taskupload')->with('success', "Task uploaded successfully for {$labname}");
@@ -83,17 +91,18 @@ class TaskuploadController extends Controller
     public function update(Request $request, string $id)
     {
         $edittask = Lab::find($id);
-        $labname = $request->input('lab_id');
-        $request->validate([
-            'lab_id' => 'required|string',
-            'files.*' => 'required|file|mimes:pdf|max:2048',
-            'hints' => 'nullable|string|max:255',
-        ]);
-
         
-        $filepaths = [];
-
-        // Check if files are present and process them
+        $request->validate([
+            'files.*' => 'nullable|file|mimes:pdf|max:2048',
+            'hints' => 'nullable|string|max:255',
+            'date' => 'nullable|date',
+            'time' => 'nullable|date_format:H:i',
+        ]);
+    
+        // Preserve existing values
+        $filepaths = json_decode($edittask->t_file, true) ?? [];
+    
+        // Check if new files are provided
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -101,14 +110,29 @@ class TaskuploadController extends Controller
                 $filepaths[] = '/labtask/' . $filename;
             }
         }
-        $edittask ->t_lab = $request->input('lab_id');
-        $edittask ->t_file = json_encode($filepaths);
-        $edittask ->t_hint = $request->input('hints');
-        $edittask ->save();
-
-        return redirect()->route('taskupload')->with('success', "Task uploaded successfully for {$labname}");
+    
+        if ($request->filled('date') && $request->filled('time')){
+            $date = $request->input('date');
+            $time = $request->input('time');
+            $datetimestring = $date . ' ' . $time;
+            $datetetime = Carbon::parse($datetimestring);
+            $edittask->date_time = $datetetime;
+        }
+        // Update only the fields that are present in the request
+        if ($request->has('hints')) {
+            $edittask->t_hint = $request->input('hints');
+        }
+        
+        // Update files if new ones were uploaded
+        if (!empty($filepaths)) {
+            $edittask->t_file = json_encode($filepaths);
+        }
+    
+        // Save the updated task
+        $edittask->save();
+    
+        return redirect()->route('taskupload')->with('success', "Task updated successfully for {$edittask->t_lab}");
     }
-
     /**
      * Remove the specified resource from storage.
      */

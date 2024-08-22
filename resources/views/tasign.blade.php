@@ -11,7 +11,7 @@
         max-width: 100%;
         height: auto;
     }
-    .reason-box {
+    .reason-box, .marks-box {
         display: none; /* Hide by default */
     }
     .bg-danger-custom {
@@ -113,8 +113,13 @@
                         </div>
                     </div>
                     <br>
+                    <div class="form-group marks-box" id="marksBox">
+                        <label for="marksInput">Marks</label>
+                        <input type="number" class="form-control" id="marksInput" name="marks" required>
+                    </div>
+                    <br>
                     <div class="form-group reason-box" id="reasonBox">
-                        <label for="reasonText">Reason for not given lab signoff</label>
+                        <label for="reasonText">Reason for not giving lab signoff</label>
                         <textarea class="form-control" id="reasonText" name="reason" rows="3"></textarea>
                     </div>
                     <br>
@@ -130,7 +135,6 @@
 
 <script>
 $(document).ready(function() {
-    // Function to refresh the signs section
     function refreshSigns() {
         $.get('{{ route("refresh_signs") }}', function(data) {
             $('#signsSection').html(data);
@@ -138,7 +142,6 @@ $(document).ready(function() {
         });
     }
 
-    // Bind click event handler for sign-link
     function bindSignLinkHandler() {
         $('.sign-link').off('click').on('click', function(event) { 
             event.preventDefault();
@@ -146,7 +149,6 @@ $(document).ready(function() {
             var id = $(this).data('id');
             var images = $(this).data('images') || []; 
 
-            // Set sign description and ID
             $('#signText').val(description);
             $('#signId').val(id);
             $('#signImagebox').empty(); 
@@ -182,14 +184,19 @@ $(document).ready(function() {
         });
     }
 
-    // Handle form submission
     $('#resolveSignForm').submit(function(event) {
         event.preventDefault();
 
-        // Ensure that the status is selected before submitting
         if (!$('input[name="status"]:checked').val()) {
             alert('Please select a status.');
             return;
+        }
+
+        // Disable the marks input if unresolved is selected
+        if ($('#statusUnresolved').is(':checked')) {
+            $('#marksInput').prop('disabled', true);
+        } else {
+            $('#marksInput').prop('disabled', false);
         }
 
         $.post($(this).attr('action'), $(this).serialize(), function() {
@@ -198,16 +205,21 @@ $(document).ready(function() {
         });
     });
 
-    // Handle status radio button change
     $('input[name="status"]').change(function() {
-        if ($('#statusUnresolved').is(':checked')) {
+        if ($('#statusResolved').is(':checked')) {
+            $('#marksBox').show();
+            $('#reasonBox').hide();
+            $('#marksInput').prop('required', true); // Make marks input required
+        } else if ($('#statusUnresolved').is(':checked')) {
+            $('#marksBox').hide();
             $('#reasonBox').show();
+            $('#marksInput').prop('required', false); // Marks input not required for unresolved
         } else {
+            $('#marksBox').hide();
             $('#reasonBox').hide();
         }
     });
 
-    // Handle modal close event
     $('#signform').on('hidden.bs.modal', function () {
         var signId = $('#signId').val();
         if (signId) {
@@ -217,19 +229,17 @@ $(document).ready(function() {
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: signId,
-                    status: null // Reset status to null when modal is closed
+                    status: null 
                 },
                 success: function() {
-                    // Optionally handle success
+                    
                 }
             });
         }
     });
 
-    // Initial binding of sign-link handler
     bindSignLinkHandler();
 
-    // Debounced refresh function
     function debounce(func, wait) {
         let timeout;
         return function() {

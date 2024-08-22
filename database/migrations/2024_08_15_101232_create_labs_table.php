@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('t_file');
             $table->string('t_hint')->nullable();
             $table->string('date_time')->nullable();
+            $table->string('t_no_stds')->nullable();
             
 
             $table->foreign('users_id')->references('id')->on('users')

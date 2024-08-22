@@ -46,12 +46,17 @@
                     </br>
                     <div class="form-group">
                         <label for="files">Upload PDF Files</label>
-                        <input type="file" name="files[]" id="files" class="form-control" accept="application/pdf" multiple required>
+                        <input type="file" name="files[]" id="files" class="form-control" accept="application/pdf" multiple>
                     </div>
                     </br>
                     <div class="form-group">
                         <label for="hints">Hints</label>
                         <textarea name="hints" id="hints" class="form-control" rows="4" placeholder="Enter hints here..." required></textarea>
+                    </div>
+                    </br>
+                    <div class="form-group">
+                        <label for="hints">Total number of students in lab</label>
+                        <input name="nostd" id="nostd" class="form-control" rows="4" placeholder="Total number of students..." required></input>
                     </div>
                     </br>
                     <div class="date-time">
@@ -60,7 +65,7 @@
                         </div>
                         </br>
                         <div class="date-time">
-                            <label for="time">Select Time:</label>
+                            <label for="time">Lab starts at:</label>
                             <input type="time" id="time" name="time" required>
                         </div>
                         <br>

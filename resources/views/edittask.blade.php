@@ -41,6 +41,10 @@
             <label for="hints">Hints</label>
             <textarea name="hints" id="hints" class="form-control" rows="4" required>{{ $edittaskadmin->t_hint }}</textarea>
         </div>
+        <div class="form-group">
+            <label for="hints">Total number of students in lab</label>
+            <input name="nostd" id="nostd" class="form-control" rows="4" value = "{{ $edittaskadmin->t_no_stds }}" required></input>
+        </div>
          <label> Time for lab : <strong>{{$edittaskadmin->date_time}}</strong> </label>
         </br>
         <div class="form-group">

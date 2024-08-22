@@ -160,6 +160,7 @@ class SignController extends Controller
     
     public function signsolution(Request $request)
     {
+        
         $validatedData = $request->validate([
             'reason' => 'nullable|string|max:10000', 
         ]);
@@ -167,7 +168,8 @@ class SignController extends Controller
         if ($sign) {
             $sign->s_resolved_by = auth()->user()->name;
             $sign->s_result = $request->input('status'); 
-            $sign->s_reason = $validatedData['reason'];  
+            $sign->s_reason = $validatedData['reason']; 
+            $sign->marks = $request->input('marks'); 
             $sign->save();
         }
         

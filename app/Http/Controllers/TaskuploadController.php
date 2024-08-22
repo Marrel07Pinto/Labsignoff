@@ -34,7 +34,11 @@ class TaskuploadController extends Controller
         $request->validate([
             'files.*' => 'required|file|mimes:pdf|max:2048',
             'hints' => 'nullable|string|max:255',
+            'nostd' => 'nullable|numeric',
+        ], [
+            'nostd.numeric' => 'The total number of students must be a number.',
         ]);
+       
 
         $filepaths = [];
 
@@ -57,6 +61,7 @@ class TaskuploadController extends Controller
         $task->t_lab = $labname;
         $task->t_file = json_encode($filepaths);
         $task->t_hint = $request->input('hints');
+        $task->t_no_stds = $request->input('nostd');
         $task->date_time = $datetetime;
         $task->save();
 
@@ -97,6 +102,9 @@ class TaskuploadController extends Controller
             'hints' => 'nullable|string|max:255',
             'date' => 'nullable|date',
             'time' => 'nullable|date_format:H:i',
+            'nostd' => 'nullable|numeric',
+        ], [
+            'nostd.numeric' => 'The total number of students must be a number.',
         ]);
     
         // Preserve existing values
@@ -121,6 +129,9 @@ class TaskuploadController extends Controller
         // Update only the fields that are present in the request
         if ($request->has('hints')) {
             $edittask->t_hint = $request->input('hints');
+        }
+        if ($request->has('nostd')) {
+            $edittask->t_no_stds = $request->input('nostd');
         }
         
         // Update files if new ones were uploaded

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('s_resolved_by')->nullable();
             $table->string('s_result')->nullable();
             $table->text('s_reason')->nullable();
+            $table->string('marks')->nullable();
             $table->string('lab');
             $table->timestamps();
 

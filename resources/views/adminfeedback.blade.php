@@ -81,7 +81,7 @@
     </div>
     <ul>
 </ul>
-    
+
     <!-- Single Card Containing Both Sections -->
     <div class="card">
         <div class="card-bodycat">
@@ -148,9 +148,23 @@
                     }
                 ?>
                 <div class="result">
-                    <center><p class="{{ categorize($average) }}">Understanding: {{ categorize($average) }}</p></center>
-                    <center><p class="{{ categorize($averageoverall) }}">Overall Experience: {{ categorize($averageoverall) }}</p></center>
-                    <center><p class="{{ categorize($averagedifficulty) }}">Difficulty Level: {{ categorize($averagedifficulty) }}</p></center>
+                    <center>
+                        <?php if ($average > 0): ?>
+                            <p class="{{ categorize($average) }}">Understanding: {{ categorize($average) }}</p>
+                        <?php endif; ?>
+                    </center>
+
+                    <center>
+                        <?php if ($averageoverall > 0): ?>
+                            <p class="{{ categorize($averageoverall) }}">Overall Experience: {{ categorize($averageoverall) }}</p>
+                        <?php endif; ?>
+                    </center>
+
+                    <center>
+                        <?php if ($averagedifficulty > 0): ?>
+                            <p class="{{ categorize($averagedifficulty) }}">Difficulty Level: {{ categorize($averagedifficulty) }}</p>
+                        <?php endif; ?>
+                    </center>
                 </div>
             </div>
         </div>
@@ -163,7 +177,7 @@
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
                   new ApexCharts(document.querySelector("#pieChart"), {
-                    series: [{{$negativecount}},{{$positivecount}}],
+                    series: [{{$positivecount}},{{$negativecount}}],
                     chart: {
                       height: 350,
                       type: 'pie',
@@ -187,123 +201,121 @@
               <h5 class="card-title">Bubble Chart</h5>
               <div id="bubbleChart"></div>
                 <button id="downloadCsv" type="button" class="btn btn-outline-secondary">Download CSV</button>
-                  <script>
-                      document.addEventListener("DOMContentLoaded", () => {
-                        const interestingData = @json($interesting);
-                        const engagingData = @json($engaging);
-                        const importantData = @json($important);
-                        const confusingData = @json($confusing);
-                        function generateData(data) 
-                        {
-                          const series = [];
-                            for (const [word, count] of Object.entries(data)) 
-                            {
-                              const x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
-                              const y = Math.floor(Math.random() * (60 - 10 + 1)) + 10;
-                              const z = count;
-                              series.push(
-                                {
-                                    x: x,
-                                    y: y,
-                                    z: z,
-                                    label: word
-                                });
-                            }
-                              return series;
+                <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    // Existing data
+                    const interestingData = @json($interesting);
+                    const engagingData = @json($engaging);
+                    const importantData = @json($important);
+                    const confusingData = @json($confusing);
+
+                    // New data for CSV
+                    const detailFeedback = @json($detailfeedback);
+
+                    // Function to generate data for the bubble chart
+                    function generateData(data) {
+                        const series = [];
+                        for (const [word, count] of Object.entries(data)) {
+                            const x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
+                            const y = Math.floor(Math.random() * (60 - 10 + 1)) + 10;
+                            const z = count;
+                            series.push({
+                                x: x,
+                                y: y,
+                                z: z,
+                                label: word
+                            });
                         }
-                        new ApexCharts(document.querySelector("#bubbleChart"), {
-                          series: [
+                        return series;
+                    }
+
+                    // Initialize bubble chart
+                    new ApexCharts(document.querySelector("#bubbleChart"), {
+                        series: [
                             {
-                              name: 'Interesting',
-                              data: generateData(interestingData)
+                                name: 'Interesting',
+                                data: generateData(interestingData)
                             },
                             {
-                              name: 'Engaging',
-                              data: generateData(engagingData)
+                                name: 'Engaging',
+                                data: generateData(engagingData)
                             },
                             {
-                              name: 'Important',
-                              data: generateData(importantData)
+                                name: 'Important',
+                                data: generateData(importantData)
                             },
                             {
-                              name: 'Confusing',
-                              data: generateData(confusingData)
+                                name: 'Confusing',
+                                data: generateData(confusingData)
                             }
-                          ],
-                          chart: {
+                        ],
+                        chart: {
                             height: 333,
                             type: 'bubble',
                             toolbar: {
-                              tools: {
-                                download: false, // Hide the download menu
-                                selection: true,
-                                zoom: true,
-                                zoomin: true,
-                                zoomout: true,
-                                pan: true,
-                                reset: true,
-                              }
+                                tools: {
+                                    download: false, // Hide the download menu
+                                    selection: true,
+                                    zoom: true,
+                                    zoomin: true,
+                                    zoomout: true,
+                                    pan: true,
+                                    reset: true,
+                                }
                             }
-                          },
-                          dataLabels: {
+                        },
+                        dataLabels: {
                             enabled: false
-                          },
-                          fill: {
+                        },
+                        fill: {
                             opacity: 0.8,
                             colors: ['#0000FF', '#00FF00', '#FFFF00', '#FF0000'] // Colors for different series
-                          },
-                          xaxis: {
+                        },
+                        xaxis: {
                             tickAmount: 12,
                             type: 'category',
-                          },
-                          yaxis: {
+                        },
+                        yaxis: {
                             max: 70
-                          },
-                          tooltip: {
+                        },
+                        tooltip: {
                             y: {
-                              formatter: function (val, opts) {
-                                const word = opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]?.label || '';
-                                const count = opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]?.z || val;
-                                return `${word}\nCount: ${count}`;
-                              }
+                                formatter: function (val, opts) {
+                                    const word = opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]?.label || '';
+                                    const count = opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]?.z || val;
+                                    return `${word}\nCount: ${count}`;
+                                }
                             }
-                          }
-                      }).render();
+                        }
+                    }).render();
+
+                    // Function to download CSV with feedback sentences
                     function downloadCSV() {
-                      let csvContent = "data:text/csv;charset=utf-8,";
-                      csvContent += "Activities you find most interesting,Things to make the class more engaging, Important thing you learned today, Anything that was confusing or unclear\n";
-                      const maxLength = Math.max(
-                        Object.keys(interestingData).length,
-                        Object.keys(engagingData).length,
-                        Object.keys(importantData).length,
-                        Object.keys(confusingData).length
-                      );
-                      for (let i = 0; i < maxLength; i++) {
-                        const interestingWord = Object.keys(interestingData)[i] || '';
-                        const interestingCount = interestingData[interestingWord] || '';
-                        
-                        const engagingWord = Object.keys(engagingData)[i] || '';
-                        const engagingCount = engagingData[engagingWord] || '';
+                        let csvContent = "data:text/csv;charset=utf-8,";
+                        csvContent += "Was there anything that was confusing or unclear?,What activities or discussions did you find most interesting,What could I do to make the class more engaging?,What is the most important thing you learned today?\n";
 
-                        const importantWord = Object.keys(importantData)[i] || '';
-                        const importantCount = importantData[importantWord] || '';
+                        detailFeedback.forEach(feedback => {
+                            csvContent += [
+                                feedback.f_confusing || '',
+                                feedback.f_interesting || '',
+                                feedback.f_engaging || '',
+                                feedback.f_important || ''
+                            ].join(',') + '\n';
+                        });
 
-                        const confusingWord = Object.keys(confusingData)[i] || '';
-                        const confusingCount = confusingData[confusingWord] || '';
-
-                        csvContent += `${interestingWord} (${interestingCount}),${engagingWord} (${engagingCount}),${importantWord} (${importantCount}),${confusingWord} (${confusingCount})\n`;
-                      }
-                      const encodedUri = encodeURI(csvContent);
-                      const link = document.createElement("a");
-                      link.setAttribute("href", encodedUri);
-                      link.setAttribute("download", "bubble_chart_data.csv");
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
+                        const encodedUri = encodeURI(csvContent);
+                        const link = document.createElement("a");
+                        link.setAttribute("href", encodedUri);
+                        link.setAttribute("download", "feedback_data.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
                     }
+
+                    // Attach the downloadCSV function to the button
                     document.getElementById("downloadCsv").addEventListener("click", downloadCSV);
-                    });
-                  </script>
+                });
+            </script>
             </div>
           </div>
         </div>

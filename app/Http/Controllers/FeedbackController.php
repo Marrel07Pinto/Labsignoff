@@ -63,10 +63,13 @@ class FeedbackController extends Controller
             $totalsum += $value * $frequency;
             $totalcount += $frequency;
         }
+        if ($totalcount > 0) {
             $avg = $totalsum / $totalcount;
-            $average = (($avg*100)/5);
-             
-
+            $average = ($avg * 100) / 5;
+        } else {
+            $avg = 0;
+            $average = 0;  
+        }   
             $afeedoverall = Feedback::where('lab', $labnumber)->pluck('f_overall');
             $frequencyoverall = $afeedoverall->countBy();
                 $totalsumoverall = 0;
@@ -76,9 +79,13 @@ class FeedbackController extends Controller
                 $totalsumoverall += $valueoverall * $frequencyofoverall;
                 $totalcountoverall += $frequencyofoverall;
             }
+            if ($totalcountoverall > 0) {
                 $avgoverall = $totalsumoverall / $totalcountoverall;
                 $averageoverall = (($avgoverall*100)/5);
-    
+            } else {
+                $avgoverall = 0;
+                $averageoverall = 0;  
+            }    
                 $afeeddifficulty = Feedback::where('lab', $labnumber)->pluck('f_difficulty');
                 $frequencydifficulty = $afeeddifficulty->countBy();
                     $totalsumdifficulty = 0;
@@ -88,9 +95,14 @@ class FeedbackController extends Controller
                     $totalsumdifficulty += $valuedifficulty * $frequencyofdifficulty;
                     $totalcountdifficulty += $frequencyofdifficulty;
                 }
+                
+                if ($totalcountdifficulty > 0) {
                     $avgdifficulty = $totalsumdifficulty / $totalcountdifficulty;
                     $averagedifficulty = (($avgdifficulty*100)/5);
-
+                } else {
+                    $avgdifficulty = 0;
+                    $averagedifficulty = 0;  
+                }
                     $positivewordfile = public_path('Feedback/positive_words.txt');
                     $negativewordfile = public_path('Feedback/negative_words.txt');
                     $poswords = file($positivewordfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -137,8 +149,10 @@ class FeedbackController extends Controller
                     $engaging = getWordFrequencies($feedbackengaging, $stopwords);
                     $important = getWordFrequencies($feedbackimportant, $stopwords);
                     $confusing = getWordFrequencies($feedbackconfusing, $stopwords);
+
+                    $detailfeedback = Feedback::where('lab', $labnumber)->get();
                 
-                    return view('adminfeedback', compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount','interesting','engaging','important','confusing'));
+                    return view('adminfeedback', compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount','interesting','engaging','important','confusing','detailfeedback'));
 
     }
     private function analyzeSentiment($sentence,$poswords , $negwords)

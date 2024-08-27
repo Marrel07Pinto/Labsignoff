@@ -1,4 +1,5 @@
-@extends('layouts.admin')
+@extends($layout)
+
 @section('content')
 <style>
     .outstanding {

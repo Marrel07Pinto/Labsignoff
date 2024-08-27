@@ -53,6 +53,7 @@ class FeedbackController extends Controller
      */
     public function show()
     {
+        
         $labnumber = auth()->user()->lab;
         $afeed = Feedback::where('lab', $labnumber)->pluck('f_understanding');
         $frequencyofnum = $afeed->countBy();
@@ -151,8 +152,10 @@ class FeedbackController extends Controller
                     $confusing = getWordFrequencies($feedbackconfusing, $stopwords);
 
                     $detailfeedback = Feedback::where('lab', $labnumber)->get();
+                    $teachrole = auth()->user()->role;
+                    $layout = $teachrole === 'ADMIN' ? 'layouts.admin' : 'layouts.ta';
                 
-                    return view('adminfeedback', compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount','interesting','engaging','important','confusing','detailfeedback'));
+                    return view('adminfeedback', compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount','interesting','engaging','important','confusing','detailfeedback','layout'));
 
     }
     private function analyzeSentiment($sentence,$poswords , $negwords)

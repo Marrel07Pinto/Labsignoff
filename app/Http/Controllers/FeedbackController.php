@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feedback;
+use App\Models\Lab;
 
 class FeedbackController extends Controller
 {
@@ -50,9 +51,119 @@ class FeedbackController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $labnumber = auth()->user()->lab;
+        $afeed = Feedback::where('lab', $labnumber)->pluck('f_understanding');
+        $frequencyofnum = $afeed->countBy();
+            $totalsum = 0;
+            $totalcount = 0;
+         
+        foreach ($frequencyofnum as $value => $frequency) {
+            $totalsum += $value * $frequency;
+            $totalcount += $frequency;
+        }
+            $avg = $totalsum / $totalcount;
+            $average = (($avg*100)/5);
+             
+
+            $afeedoverall = Feedback::where('lab', $labnumber)->pluck('f_overall');
+            $frequencyoverall = $afeedoverall->countBy();
+                $totalsumoverall = 0;
+                $totalcountoverall = 0;
+             
+            foreach ($frequencyoverall as $valueoverall => $frequencyofoverall) {
+                $totalsumoverall += $valueoverall * $frequencyofoverall;
+                $totalcountoverall += $frequencyofoverall;
+            }
+                $avgoverall = $totalsumoverall / $totalcountoverall;
+                $averageoverall = (($avgoverall*100)/5);
+    
+                $afeeddifficulty = Feedback::where('lab', $labnumber)->pluck('f_difficulty');
+                $frequencydifficulty = $afeeddifficulty->countBy();
+                    $totalsumdifficulty = 0;
+                    $totalcountdifficulty = 0;
+                 
+                foreach ($frequencydifficulty as $valuedifficulty => $frequencyofdifficulty) {
+                    $totalsumdifficulty += $valuedifficulty * $frequencyofdifficulty;
+                    $totalcountdifficulty += $frequencyofdifficulty;
+                }
+                    $avgdifficulty = $totalsumdifficulty / $totalcountdifficulty;
+                    $averagedifficulty = (($avgdifficulty*100)/5);
+
+                    $positivewordfile = public_path('Feedback/positive_words.txt');
+                    $negativewordfile = public_path('Feedback/negative_words.txt');
+                    $poswords = file($positivewordfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                    $negwords = file($negativewordfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                
+                    // Analyze Sentiment for Feedback
+                    $feedbacks = Feedback::where('lab', $labnumber)->pluck('f_confusing');
+                    $positivecount = 0;
+                    $negativecount = 0;
+                
+                    foreach ($feedbacks as $feedback) {
+                        $sentiment = $this->analyzeSentiment($feedback, $poswords, $negwords);
+                        if ($sentiment === 'Positive') {
+                            $positivecount++;
+                        } elseif ($sentiment === 'Negative') {
+                            $negativecount++;
+                        }
+                    }
+
+                    $feedbackinteresting = Feedback::where('lab', $labnumber)->pluck('f_interesting');
+                    $feedbackengaging = Feedback::where('lab', $labnumber)->pluck('f_engaging');
+                    $feedbackimportant = Feedback::where('lab', $labnumber)->pluck('f_important');
+                    $feedbackconfusing = Feedback::where('lab', $labnumber)->pluck('f_confusing');
+                    $stopwords = [
+                        'the', 'is', 'in', 'at', 'which', 'on', 'for', 'and', 'a', 'an', 'of', 'to', 'it', 'this', 'that', 'with', 
+                        'as', 'by', 'was', 'were', 'from', 'be', 'or', 'are', 'but', 'about', 'what', 'when', 'where', 'who', 'why',
+                        'how', 'if', 'all', 'any', 'not', 'can', 'so', 'just', 'out', 'up', 'down', 'left', 'right', 'over', 'under',
+                        'then', 'than', 'there', 'their', 'some', 'many', 'more', 'most', 'no', 'nor', 'only', 'own', 'same', 'such',
+                        'too', 'very', 's', 't', 'will', 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', 'couldn', 'didn',
+                        'doesn', 'hadn', 'hasn', 'haven', 'isn', 'ma', 'mightn', 'mustn', 'needn', 'shan', 'shouldn', 'wasn', 'weren',
+                        'won', 'wouldn'
+                    ];
+                    function getWordFrequencies($feedback, $stopwords) {
+                        $feedbacktext = strtolower(implode(' ', $feedback->toArray()));
+                        $words = str_word_count(preg_replace('/[^\w\s]/', '', $feedbacktext), 1);
+                        $filteredWords = array_filter($words, function ($word) use ($stopwords) {
+                            return !in_array($word, $stopwords);
+                        });
+                        $wordfrequencies = array_count_values($filteredWords);
+                        arsort($wordfrequencies);
+                        return $wordfrequencies;
+                    }
+                    $interesting = getWordFrequencies($feedbackinteresting, $stopwords);
+                    $engaging = getWordFrequencies($feedbackengaging, $stopwords);
+                    $important = getWordFrequencies($feedbackimportant, $stopwords);
+                    $confusing = getWordFrequencies($feedbackconfusing, $stopwords);
+                
+                    return view('adminfeedback', compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount','interesting','engaging','important','confusing'));
+
+    }
+    private function analyzeSentiment($sentence,$poswords , $negwords)
+    {
+        $sentenceWords = explode(' ', strtolower($sentence));
+
+        $positivecount = 0;
+        $negativecount = 0;
+
+        foreach ($sentenceWords as $word) {
+            if (in_array($word, $poswords)) {
+                $positivecount++;
+            }
+            if (in_array($word, $negwords)) {
+                $negativecount++;
+            }
+        }
+
+        if ($positivecount > $negativecount) {
+            return 'Positive';
+        } elseif ($negativecount > $positivecount) {
+            return 'Negative';
+        } else {
+            return 'Neutral';
+        }
     }
 
     /**

@@ -130,7 +130,13 @@ class SeatController extends Controller
         $seatsoccupied = seat::all();
         return view('seat',compact('seatsoccupied')); 
     }
-
+    public function show()
+    {
+        //
+        $user_id = auth()->user()->id;
+        $seatswithnav = seat::all();
+        return view('seatwithnav',compact('seatswithnav')); 
+    }
     /**
      * Display the specified resource.
      */

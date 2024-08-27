@@ -86,6 +86,9 @@ Route::get('/tasign', function() {
 Route::get('/attendance', function() {
                         return view('attendance');
                     })->name('attendance');
+Route::get('/adminfeedback', function() {
+                        return view('adminfeedback');
+                    })->name('adminfeedback');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -127,8 +130,7 @@ Route::get('/taskuploadedit/{id}', [TaskuploadController::class, 'edit'])->name(
 Route::put('/task/update/{id}', [TaskuploadController::class, 'update'])->name('task_update_form');
 Route::delete('/task/delete/{id}', [TaskuploadController::class, 'destroy'])->name('edittaskadmin.delete');
 Route::get('/task', [TaskuploadController::class, 'labdetails'])->name('task');
-
-
+Route::get('/adminfeedback', [FeedbackController::class, 'show'])->name('adminfeedback');
 
 });
 

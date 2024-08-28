@@ -132,7 +132,6 @@ Route::delete('/task/delete/{id}', [TaskuploadController::class, 'destroy'])->na
 Route::get('/task', [TaskuploadController::class, 'labdetails'])->name('task');
 Route::get('/adminfeedback', [FeedbackController::class, 'show'])->name('adminfeedback');
 Route::get('/chat/refresh', [ChatController::class, 'refreshchat'])->name('chat.refresh');
-
 Route::get('/adminchat/refresh', [ChatController::class, 'adminrefreshchat'])->name('msg.refresh');
 });
 

@@ -94,7 +94,7 @@
         <div class="card-body">
             <div class="chat-messages">
                 <div class="chat-messages" id="chat-messages">
-                    @include('adminchatrefresh', ['chatmessages' => $chatmessages])
+                    @include('partials.adminchatrefresh', ['chatmessages' => $chatmessages])
                 </div>
             </div>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

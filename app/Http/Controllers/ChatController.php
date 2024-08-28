@@ -66,7 +66,7 @@ class ChatController extends Controller
 public function adminrefreshchat()
 {
     $chatmessages = Chat::with('user')->oldest()->get();
-    return view('adminchatrefresh', compact('chatmessages'))->render();
+    return view('partials.adminchatrefresh', compact('chatmessages'))->render();
 }
 
     /**

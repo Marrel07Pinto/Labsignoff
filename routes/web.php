@@ -131,7 +131,7 @@ Route::put('/task/update/{id}', [TaskuploadController::class, 'update'])->name('
 Route::delete('/task/delete/{id}', [TaskuploadController::class, 'destroy'])->name('edittaskadmin.delete');
 Route::get('/task', [TaskuploadController::class, 'labdetails'])->name('task');
 Route::get('/adminfeedback', [FeedbackController::class, 'show'])->name('adminfeedback');
-Route::get('/chat/refresh', [ChatController::class, 'refreshChat'])->name('chat.refresh');
+Route::get('/chat/refresh', [ChatController::class, 'refreshchat'])->name('chat.refresh');
 
 });
 

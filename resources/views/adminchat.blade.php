@@ -6,6 +6,8 @@
     overflow-y: auto; 
     display: flex;
     flex-direction: column; 
+    position: relative;
+
 }
 
 .chat-messages {
@@ -13,6 +15,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px; 
+    overflow-y: auto;
 }
 
 .message {
@@ -55,32 +58,32 @@
 
     
 
-    .chat-input {
+.chat-input {
         display: flex;
         gap: 10px;
         margin-top: 10px;
         width: 90%;
-    }
+}
 
-    .chat-input input[type="text"] {
+.chat-input input[type="text"] {
         flex: 1;
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
-    }
+}
 
-    .chat-input button {
+.chat-input button {
         padding: 10px;
         border: none;
         background-color: #007bff;
         color: white;
         border-radius: 5px;
         cursor: pointer;
-    }
+}
 
-    .chat-input button:hover {
+.chat-input button:hover {
         background-color: #0056b3;
-    }
+}
 </style>
 
 <main id="main" class="main">
@@ -90,18 +93,57 @@
     <div class="card">
         <div class="card-body">
             <div class="chat-messages">
-                @foreach($chatmessages as $item)
-                    <div class="message {{ Str::startsWith($item->user->role, 'TA') || Str::startsWith($item->user->role, 'ADMIN') ? 'right-message' : 'left-message' }}">
-                        <div class="message-content">
-                            <h6>{{ $item->c_messages }}</h6>
-                        </div>
-                        <div class="message-meta {{ Str::startsWith($item->user->role, 'TA') || Str::startsWith($item->user->role, 'ADMIN') ? 'right-message-meta' : 'left-message-meta' }}">
-                            <span>{{ $item->user->name }}</span>
-                            <span>{{ $item->created_at->toTimeString() }}</span>
-                        </div>
-                    </div>
-                @endforeach
+                <div class="chat-messages" id="chat-messages">
+                    @include('adminchatrefresh', ['chatmessages' => $chatmessages])
+                </div>
             </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function fetchChatMessages() {
+                $.ajax({
+                    url: '{{ route("msg.refresh") }}',
+                    method: 'GET',
+                    success: function(data) {
+                        $('#chat-messages').html(data);
+                        scrollToBottom();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX error:", status, error);
+                    }
+                });
+            }
+
+            function scrollToBottom() {
+                var chatMessages = document.getElementById('chat-messages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            $(document).ready(function() {
+                fetchChatMessages();
+                setInterval(fetchChatMessages, 1000);
+                $('#chat_form').on('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function() {
+                            fetchChatMessages();
+                            $('#c_messages').val('');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX error:", status, error);
+                        }
+                    });
+                });
+                $('#c_messages').on('keypress', function(e) {
+                    if (e.which === 13) { 
+                        e.preventDefault(); 
+                        $('#chat_form').submit(); 
+                    }
+                });
+            });
+        </script>
             <center>
                 <form id="chat_form" action="{{ route('chat_form') }}" method="POST">
                     @csrf

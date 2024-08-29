@@ -10,6 +10,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\TaregistrationController;
 use App\Http\Controllers\TaskuploadController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::middleware('auth')->group(function () {
@@ -133,6 +134,10 @@ Route::get('/task', [TaskuploadController::class, 'labdetails'])->name('task');
 Route::get('/adminfeedback', [FeedbackController::class, 'show'])->name('adminfeedback');
 Route::get('/chat/refresh', [ChatController::class, 'refreshchat'])->name('chat.refresh');
 Route::get('/adminchat/refresh', [ChatController::class, 'adminrefreshchat'])->name('msg.refresh');
+
+
+Route::get('/attendance', [AttendanceController::class, 'show'])->name('attendance');
+Route::get('/download-csv', [AttendanceController::class, 'downloadcsv'])->name('downloadcsvforatten');
 });
 
 

@@ -40,6 +40,7 @@
         <p><strong>Code Link:</strong> {{ $signview->s_clink }}</p>
         <p><strong>Status:</strong> {{ $signview->s_result }}</p>
         <p><strong>Teaching Assistance:</strong> {{ $signview->s_resolved_by }}</p>
+        <p><strong>Score:</strong> {{ $signview->marks }}/100</p>
 
         @if($signview->s_result === 'unresolved')
             <p><strong>Reason for not giving the lab sign-off:</strong> {{ $signview->s_reason }}</p>

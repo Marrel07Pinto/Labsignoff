@@ -1,6 +1,11 @@
 @extends($TA ? 'layouts.ta' : 'layouts.app')
 @section('content')
 <style>
+.card {
+    height: 80%; 
+    display: flex;
+    flex-direction: column;
+}
 .card-body {
     max-height: 80vh; 
     overflow-y: auto; 
@@ -100,8 +105,14 @@
                     url: '{{ route("chat.refresh") }}',
                     method: 'GET',
                     success: function(data) {
+                        var chatMessages = document.getElementById('chat-messages');
+                        var isScrolledToBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 1;
+
                         $('#chat-messages').html(data);
-                        scrollToBottom();
+
+                        if (isScrolledToBottom) {
+                            scrollToBottom();
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("AJAX error:", status, error);
@@ -117,6 +128,7 @@
             $(document).ready(function() {
                 fetchChatMessages();
                 setInterval(fetchChatMessages, 1000);
+
                 $('#chat_form').on('submit', function(e) {
                     e.preventDefault();
                     $.ajax({
@@ -132,6 +144,7 @@
                         }
                     });
                 });
+
                 $('#c_messages').on('keypress', function(e) {
                     if (e.which === 13) { 
                         e.preventDefault(); 

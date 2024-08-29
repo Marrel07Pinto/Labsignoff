@@ -115,7 +115,7 @@
                     <br>
                     <div class="form-group marks-box" id="marksBox">
                         <label for="marksInput">Marks</label>
-                        <input type="number" class="form-control" id="marksInput" name="marks" required>
+                        <input type="number" class="form-control" id="marksInput" name="marks" required min="0" max="100">
                     </div>
                     <br>
                     <div class="form-group reason-box" id="reasonBox">
@@ -135,10 +135,11 @@
 
 <script>
 $(document).ready(function() {
+
     function refreshSigns() {
         $.get('{{ route("refresh_signs") }}', function(data) {
             $('#signsSection').html(data);
-            bindSignLinkHandler(); // Re-bind click handlers after updating the section
+            bindSignLinkHandler();
         });
     }
 
@@ -165,6 +166,7 @@ $(document).ready(function() {
             }
 
             $('#signform').modal('show');
+            setSignAsInProgress(id); 
 
             $.ajax({
                 url: '{{ route("sign_status") }}',
@@ -175,7 +177,7 @@ $(document).ready(function() {
                     status: 'in-progress'
                 },
                 success: function() {
-                    // Optionally handle success
+               
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error updating sign status:', textStatus, errorThrown);
@@ -184,6 +186,42 @@ $(document).ready(function() {
         });
     }
 
+    function setSignAsInProgress(id) {
+        let openSigns = JSON.parse(sessionStorage.getItem('openSigns')) || [];
+        if (!openSigns.includes(id)) {
+            openSigns.push(id);
+            sessionStorage.setItem('openSigns', JSON.stringify(openSigns));
+        }
+    }
+
+    function removeSignFromOpen(id) {
+        let openSigns = JSON.parse(sessionStorage.getItem('openSigns')) || [];
+        openSigns = openSigns.filter(signId => signId !== id);
+        sessionStorage.setItem('openSigns', JSON.stringify(openSigns));
+    }
+
+    function resetinprogress() {
+        let openSigns = JSON.parse(sessionStorage.getItem('openSigns')) || [];
+        if (openSigns.length > 0) {
+            $.ajax({
+                url: '{{ route("reset_in_progresssign") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    ids: openSigns
+                },
+                success: function() {
+                    sessionStorage.removeItem('openSigns'); 
+                    refreshSigns();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error resetting in-progress signs:', textStatus, errorThrown);
+                }
+            });
+        }
+    }
+
+    // Handle form submission
     $('#resolveSignForm').submit(function(event) {
         event.preventDefault();
 
@@ -192,7 +230,6 @@ $(document).ready(function() {
             return;
         }
 
-        // Disable the marks input if unresolved is selected
         if ($('#statusUnresolved').is(':checked')) {
             $('#marksInput').prop('disabled', true);
         } else {
@@ -201,7 +238,8 @@ $(document).ready(function() {
 
         $.post($(this).attr('action'), $(this).serialize(), function() {
             $('#signform').modal('hide');
-            refreshSigns(); // Refresh signs after form submission
+            removeSignFromOpen($('#signId').val()); 
+            refreshSigns(); 
         });
     });
 
@@ -209,11 +247,11 @@ $(document).ready(function() {
         if ($('#statusResolved').is(':checked')) {
             $('#marksBox').show();
             $('#reasonBox').hide();
-            $('#marksInput').prop('required', true); // Make marks input required
+            $('#marksInput').prop('required', true); 
         } else if ($('#statusUnresolved').is(':checked')) {
             $('#marksBox').hide();
             $('#reasonBox').show();
-            $('#marksInput').prop('required', false); // Marks input not required for unresolved
+            $('#marksInput').prop('required', false); 
         } else {
             $('#marksBox').hide();
             $('#reasonBox').hide();
@@ -232,9 +270,9 @@ $(document).ready(function() {
                     status: null 
                 },
                 success: function() {
-                    
                 }
             });
+            removeSignFromOpen(signId);
         }
     });
 
@@ -248,7 +286,9 @@ $(document).ready(function() {
         };
     }
     const debouncedRefreshSigns = debounce(refreshSigns, 500); 
-    setInterval(debouncedRefreshSigns, 1000); 
+    setInterval(debouncedRefreshSigns, 1000);
+    resetinprogress();
 });
+
 </script>
 @endsection

@@ -10,6 +10,9 @@ use App\Http\Controllers\Auth\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use App\Models\Attendance;
+use App\Models\Lab;
+use Carbon\Carbon;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -61,9 +64,39 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::guard('web')->user();
         if ($user) {
-            if ($user->role === 'student') {
+            if ($user->role === 'student') 
+            {
                 $userId = $user->id;
                 DB::table('seats')->where('users_id', $userId)->delete();
+
+                $logouttime = now(); 
+        $user->last_logout_at = $logouttime;
+        $user->save();
+        $labnumber = $user->lab; 
+
+        // Retrieve lab details
+        $labs = Lab::where('t_lab', $labnumber)->first();
+        if ($labs) 
+        {
+            $Admintime = Carbon::parse($labs->date_time);
+            $timeend = $Admintime->copy()->addMinutes(15);
+            $extendedtimeend = $Admintime->copy()->addMinutes(30);
+
+            // Retrieve the existing attendance record
+            $attendance = Attendance::where('u_num', $user->u_num)
+                ->where('lab', $labnumber)
+                ->first();
+
+            // Update attendance status to 'Absent' if logout time falls within the range
+            if ($logouttime->greaterThanOrEqualTo($Admintime) && $logouttime->lessThanOrEqualTo($extendedtimeend)) 
+            {
+                if ($attendance) 
+                {
+                    $attendance->atten = 'Absent';
+                    $attendance->save();
+                }
+            }
+        }
             }
             Auth::guard('web')->logout();
             $request->session()->invalidate();
@@ -72,4 +105,5 @@ class AuthenticatedSessionController extends Controller
         }
         return redirect()->route('login');
     }
+    
 }

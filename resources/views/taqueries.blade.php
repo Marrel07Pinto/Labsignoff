@@ -122,19 +122,52 @@ $(document).ready(function() {
     function refreshQueries() {
         $.get('{{ route("refresh_queries") }}', function(data) {
             $('#queriesSection').html(data);
-            bindQueryLinkHandler(); // Re-bind click handlers after updating the section
+            bindQueryLinkHandler(); 
         });
     }
 
-    // Bind click event handler for query-link
+    // Track open queries in session storage
+    function setQueryAsInProgress(id) {
+        let openQueries = JSON.parse(sessionStorage.getItem('openQueries')) || [];
+        if (!openQueries.includes(id)) {
+            openQueries.push(id);
+            sessionStorage.setItem('openQueries', JSON.stringify(openQueries));
+        }
+    }
+
+    function removeQueryFromOpen(id) {
+        let openQueries = JSON.parse(sessionStorage.getItem('openQueries')) || [];
+        openQueries = openQueries.filter(queryId => queryId !== id);
+        sessionStorage.setItem('openQueries', JSON.stringify(openQueries));
+    }
+
+    function resetinProgressQueries() {
+        let openQueries = JSON.parse(sessionStorage.getItem('openQueries')) || [];
+        if (openQueries.length > 0) {
+            $.ajax({
+                url: '{{ route("reset_in_progressqueries") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    ids: openQueries
+                },
+                success: function() {
+                    sessionStorage.removeItem('openQueries'); 
+                    refreshQueries();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error resetting in-progress queries:', textStatus, errorThrown);
+                }
+            });
+        }
+    }
+
     function bindQueryLinkHandler() {
         $('.query-link').off('click').on('click', function(event) { 
             event.preventDefault();
             var query = $(this).data('query');
             var id = $(this).data('id');
             var images = $(this).data('images') || []; 
-
-            // Set query text and ID
             $('#queryText').val(query);
             $('#queryId').val(id);
             $('#queryImagebox').empty(); 
@@ -151,6 +184,7 @@ $(document).ready(function() {
             }
 
             $('#queryform').modal('show');
+            setQueryAsInProgress(id); 
 
             $.ajax({
                 url: '{{ route("query_status") }}',
@@ -161,7 +195,7 @@ $(document).ready(function() {
                     status: 'in-progress'
                 },
                 success: function() {
-                    // Optionally handle success
+                    
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error updating query status:', textStatus, errorThrown);
@@ -170,16 +204,15 @@ $(document).ready(function() {
         });
     }
 
-    // Handle form submission
     $('#resolveQueryForm').submit(function(event) {
         event.preventDefault();
         $.post($(this).attr('action'), $(this).serialize(), function() {
             $('#queryform').modal('hide');
-            refreshQueries(); // Refresh queries after form submission
+            removeQueryFromOpen($('#queryId').val()); 
+            refreshQueries(); 
         });
     });
 
-    // Handle modal close event
     $('#queryform').on('hidden.bs.modal', function () {
         var queryId = $('#queryId').val();
         if (queryId) {
@@ -189,19 +222,19 @@ $(document).ready(function() {
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: queryId,
-                    status: null // Reset status to null when modal is closed
+                    status: null 
                 },
                 success: function() {
-                    // Optionally handle success
+                   
                 }
             });
+            removeQueryFromOpen(queryId); 
         }
     });
 
-    // Initial binding of query-link handler
     bindQueryLinkHandler();
 
-    // Debounced refresh function
+   
     function debounce(func, wait) {
         let timeout;
         return function() {
@@ -210,7 +243,11 @@ $(document).ready(function() {
         };
     }
     const debouncedRefreshQueries = debounce(refreshQueries, 500); 
-    setInterval(debouncedRefreshQueries, 1000); 
+    setInterval(debouncedRefreshQueries, 1000);
+
+
+    resetinProgressQueries();
 });
+
 </script>
 @endsection

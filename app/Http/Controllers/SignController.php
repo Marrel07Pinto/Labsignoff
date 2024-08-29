@@ -163,6 +163,7 @@ class SignController extends Controller
         
         $validatedData = $request->validate([
             'reason' => 'nullable|string|max:10000', 
+            
         ]);
         $sign = Sign::find($request->input('sign_id'));
         if ($sign) {
@@ -380,7 +381,7 @@ public function refreshsigns()
     return view('partials.refreshsign', compact('signsGivenToTA'));
 }
 
-public function SignStatus(Request $request)
+    public function SignStatus(Request $request)
     {
         $sign = Sign::find($request->input('id'));
         if ($sign) 
@@ -390,4 +391,13 @@ public function SignStatus(Request $request)
         }
         return response()->json(['success' => true]);
     }
+    public function resetinprogresssign(Request $request)
+    {
+        $ids = $request->input('ids');
+        
+        Sign::whereIn('id', $ids)->update(['s_state' => null]);
+        
+        return response()->json(['success' => true]);
+    }
+
 }

@@ -320,4 +320,12 @@ class QueryController extends Controller
         }
         return response()->json(['success' => true]);
     }
+    public function resetinprogressquery(Request $request)
+    {
+        $ids = $request->input('ids');
+        Query::whereIn('id', $ids)->update(['q_state' => null]);
+
+        return response()->json(['success' => true]);
+    }
+
 }

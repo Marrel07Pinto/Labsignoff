@@ -134,10 +134,11 @@ Route::get('/task', [TaskuploadController::class, 'labdetails'])->name('task');
 Route::get('/adminfeedback', [FeedbackController::class, 'show'])->name('adminfeedback');
 Route::get('/chat/refresh', [ChatController::class, 'refreshchat'])->name('chat.refresh');
 Route::get('/adminchat/refresh', [ChatController::class, 'adminrefreshchat'])->name('msg.refresh');
-
-
 Route::get('/attendance', [AttendanceController::class, 'show'])->name('attendance');
 Route::get('/download-csv', [AttendanceController::class, 'downloadcsv'])->name('downloadcsvforatten');
+Route::post('/reset-in-progress-queries', [QueryController::class, 'resetinprogressquery'])->name('reset_in_progressqueries');
+Route::post('/reset-in-progress-signs', [SignController::class, 'resetinprogresssign'])->name('reset_in_progresssign');
+
 });
 
 

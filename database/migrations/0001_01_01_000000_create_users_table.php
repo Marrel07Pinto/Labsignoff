@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('role')->default('student');
             $table->string('lab')->nullable();
+            $table->timestamp('last_logout_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

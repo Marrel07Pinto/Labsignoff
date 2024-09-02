@@ -104,4 +104,14 @@ class AttendanceController extends Controller
     {
         //
     }
+    public function attenupdate(Request $request, $id)
+    {
+        $request->validate([
+            'attendance' => 'required|string|max:255',
+        ]);
+        $attendance = Attendance::findOrFail($id);
+        $attendance->atten = $request->input('attendance');
+        $attendance->save();
+        return redirect()->route('taskupload')->with('success', 'Attendance updated successfully.');
+    }
 }

@@ -49,12 +49,12 @@
         </br>
         <div class="form-group">
             <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" class="form-control">
+            <input type="date" id="date" name="date" class="form-control" required>
         </div>
 
         <div class="form-group">
             <label for="time">Select Time:</label>
-            <input type="time" id="time" name="time" class="form-control">
+            <input type="time" id="time" name="time" class="form-control" required>
         </div>
 
         <br>

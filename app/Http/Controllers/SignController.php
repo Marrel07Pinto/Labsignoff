@@ -400,4 +400,20 @@ public function refreshsigns()
         return response()->json(['success' => true]);
     }
 
+    public function signupdatestd(Request $request, $id)
+    {
+        $request->validate([
+            'resolved_by' => 'required|string|max:255',
+            'result' => 'required|string|max:255',
+        ]);
+
+
+    $sign = Sign::findOrFail($id);
+    $sign->s_resolved_by = $request->input('resolved_by');
+    $sign->s_result = $request->input('result');
+    $sign->marks = $request->input('marks');
+    $sign->save();
+    return redirect()->route('taskupload')->with('success', 'Sign Off data updated successfully.');
+    }
+
 }

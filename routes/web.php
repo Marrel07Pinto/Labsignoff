@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\TaregistrationController;
 use App\Http\Controllers\TaskuploadController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::middleware('auth')->group(function () {
@@ -90,6 +91,9 @@ Route::get('/attendance', function() {
 Route::get('/adminfeedback', function() {
                         return view('adminfeedback');
                     })->name('adminfeedback');
+Route::get('/search', function() {
+                        return view('search');
+                    })->name('search');
 Route::post('/seat_value', [SeatController::class, 'store'])->name('seat_value');
 Route::post('/seat_vupdate/{id}', [SeatController::class, 'update'])->name('seat_vupdate');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -138,6 +142,9 @@ Route::get('/attendance', [AttendanceController::class, 'show'])->name('attendan
 Route::get('/download-csv', [AttendanceController::class, 'downloadcsv'])->name('downloadcsvforatten');
 Route::post('/reset-in-progress-queries', [QueryController::class, 'resetinprogressquery'])->name('reset_in_progressqueries');
 Route::post('/reset-in-progress-signs', [SignController::class, 'resetinprogresssign'])->name('reset_in_progresssign');
+Route::post('/search', [SearchController::class, 'show'])->name('searchbar');
+Route::put('/signoff-update/{id}', [SignController::class, 'signupdatestd'])->name('signoff_edit');
+Route::put('/attendance-update/{id}', [AttendanceController::class, 'attenupdate'])->name('attendance_update');
 
 });
 

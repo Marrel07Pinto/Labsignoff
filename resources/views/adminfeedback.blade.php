@@ -3,23 +3,23 @@
 @section('content')
 <style>
     .outstanding {
-        background-color: #4fb353; 
-        color: white;
+        background-color: #ADD8E6; 
+        color: black;
         padding: 10px;
         border-radius: 5px;
         width: 90%;
     }
 
     .excellent {
-        background-color: #c6fc86; 
-        color: white;
+        background-color: #ADD8E6; 
+        color: black;
         padding: 10px;
         border-radius: 5px;
         width: 90%;
     }
 
     .very-good {
-        background-color: #ebfc3a; 
+        background-color: #D3D3D3; 
         color: black;
         padding: 10px;
         border-radius: 5px;
@@ -27,7 +27,7 @@
     }
 
     .good {
-        background-color: #fcfa7e; 
+        background-color: #B0E0E6; 
         color: black;
         padding: 10px;
         border-radius: 5px;
@@ -35,7 +35,7 @@
     }
 
     .average {
-        background-color: #fcc4a2; 
+        background-color: #F8F8E7; 
         color: black;
         padding: 10px;
         border-radius: 5px;
@@ -43,15 +43,15 @@
     }
 
     .poor {
-        background-color: #f7b7b7; 
-        color: white;
+        background-color: #FFD1DC; 
+        color: black;
         padding: 10px;
         border-radius: 5px;
         width: 90%;
     }
 
     .below-minimum {
-        background-color: #F44336;
+        background-color: #000000;
         color: white;
         padding: 10px;
         border-radius: 5px;
@@ -190,7 +190,7 @@
                   }).render();
                 });
               </script>
-              <!-- End Pie Chart -->
+              
 
             </div>
           </div>

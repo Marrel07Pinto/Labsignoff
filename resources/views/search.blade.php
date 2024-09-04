@@ -75,7 +75,7 @@
                                                data-resolved-by="{{ $sign->s_resolved_by }}" 
                                                data-result="{{ $sign->s_result }}" 
                                                data-marks="{{ $sign->marks }}" title="Edit">
-                                                <i class="bi bi-pencil"></i>
+                                                <i class="bx bxs-edit"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -105,7 +105,7 @@
                                             <a href="#" class="edit-attendance" data-bs-toggle="modal" data-bs-target="#editAttendanceModal" 
                                                data-id="{{ $attendance->id }}" 
                                                data-attendance="{{ $attendance->atten }}" title="Edit">
-                                                <i class="bi bi-pencil"></i>
+                                                <i class="bx bxs-edit"></i>
                                             </a>
                                         </td>
                                     </tr>

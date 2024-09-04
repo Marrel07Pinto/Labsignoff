@@ -9,8 +9,8 @@
                 <br>
                 <h1><center>STUDENT DATA</center></h1>  
                 <br>
-                @if(session('error'))
-                    <p><strong>{{ session('error') }}</strong></p>
+                @if(isset($error) && !empty($error))
+                    <p><strong>{{ $error }}</strong></p>
                 @else
                     <label><strong>Student Name :</strong>  {{$username}} </label><br>
                     <br>

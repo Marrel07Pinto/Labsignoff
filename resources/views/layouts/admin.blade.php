@@ -54,7 +54,7 @@
     <div class="search-bar">
     <form class="search-form d-flex align-items-center" method="POST" action="{{ route('searchbar') }}">
       @csrf
-      <input type="text" name="search" placeholder="Enter student university number" title="Enter search keyword" required>
+      <input type="number" name="search" placeholder="Enter student university number" title="Enter search keyword" required>
       <button type="submit" title="Search"><i class="bi bi-search"></i></button>
     </form>
   </div>

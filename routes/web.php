@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/edit', [PasswordController::class, 'update'])->name('pass_update');
 });
+Route::middleware('throttle:100,1')->group(function () {
 Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::get('/register', function () {
@@ -145,9 +146,8 @@ Route::post('/reset-in-progress-signs', [SignController::class, 'resetinprogress
 Route::post('/search', [SearchController::class, 'show'])->name('searchbar');
 Route::put('/signoff-update/{id}', [SignController::class, 'signupdatestd'])->name('signoff_edit');
 Route::put('/attendance-update/{id}', [AttendanceController::class, 'attenupdate'])->name('attendance_update');
-
 });
-
+});
 
 
 

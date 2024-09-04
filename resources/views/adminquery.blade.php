@@ -18,6 +18,16 @@
         <h1>Raised Queries</h1>
     </div><!-- End Page Title -->
     <br>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Meaning of the colours</h5>
+            <center>
+                <span style='padding: 0.5rem 1rem' class="alert alert-danger-custom alert-dismissible fade show"><i class="bi bi-triangle-fill triangle me-1"></i>Priority</span>
+                <span style='padding: 0.5rem 1rem' class="alert alert-danger alert-dismissible fade show"><i class="bi bi-star me-1"></i> Pending</span>
+                <span style='padding: 0.5rem 1rem' class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-1"></i> Resolved</span>
+            </center>
+        </div>           
+    </div>
     @if(!empty($queriesGivenToTA))
         <section class="section">
             <div class="row flex-row flex-nowrap overflow-auto">

@@ -100,59 +100,61 @@
         </div>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
-                function fetchChatMessages() {
+            function fetchChatMessages() {
+                $.ajax({
+                    url: '{{ route("msg.refresh") }}',
+                    method: 'GET',
+                    success: function(data) {
+                        var chatMessages = document.getElementById('chat-messages');
+                        var isScrolledToBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 1;
+
+                        $('#chat-messages').html(data);
+
+                        if (isScrolledToBottom) {
+                            scrollToBottom();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX error:", status, error);
+                    }
+                });
+            }
+
+            function scrollToBottom() {
+                var chatMessages = document.getElementById('chat-messages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            $(document).ready(function() {
+                scrollToBottom(); 
+                fetchChatMessages();
+                setInterval(fetchChatMessages, 1000);
+
+                $('#chat_form').on('submit', function(e) {
+                    e.preventDefault();
                     $.ajax({
-                        url: '{{ route("msg.refresh") }}',
-                        method: 'GET',
-                        success: function(data) {
-                            var chatMessages = document.getElementById('chat-messages');
-                            var isScrolledToBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 1;
-
-                            $('#chat-messages').html(data);
-
-                            if (isScrolledToBottom) {
-                                scrollToBottom();
-                            }
+                        url: $(this).attr('action'),
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function() {
+                            fetchChatMessages();
+                            $('#c_messages').val('');
                         },
                         error: function(xhr, status, error) {
                             console.error("AJAX error:", status, error);
                         }
                     });
-                }
-
-                function scrollToBottom() {
-                    var chatMessages = document.getElementById('chat-messages');
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-
-                $(document).ready(function() {
-                    fetchChatMessages();
-                    setInterval(fetchChatMessages, 1000);
-
-                    $('#chat_form').on('submit', function(e) {
-                        e.preventDefault();
-                        $.ajax({
-                            url: $(this).attr('action'),
-                            method: 'POST',
-                            data: $(this).serialize(),
-                            success: function() {
-                                fetchChatMessages();
-                                $('#c_messages').val('');
-                            },
-                            error: function(xhr, status, error) {
-                                console.error("AJAX error:", status, error);
-                            }
-                        });
-                    });
-
-                    $('#c_messages').on('keypress', function(e) {
-                        if (e.which === 13) { 
-                            e.preventDefault(); 
-                            $('#chat_form').submit(); 
-                        }
-                    });
                 });
-            </script>
+
+                $('#c_messages').on('keypress', function(e) {
+                    if (e.which === 13) { 
+                        e.preventDefault(); 
+                        $('#chat_form').submit(); 
+                    }
+                });
+            });
+        </script>
+
         </div>
             <center>
                 <form id="chat_form" action="{{ route('chat_form') }}" method="POST">

@@ -34,6 +34,7 @@ class SignController extends Controller
             's_img' => 'nullable|array',
             's_img.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
+            's_img.*.image' => 'Each file must be an image.',
             's_img.*.mimes' => 'Each image should be of type jpeg, png, jpg.',
             's_img.*.max' => 'Each image should not be larger than 2MB.',
 
@@ -101,13 +102,14 @@ class SignController extends Controller
             's_img' => 'nullable|array',
             's_img.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
-            's_img.image' => 'The file must be an image.',
-            's_img.mimes' => 'Image should be of type jpeg, png, jpg.',
+            's_img.*.image' => 'Each file must be an image.',
+            's_img.*.mimes' => 'Image should be of type jpeg, png, jpg.',
+            's_img.*.max' => 'Each image should not be larger than 2MB.'
             
 
         ]);
         $validatedData = $request->validate([
-            's_description' => 'required|string|max:10000', // Example: max length of 10,000 characters
+            's_description' => 'required|string|max:10000', 
         ]);
         $signedit = Sign::find($id);
 
@@ -118,11 +120,11 @@ class SignController extends Controller
             foreach ($existingImages as $existingImage) {
                 $imagePath = public_path('/images/signoff_images/') . $existingImage;
                 if (file_exists($imagePath)) {
-                    unlink($imagePath); // Delete existing image from server
+                    unlink($imagePath);
                 }
                 
             }
-            // Upload and store new images
+           
             foreach ($request->file('s_img') as $img) {
                 $imageName = time() . '_' . $img->getClientOriginalName();
                 $img->move(public_path('/images/signoff_images'), $imageName);

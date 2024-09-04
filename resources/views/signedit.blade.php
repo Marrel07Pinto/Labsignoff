@@ -49,9 +49,9 @@
                     <textarea id="s_description" name="s_description">{{ $signedit->s_description }}</textarea><br>
                     <br>
                     <label for="s_clink">Codeshare Link:</label></br>
-                    <input type="text" id="s_clink" name="s_clink" value="{{ $signedit->s_clink }}"><br>
+                    <input type="url" id="s_clink" name="s_clink" value="{{ $signedit->s_clink }}"><br>
                     <br>
-                    <button type="submit">Update </button>
+                    <button type="submit" class="btn btn-custom" >Update </button>
                 </form>
                 @if (session('success'))
                     <script>

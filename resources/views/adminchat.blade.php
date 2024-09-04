@@ -160,7 +160,7 @@
                 <form id="chat_form" action="{{ route('chat_form') }}" method="POST">
                     @csrf
                     <div class="chat-input">
-                        <input type="text" placeholder="Type a message..." id="c_messages" name="c_messages" required>
+                        <input type="text" placeholder="Type a message..." id="c_messages" name="c_messages" maxlength="300" required>
                         <button type="submit">Send</button>
                     </div>
                 </form>

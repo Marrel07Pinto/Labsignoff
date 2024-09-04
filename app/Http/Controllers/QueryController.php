@@ -32,11 +32,12 @@ class QueryController extends Controller
     {
         $request->validate([
             
-            's_img' => 'nullable|array',
-            's_img.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'q_img' => 'nullable|array',
+            'q_img.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
-            's_img.*.mimes' => 'Each image should be of type jpeg, png, jpg.',
-            's_img.*.max' => 'Each image should not be larger than 2MB.',
+            'q_img.*.image' => 'Each file must be an image.',
+            'q_img.*.mimes' => 'Each image should be of type jpeg, png, jpg.',
+            'q_img.*.max' => 'Each image should not be larger than 2MB.',
 
         ]);
 

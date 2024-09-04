@@ -47,13 +47,14 @@
             @csrf
             <div class="form-querygroup">
                 <label for="q_img">Image:</label>
-                <div class="input-group">
-                    <label class="input-group-text custom-imagefile-upload" for="q_img">
-                        <i class="bi bi-image"></i> Choose Image
-                    </label>
-                    <input type="file" id="q_img" name="q_img[]" accept="image/*" multiple class="form-control d-none">
+                    <div class="input-group">
+                        <label class="input-group-text custom-imagefile-upload" for="q_img">
+                            <i class="bi bi-image"></i> Choose Image
+                        </label>
+                            <input type="file" id="q_img" name="q_img[]" accept="image/*" multiple class="form-control d-none">
+                    </div>
+                    <div id="file-names" class="mt-2"></div> 
                 </div>
-            </div>
             <div class="form-querygroup">
                 <label for="q_query">Query:</label>
                 <textarea id="q_query" name="q_query" class="form-control" required></textarea>
@@ -158,5 +159,41 @@
             }
         });
     });
+
+    document.getElementById('q_img').addEventListener('change', function(event) {
+    const fileInput = event.target;
+    const fileNamesContainer = document.getElementById('file-names');
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    const maxSizeMB = 2;
+    const maxSizeKB = maxSizeMB * 1024; 
+    fileNamesContainer.innerHTML = '';
+    const files = fileInput.files;
+    
+    if (files.length > 0) {
+        const validFileNames = [];
+        const invalidFileNames = [];
+        Array.from(files).forEach(file => {
+            if (allowedTypes.includes(file.type)) {
+                if (file.size <= maxSizeKB * 1024) { 
+                    validFileNames.push(file.name);
+                } else {
+                    invalidFileNames.push(file.name);
+                }
+            } else {
+                invalidFileNames.push(file.name);
+            }
+        });
+
+        if (validFileNames.length > 0) {
+            fileNamesContainer.innerHTML = `<p>Selected images: ${validFileNames.join(', ')}</p>`;
+        }
+        
+        if (invalidFileNames.length > 0) {
+            fileNamesContainer.innerHTML += `<p class="text-danger">The following files are invalid or exceed the size limit: ${invalidFileNames.join(', ')}</p>`;
+        }
+    } else {
+        fileNamesContainer.innerHTML = '<p>No files selected.</p>';
+    }
+});
 </script>
 @endsection

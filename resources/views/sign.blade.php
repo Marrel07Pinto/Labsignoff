@@ -38,13 +38,14 @@
                 <form id="signform" action="{{ route('sign_form') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-querygroup">
-                        <label for="s_img">Image:</label>
+                      <label for="s_img">Image:</label>
                         <div class="input-group">
                             <label class="input-group-text custom-imagefile-upload" for="s_img">
                                 <i class="bi bi-image"></i> Choose Image
                             </label>
                             <input type="file" id="s_img" name="s_img[]" accept="image/*" multiple class="form-control d-none">
                         </div>
+                        <div id="file-names" class="mt-2"></div> <!-- Element to display file names -->
                     </div>
                     <div class="form-querygroup">
                         <label for="s_description">Explanation:</label>
@@ -52,7 +53,7 @@
                     </div>
                     <div class="form-querygroup">
                         <label for="s_clink">Codeshare Link:</label>
-                        <input type="text" id="s_clink" name="s_clink" class="form-control">
+                        <input type="url" id="s_clink" name="s_clink" class="form-control">
                     </div>
                     <div class="form-querygroup">
                         <input type="submit" value="Submit" class="btn btn-custom">
@@ -104,7 +105,7 @@
             $noResultItems = $signoff->filter(fn($item) => empty($item->s_result));
         @endphp
 
-        @foreach($noResultItems as $item) <!-- Red alerts -->
+        @foreach($noResultItems as $item) 
             @php
             $alertClass = 'alert-danger';
             $showEditAndDelete = true;
@@ -215,6 +216,42 @@
             myModal.show();
         });
     }
+
+    document.getElementById('s_img').addEventListener('change', function(event) {
+    const fileInput = event.target;
+    const fileNamesContainer = document.getElementById('file-names');
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    const maxSizeMB = 2;
+    const maxSizeKB = maxSizeMB * 1024; 
+    fileNamesContainer.innerHTML = '';
+    const files = fileInput.files;
+    
+    if (files.length > 0) {
+        const validFileNames = [];
+        const invalidFileNames = [];
+        Array.from(files).forEach(file => {
+            if (allowedTypes.includes(file.type)) {
+                if (file.size <= maxSizeKB * 1024) { 
+                    validFileNames.push(file.name);
+                } else {
+                    invalidFileNames.push(file.name);
+                }
+            } else {
+                invalidFileNames.push(file.name);
+            }
+        });
+
+        if (validFileNames.length > 0) {
+            fileNamesContainer.innerHTML = `<p>Selected images: ${validFileNames.join(', ')}</p>`;
+        }
+        
+        if (invalidFileNames.length > 0) {
+            fileNamesContainer.innerHTML += `<p class="text-danger">The following files are invalid or exceed the size limit: ${invalidFileNames.join(', ')}</p>`;
+        }
+    } else {
+        fileNamesContainer.innerHTML = '<p>No files selected.</p>';
+    }
+});
 </script>
 
 @endsection

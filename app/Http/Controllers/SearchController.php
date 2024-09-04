@@ -47,7 +47,9 @@ class SearchController extends Controller
     $sign_off = collect();
     $atten = collect();
     $error = null;
-        $userdata = User::where('u_num', $searchnum)->first();
+    $teachrole = auth()->user()->role;
+    $layout = $teachrole === 'ADMIN' ? 'layouts.admin' : 'layouts.ta';
+    $userdata = User::where('u_num', $searchnum)->where('role', 'student')->first();
         if ($userdata) {
             $userid = $userdata->id;
             $username = $userdata->name;
@@ -55,8 +57,7 @@ class SearchController extends Controller
             $queries = Query::where('users_id',$userid)->get();
             $sign_off = Sign::where('users_id',$userid)->get();
             $atten = Attendance::where('name',$username)->get();
-            $teachrole = auth()->user()->role;
-            $layout = $teachrole === 'ADMIN' ? 'layouts.admin' : 'layouts.ta';
+            
         } else {
             $error = 'No user found with that university number';
         }

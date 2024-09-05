@@ -3,7 +3,7 @@
 @section('content')
 <style>
     .outstanding {
-        background-color: #ADD8E6; 
+        background-color: #90EE90; 
         color: black;
         padding: 10px;
         border-radius: 5px;

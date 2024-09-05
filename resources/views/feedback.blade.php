@@ -1,7 +1,126 @@
-@extends('layouts.app')
-@section('content')
+
 <!DOCTYPE html>
 <html>
+    <style>
+        /* Reset default styles */
+        body, h1, p, label, input, textarea {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Main container */
+        .main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Page title */
+        .pagetitle h1 {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Section */
+        .section {
+            padding: 20px;
+        }
+
+        /* Card styling */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Form fields */
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+            
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Alert messages */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        input#confusing,
+        input#important {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+
+    </style>
     <body>
         <main id="main" class="main">
                 <div class="pagetitle">
@@ -51,7 +170,8 @@
                         <input type="radio" id="difficulty4" name="difficulty" value="4"> 4
                         <input type="radio" id="difficulty5" name="difficulty" value="5"> 5
                         </p>
-                        <input type="submit"class="btn btn-outline-primary" value="Submit">
+                        <br>
+                        <input type="submit"class="btn btn-outline-primary" value="Submit and Logout">
                     </form>
                 </div>
             </div>
@@ -59,4 +179,3 @@
         </main>
     </body>
 </html>
-@endsection

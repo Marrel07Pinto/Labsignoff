@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Feedback;
 use App\Models\Lab;
+use App\Models\Attendance;
+use App\Mail\Mailgenerator;
+use Illuminate\Support\Facades\Mail;
 
 class FeedbackController extends Controller
 {
@@ -217,4 +220,110 @@ class FeedbackController extends Controller
     {
         //
     }
+
+    public function emaildata()
+{
+    $user = auth()->user();
+    if ($user && $user->role == 'ADMIN') 
+    {
+        $labnumber = $user->lab;
+        $adminname = $user->name;
+        $afeed = Feedback::where('lab', $labnumber)->pluck('f_understanding');
+        $frequencyofnum = $afeed->countBy();
+        $totalsum = 0;
+        $totalcount = 0;
+     
+        foreach ($frequencyofnum as $value => $frequency) {
+            $totalsum += $value * $frequency;
+            $totalcount += $frequency;
+        }
+        if ($totalcount > 0) {
+            $avg = $totalsum / $totalcount;
+            $average = ($avg * 100) / 5;
+        } else {
+            $avg = 0;
+            $average = 0;  
+        }   
+        
+        $afeedoverall = Feedback::where('lab', $labnumber)->pluck('f_overall');
+        $frequencyoverall = $afeedoverall->countBy();
+        $totalsumoverall = 0;
+        $totalcountoverall = 0;
+         
+        foreach ($frequencyoverall as $valueoverall => $frequencyofoverall) {
+            $totalsumoverall += $valueoverall * $frequencyofoverall;
+            $totalcountoverall += $frequencyofoverall;
+        }
+        if ($totalcountoverall > 0) {
+            $avgoverall = $totalsumoverall / $totalcountoverall;
+            $averageoverall = (($avgoverall*100)/5);
+        } else {
+            $avgoverall = 0;
+            $averageoverall = 0;  
+        }    
+        
+        $afeeddifficulty = Feedback::where('lab', $labnumber)->pluck('f_difficulty');
+        $frequencydifficulty = $afeeddifficulty->countBy();
+        $totalsumdifficulty = 0;
+        $totalcountdifficulty = 0;
+         
+        foreach ($frequencydifficulty as $valuedifficulty => $frequencyofdifficulty) {
+            $totalsumdifficulty += $valuedifficulty * $frequencyofdifficulty;
+            $totalcountdifficulty += $frequencyofdifficulty;
+        }
+        
+        if ($totalcountdifficulty > 0) {
+            $avgdifficulty = $totalsumdifficulty / $totalcountdifficulty;
+            $averagedifficulty = (($avgdifficulty*100)/5);
+        } else {
+            $avgdifficulty = 0;
+            $averagedifficulty = 0;  
+        }
+
+        $positivewordfile = public_path('Feedback/positive_words.txt');
+        $negativewordfile = public_path('Feedback/negative_words.txt');
+        $poswords = file($positivewordfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $negwords = file($negativewordfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        
+        $feedbacks = Feedback::where('lab', $labnumber)->pluck('f_confusing');
+        $positivecount = 0;
+        $negativecount = 0;
+        
+        foreach ($feedbacks as $feedback) {
+            $feedback = strtolower($feedback);
+        
+            foreach ($poswords as $posword) {
+                if (stripos($feedback, $posword) !== false) {
+                    $positivecount++;
+                }
+            }
+        
+            foreach ($negwords as $negword) {
+                if (stripos($feedback, $negword) !== false) {
+                    $negativecount++;
+                }
+            }
+        }
+
+        $detailfeedback = Feedback::where('lab', $labnumber)->get();
+
+        $atten = Attendance::where('lab', $labnumber)->get();
+        $totalstud = Lab::where('t_lab', $labnumber)->value('t_no_stds');
+        $present = Attendance::where('lab', $labnumber)->where('atten', 'Present')->count();
+        $partialPresent= Attendance::where('lab', $labnumber)->where('atten', 'Partial_Present')->count();
+        $absent = Attendance::where('lab', $labnumber)->where('atten', 'Absent')->count();
+        $abs = $totalstud - ($present + $partialPresent + $absent);
+        $totalabsent = $absent + $abs;
+        
+        $data = compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount', 'detailfeedback', 'labnumber', 'adminname','present','partialPresent','totalabsent');
+
+        // Prepare email data
+        $emailAddress = $user->name . '@swansea.com'; 
+        Mail::to($emailAddress)->send(new Mailgenerator($data));
+
+        return back()->with('success', 'Email sent!');
+    } else {
+        return back()->with('message', 'No admin found!')->with('status', 404);
+    }
+}
 }

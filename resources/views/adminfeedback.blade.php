@@ -82,11 +82,18 @@
     </div>
     <ul>
 </ul>
-
-    <!-- Single Card Containing Both Sections -->
+@if (session('message'))
+            <div class="alert alert-danger">
+                {{ session('message') }}
+            </div>
+            @endif
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
     <div class="card">
         <div class="card-bodycat">
-            <!-- Radial Bar Chart Section -->
             <div class="chart-container">
                 <h5 class="card-title"><strong> <center>Radial Bar Chart - Understanding, Overall Experience and Difficulty Level</center></strong></h5>
                 <div id="radialBarChart"></div>
@@ -320,8 +327,14 @@
             </div>
           </div>
         </div>
-
-
+        <div class="d-grid gap-2 mt-3">
+            <form action="{{ route('mailtoadmin') }}" method="POST">
+                @csrf
+                <button class="btn btn-dark" type="submit" style="width: 100%">
+                    <i class="bx bx-mail-send"></i> Mail Regarding Attendance & Feedback
+                </button>
+            </form>
+        </div>
 </main>
 @endsection
     

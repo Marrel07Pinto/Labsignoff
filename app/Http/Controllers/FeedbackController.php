@@ -8,6 +8,7 @@ use App\Models\Lab;
 use App\Models\Attendance;
 use App\Mail\Mailgenerator;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 class FeedbackController extends Controller
 {
@@ -48,6 +49,9 @@ class FeedbackController extends Controller
         $feedback->f_overall = $request->input('overall');
         $feedback->f_difficulty = $request->input('difficulty');
         $feedback->save();
+
+        $sessionService = new AuthenticatedSessionController();
+        $sessionService->destroy($request);
         return back()->with('success', 'Feedback submitted successfully!');
     }
 

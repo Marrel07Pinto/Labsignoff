@@ -127,13 +127,10 @@
               <hr class="dropdown-divider">
             </li>
             <li>
-                <form method="POST" action="{{ route('logout') }}">
-                  @csrf
-                  <button type="submit" class="dropdown-item d-flex align-items-center">
+                <a class="dropdown-item d-flex align-items-center" href="{{ route('feedback') }}">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Sign Out</span>
-                  </button>
-                </form>
+                </a>
             </li>
 
 

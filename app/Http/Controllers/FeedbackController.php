@@ -316,8 +316,6 @@ class FeedbackController extends Controller
         $totalabsent = $absent + $abs;
         
         $data = compact('average', 'totalcount', 'averageoverall', 'averagedifficulty', 'positivecount', 'negativecount', 'detailfeedback', 'labnumber', 'adminname','present','partialPresent','totalabsent');
-
-        // Prepare email data
         $emailAddress = $user->name . '@swansea.com'; 
         Mail::to($emailAddress)->send(new Mailgenerator($data));
 

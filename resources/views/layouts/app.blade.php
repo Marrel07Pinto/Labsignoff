@@ -185,12 +185,6 @@
       <span>Request for Signoff</span>
     </a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="{{ route('feedback') }}">
-      <i class="bi bi-journal-text"></i>
-      <span>Feedback</span>
-    </a>
-  </li>
 </ul>
 </aside><!-- End Sidebar-->
 @yield('content')

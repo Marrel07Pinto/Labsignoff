@@ -64,7 +64,6 @@ class TaskuploadController extends Controller
         $task->t_no_stds = $request->input('nostd');
         $task->date_time = $datetetime;
         $task->save();
-
         return redirect()->route('taskupload')->with('success', "Task uploaded successfully for {$labname}");
     }
 
@@ -106,11 +105,7 @@ class TaskuploadController extends Controller
         ], [
             'nostd.numeric' => 'The total number of students must be a number.',
         ]);
-    
-        // Preserve existing values
         $filepaths = json_decode($edittask->t_file, true) ?? [];
-    
-        // Check if new files are provided
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -126,20 +121,15 @@ class TaskuploadController extends Controller
             $datetetime = Carbon::parse($datetimestring);
             $edittask->date_time = $datetetime;
         }
-        // Update only the fields that are present in the request
         if ($request->has('hints')) {
             $edittask->t_hint = $request->input('hints');
         }
         if ($request->has('nostd')) {
             $edittask->t_no_stds = $request->input('nostd');
         }
-        
-        // Update files if new ones were uploaded
         if (!empty($filepaths)) {
             $edittask->t_file = json_encode($filepaths);
         }
-    
-        // Save the updated task
         $edittask->save();
     
         return redirect()->route('taskupload')->with('success', "Task updated successfully for {$edittask->t_lab}");

@@ -37,7 +37,7 @@ class Mailgenerator extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail',
+            view: 'mailadmin',
         );
     }
 
@@ -49,5 +49,10 @@ class Mailgenerator extends Mailable
     public function attachments(): array
     {
         return [];
+    }
+    public function build()
+    {
+        return $this->view('mailadmin')
+                    ->with($this->data);
     }
 }

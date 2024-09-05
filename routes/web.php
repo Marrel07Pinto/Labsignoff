@@ -146,8 +146,14 @@ Route::post('/reset-in-progress-signs', [SignController::class, 'resetinprogress
 Route::post('/search', [SearchController::class, 'show'])->name('searchbar');
 Route::put('/signoff-update/{id}', [SignController::class, 'signupdatestd'])->name('signoff_edit');
 Route::put('/attendance-update/{id}', [AttendanceController::class, 'attenupdate'])->name('attendance_update');
+Route::post('/send-email', [FeedbackController::class, 'emaildata'])->name('mailtoadmin');
+
+
+
+
 });
 });
+
 
 
 

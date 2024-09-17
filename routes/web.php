@@ -13,13 +13,12 @@ use App\Http\Controllers\TaskuploadController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
+Route::middleware('throttle:100,1')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/edit', [PasswordController::class, 'update'])->name('pass_update');
 });
-Route::middleware('throttle:100,1')->group(function () {
 Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::get('/register', function () {

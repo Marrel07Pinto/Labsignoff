@@ -53,7 +53,7 @@ class QueryController extends Controller
         
         if ($request->has('q_img')) {
             foreach ($request->q_img as $img) {
-                $imageName = time().'_'.$img->getClientOriginalName();
+                $imageName = time().'_'.$img->hashName();
                 $img->move(public_path('/images/query_images'), $imageName);
                 $imageNames[] = $imageName; // Store each image name in the array
             }

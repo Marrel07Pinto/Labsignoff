@@ -93,7 +93,7 @@ class ProfileController extends Controller
     
             // Upload and store new image
             $img = $request->file('p_img');
-            $newImageName = time() . '_' . $img->getClientOriginalName();
+            $newImageName = time() . '_' . $img->hashName();
             $img->move(public_path('/images/profile_images'), $newImageName);
         } else {
             // If no new image is uploaded, retain the existing image name

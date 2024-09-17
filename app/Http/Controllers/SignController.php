@@ -54,7 +54,7 @@ class SignController extends Controller
         
         if ($request->has('s_img')) {
             foreach ($request->s_img as $img) {
-                $imageName = time().'_'.$img->getClientOriginalName();
+                $imageName = time().'_'.$img->hashName();
                 $img->move(public_path('/images/signoff_images'), $imageName);
                 $imageNames[] = $imageName; // Store each image name in the array
             }
@@ -126,7 +126,7 @@ class SignController extends Controller
             }
            
             foreach ($request->file('s_img') as $img) {
-                $imageName = time() . '_' . $img->getClientOriginalName();
+                $imageName = time() . '_' . $img->hashName();
                 $img->move(public_path('/images/signoff_images'), $imageName);
                 $newImageNames[] = $imageName;
             }
